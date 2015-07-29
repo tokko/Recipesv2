@@ -9,8 +9,6 @@ import android.widget.ArrayAdapter;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.tokko.recipesv2.backend.registration.Registration;
 import com.tokko.recipesv2.backend.registration.model.RegistrationRecord;
 
@@ -53,7 +51,7 @@ public class GroceryListActivity extends ListActivity {
 
         @Override
         protected List<String> doInBackground(Void... params) {
-            Registration reg = new Registration.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null).setRootUrl("http://192.168.102.1:8080/_ah/api/").build();
+            Registration reg = (Registration) ApiFactory.createApi(Registration.Builder.class);
             try {
                 return Stream.of(reg.listDevices().execute().getItems()).map(RegistrationRecord::getRegId).collect(Collectors.toList());
             } catch (IOException e) {
