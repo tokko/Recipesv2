@@ -14,7 +14,8 @@
         <init-param>
             <param-name>services</param-name>
             <param-value>com.tokko.recipesv2.backend.endpoints.RegistrationEndpoint,
-                com.tokko.recipesv2.backend.endpoints.MessagingEndpoint
+                com.tokko.recipesv2.backend.endpoints.MessagingEndpoint,
+                com.tokko.recipesv2.backend.endpoints.RecipeUserEndpoint
             </param-value>
         </init-param>
     </servlet>

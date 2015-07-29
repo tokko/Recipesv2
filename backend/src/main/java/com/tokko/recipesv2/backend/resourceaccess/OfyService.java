@@ -1,4 +1,4 @@
-package com.tokko.recipesv2.backend;
+package com.tokko.recipesv2.backend.resourceaccess;
 
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFactory;

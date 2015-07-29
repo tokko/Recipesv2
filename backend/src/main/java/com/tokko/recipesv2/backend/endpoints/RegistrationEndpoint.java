@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
-import static com.tokko.recipesv2.backend.OfyService.ofy;
+import static com.tokko.recipesv2.backend.resourceaccess.OfyService.ofy;
 
 /**
  * A registration endpoint class we are exposing for a device's GCM registration id on the backend
@@ -31,7 +31,8 @@ import static com.tokko.recipesv2.backend.OfyService.ofy;
  */
 @Api(name = "registration", version = "v1",
         clientIds = {Constants.ANDROID_CLIENT_ID, Constants.WEB_CLIENT_ID},
-        audiences = {Constants.ANDROID_AUDIENCE}, namespace = @ApiNamespace(ownerDomain = "backend.recipesv2.tokko.com", ownerName = "backend.recipesv2.tokko.com", packagePath = ""))
+        audiences = {Constants.ANDROID_AUDIENCE},
+        namespace = @ApiNamespace(ownerDomain = "backend.recipesv2.tokko.com", ownerName = "backend.recipesv2.tokko.com", packagePath = ""))
 public class RegistrationEndpoint {
 
     private static final Logger log = Logger.getLogger(RegistrationEndpoint.class.getName());

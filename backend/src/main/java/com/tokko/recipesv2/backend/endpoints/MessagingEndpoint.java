@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 
 import javax.inject.Named;
 
-import static com.tokko.recipesv2.backend.OfyService.ofy;
+import static com.tokko.recipesv2.backend.resourceaccess.OfyService.ofy;
 
 /**
  * An endpoint to send messages to devices registered with the backend
