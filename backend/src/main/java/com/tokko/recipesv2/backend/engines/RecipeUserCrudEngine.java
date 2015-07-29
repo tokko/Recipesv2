@@ -11,7 +11,9 @@ public class RecipeUserCrudEngine {
     }
 
     public RecipeUser createUser(String email) {
-        throw new UnsupportedOperationException("Not implemented");
+        RecipeUser user = new RecipeUser();
+        user.setEmail(email);
+        return user;
     }
 
     public void addRegistrationIdToUser(RecipeUser user, String registrationId) {

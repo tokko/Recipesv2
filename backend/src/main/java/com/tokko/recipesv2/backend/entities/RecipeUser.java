@@ -3,13 +3,14 @@ package com.tokko.recipesv2.backend.entities;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class RecipeUser {
     @Id
     private String email;
-    private List<String> registrationIds;
+    private List<String> registrationIds = new ArrayList<String>();
 
     public String getEmail() {
         return email;

@@ -49,9 +49,11 @@ public class RecipeUserCrudEngineTest extends TestsWithObjectifyStorage {
     }
 
     @Test
-    @Ignore("Not implementsed yet")
     public void testCreateUser() throws Exception {
-
+        RecipeUser newUser = recipeUserCrudEngine.createUser(doesNotExist.getEmail());
+        assertNotNull(newUser);
+        assertEquals(doesNotExist.getEmail(), newUser.getEmail());
+        assertEquals(doesNotExist.getRegistrationIds(), newUser.getRegistrationIds());
     }
 
     @Test
