@@ -13,6 +13,7 @@ import util.TestsWithObjectifyStorage;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public class RecipeUserCrudEngineTest extends TestsWithObjectifyStorage {
 
@@ -39,6 +40,12 @@ public class RecipeUserCrudEngineTest extends TestsWithObjectifyStorage {
         RecipeUser user = recipeUserCrudEngine.getUserByEmail(exists.getEmail());
         assertNotNull(user);
         assertEquals(exists.getEmail(), user.getEmail());
+    }
+
+    @Test
+    public void testGetUserByEmail_userNotExists_returnsNull() throws Exception {
+        RecipeUser user = recipeUserCrudEngine.getUserByEmail(doesNotExist.getEmail());
+        assertNull(user);
     }
 
     @Test
