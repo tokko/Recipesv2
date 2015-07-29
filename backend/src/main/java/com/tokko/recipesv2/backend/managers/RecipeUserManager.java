@@ -13,12 +13,10 @@ public class RecipeUserManager {
     }
 
     public void addRegistrationIdToRecipeUser(String email, String registrationId) {
-        recipeUserCrudEngine.startTransaction();
         RecipeUser user = recipeUserCrudEngine.getUserByEmail(email);
         if (user == null)
             user = recipeUserCrudEngine.createUser(email);
         recipeUserCrudEngine.addRegistrationIdToUser(user, registrationId);
         recipeUserCrudEngine.persistUser(user);
-        recipeUserCrudEngine.commitTransaction();
     }
 }
