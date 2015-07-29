@@ -3,6 +3,7 @@ package com.tokko.recipesv2.backend.resourceaccess;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
+import com.tokko.recipesv2.backend.entities.RecipeUser;
 import com.tokko.recipesv2.backend.entities.RegistrationRecord;
 
 /**
@@ -13,6 +14,7 @@ public class OfyService {
 
     static {
         ObjectifyService.register(RegistrationRecord.class);
+        ObjectifyService.register(RecipeUser.class);
     }
 
     public static Objectify ofy() {
