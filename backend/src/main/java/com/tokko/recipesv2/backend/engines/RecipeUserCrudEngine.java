@@ -16,11 +16,7 @@ public class RecipeUserCrudEngine {
         return user;
     }
 
-    public void addRegistrationIdToUser(RecipeUser user, String registrationId) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
     public void persistUser(RecipeUser user) {
-        throw new UnsupportedOperationException("Not implemented");
+        ofy().save().entity(user).now();
     }
 }

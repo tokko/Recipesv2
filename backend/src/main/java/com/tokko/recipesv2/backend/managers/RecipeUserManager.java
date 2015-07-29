@@ -16,7 +16,7 @@ public class RecipeUserManager {
         RecipeUser user = recipeUserCrudEngine.getUserByEmail(email);
         if (user == null)
             user = recipeUserCrudEngine.createUser(email);
-        recipeUserCrudEngine.addRegistrationIdToUser(user, registrationId);
+        user.getRegistrationIds().add(registrationId);
         recipeUserCrudEngine.persistUser(user);
     }
 }
