@@ -1,8 +1,7 @@
 package com.tokko.recipesv2;
 
-import android.app.Activity;
 import android.app.ListActivity;
-import android.support.v7.app.ActionBarActivity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,8 +9,12 @@ import android.widget.ArrayAdapter;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.tokko.recipesv2.backend.registration.Registration;
+import com.tokko.recipesv2.backend.registration.model.RegistrationRecord;
 
-import java.util.Arrays;
+import java.io.IOException;
 import java.util.List;
 
 
@@ -21,9 +24,7 @@ public class GroceryListActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        // setContentView(R.layout.activity_grocery_list);
-        List<String> list = Arrays.asList("one", "two");
-        list = Stream.of(list).map(s -> s + "postfix").collect(Collectors.toList());
-        setListAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, list));
+        new Downloader().execute();
     }
 
     @Override
@@ -46,5 +47,26 @@ public class GroceryListActivity extends ListActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private class Downloader extends AsyncTask<Void, Void, List<String>> {
+
+        @Override
+        protected List<String> doInBackground(Void... params) {
+            Registration reg = new Registration.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null).setRootUrl("http://192.168.102.1:8080/_ah/api/").build();
+            try {
+                return Stream.of(reg.listDevices().execute().getItems()).map(RegistrationRecord::getRegId).collect(Collectors.toList());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<String> list) {
+            super.onPostExecute(list);
+            list = Stream.of(list).map(s -> s + "postfix").collect(Collectors.toList());
+            setListAdapter(new ArrayAdapter<>(GroceryListActivity.this, android.R.layout.simple_list_item_1, android.R.id.text1, list));
+        }
     }
 }
