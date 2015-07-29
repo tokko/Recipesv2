@@ -11,7 +11,7 @@ import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.users.User;
-import com.tokko.recipesv2.backend.enteties.RegistrationRecord;
+import com.tokko.recipesv2.backend.entities.RegistrationRecord;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.tokko.recipesv2.backend.enteties;
+package com.tokko.recipesv2.backend.entities;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;

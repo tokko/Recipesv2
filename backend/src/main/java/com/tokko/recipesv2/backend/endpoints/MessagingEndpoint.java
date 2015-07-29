@@ -12,7 +12,7 @@ import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiNamespace;
-import com.tokko.recipesv2.backend.enteties.RegistrationRecord;
+import com.tokko.recipesv2.backend.entities.RegistrationRecord;
 
 import java.io.IOException;
 import java.util.List;
