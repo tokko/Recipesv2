@@ -4,7 +4,7 @@
    https://github.com/GoogleCloudPlatform/gradle-appengine-templates/tree/master/GcmEndpoints
 */
 
-package com.tokko.recipesv2.backend;
+package com.tokko.recipesv2.backend.endpoints;
 
 import com.google.android.gcm.server.Constants;
 import com.google.android.gcm.server.Message;
@@ -12,6 +12,7 @@ import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiNamespace;
+import com.tokko.recipesv2.backend.enteties.RegistrationRecord;
 
 import java.io.IOException;
 import java.util.List;

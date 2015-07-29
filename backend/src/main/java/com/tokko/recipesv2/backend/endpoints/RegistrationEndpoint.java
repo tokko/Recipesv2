@@ -4,13 +4,14 @@
    https://github.com/GoogleCloudPlatform/gradle-appengine-templates/tree/master/GcmEndpoints
 */
 
-package com.tokko.recipesv2.backend;
+package com.tokko.recipesv2.backend.endpoints;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.users.User;
+import com.tokko.recipesv2.backend.enteties.RegistrationRecord;
 
 import java.util.Arrays;
 import java.util.List;

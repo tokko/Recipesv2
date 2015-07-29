@@ -1,4 +1,4 @@
-package com.tokko.recipesv2.backend;
+package com.tokko.recipesv2.backend.endpoints;
 
 public class Constants {
 

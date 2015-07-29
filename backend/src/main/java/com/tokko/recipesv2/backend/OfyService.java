@@ -3,6 +3,7 @@ package com.tokko.recipesv2.backend;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
+import com.tokko.recipesv2.backend.enteties.RegistrationRecord;
 
 /**
  * Objectify service wrapper so we can statically register our persistence classes
