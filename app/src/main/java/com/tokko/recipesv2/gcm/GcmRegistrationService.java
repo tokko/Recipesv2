@@ -24,10 +24,8 @@ public class GcmRegistrationService extends IntentService {
             String token = instanceID.getToken("826803278070",
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
             RecipeUserApi api = (RecipeUserApi) ApiFactory.createApi(RecipeUserApi.Builder.class);
-            RecipeUser b;
             if (api != null) {
-                b = api.foo().execute();
-                //api.insert(token).execute();
+                api.insert(token).execute();
             }
             getSharedPreferences("RegistrationData", MODE_PRIVATE).edit().putString("regid", token).apply();
         } catch (IOException e) {
