@@ -11,8 +11,7 @@ import android.widget.ArrayAdapter;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.tokko.recipesv2.backend.enteties.recipeUserApi.RecipeUserApi;
-import com.tokko.recipesv2.backend.enteties.recipeUserApi.model.RegistrationRecord;
-import com.tokko.recipesv2.backend.registration.Registration;
+import com.tokko.recipesv2.backend.enteties.recipeUserApi.model.RecipeUser;
 import com.tokko.recipesv2.gcm.GcmRegistrationService;
 
 import java.io.IOException;
@@ -57,8 +56,8 @@ public class GroceryListActivity extends ListActivity {
         protected List<String> doInBackground(Void... params) {
             RecipeUserApi reg = (RecipeUserApi) ApiFactory.createApi(RecipeUserApi.Builder.class);
             try {
-                List<RegistrationRecord> items = reg.getMockList().execute().getItems();
-                return Stream.of(items).map(RegistrationRecord::getRegId).collect(Collectors.toList());
+                List<RecipeUser> items = reg.getMockList().execute().getItems();
+                return Stream.of(items).map(RecipeUser::getEmail).collect(Collectors.toList());
             } catch (IOException e) {
                 Throwable cause = e.getCause();
                 cause.printStackTrace();
