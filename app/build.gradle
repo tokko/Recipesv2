@@ -52,7 +52,7 @@ android {
         }
     }
     dexOptions {
-        javaMaxHeapSize "1g"
+        javaMaxHeapSize "4g"
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

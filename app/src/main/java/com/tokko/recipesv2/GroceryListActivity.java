@@ -1,6 +1,7 @@
 package com.tokko.recipesv2;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,6 +12,7 @@ import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.tokko.recipesv2.backend.registration.Registration;
 import com.tokko.recipesv2.backend.registration.model.RegistrationRecord;
+import com.tokko.recipesv2.gcm.GcmRegistrationService;
 
 import java.io.IOException;
 import java.util.List;
@@ -40,7 +42,8 @@ public class GroceryListActivity extends ListActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.register) {
+            startService(new Intent(this, GcmRegistrationService.class));
             return true;
         }
 

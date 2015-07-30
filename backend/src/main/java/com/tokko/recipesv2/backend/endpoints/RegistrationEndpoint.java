@@ -32,7 +32,10 @@ import static com.tokko.recipesv2.backend.resourceaccess.OfyService.ofy;
 @Api(name = "registration", version = "v1",
         clientIds = {Constants.ANDROID_CLIENT_ID, Constants.WEB_CLIENT_ID},
         audiences = {Constants.ANDROID_AUDIENCE},
-        namespace = @ApiNamespace(ownerDomain = "backend.recipesv2.tokko.com", ownerName = "backend.recipesv2.tokko.com", packagePath = ""))
+        namespace = @ApiNamespace(
+                ownerDomain = "backend.recipesv2.tokko.com",
+                ownerName = "backend.recipesv2.tokko.com",
+                packagePath = ""))
 public class RegistrationEndpoint {
 
     private static final Logger log = Logger.getLogger(RegistrationEndpoint.class.getName());

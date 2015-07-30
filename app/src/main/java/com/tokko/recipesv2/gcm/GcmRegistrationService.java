@@ -6,8 +6,8 @@ import android.content.Intent;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.tokko.recipesv2.ApiFactory;
-import com.tokko.recipesv2.backend.registration.Registration;
-import com.tokko.recipesv2.backend.registration.model.RegistrationRecord;
+import com.tokko.recipesv2.backend.enteties.recipeUserApi.RecipeUserApi;
+import com.tokko.recipesv2.backend.enteties.recipeUserApi.model.RecipeUser;
 
 import java.io.IOException;
 
@@ -23,10 +23,13 @@ public class GcmRegistrationService extends IntentService {
         try {
             String token = instanceID.getToken("826803278070",
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-            RegistrationRecord reg1 = new RegistrationRecord();
-            reg1.setRegId(token);
-            RegistrationRecord reg = ((Registration) ApiFactory.createApi(Registration.Builder.class)).insert(reg1).execute();
-            getSharedPreferences("RegistrationData", MODE_PRIVATE).edit().putString("regid", reg.getRegId()).apply();
+            RecipeUserApi api = (RecipeUserApi) ApiFactory.createApi(RecipeUserApi.Builder.class);
+            RecipeUser b;
+            if (api != null) {
+                b = api.foo().execute();
+                //api.insert(token).execute();
+            }
+            getSharedPreferences("RegistrationData", MODE_PRIVATE).edit().putString("regid", token).apply();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -18,7 +18,7 @@ public class ApiFactory {
         try {
             return clz.getConstructor(HttpTransport.class, JsonFactory.class, HttpRequestInitializer.class)
                     .newInstance(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), credential)
-                    .setRootUrl(getRootUrl()).build();
+                    .setRootUrl(getRootUrl()).setApplicationName("recipesv2").build();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -28,6 +28,6 @@ public class ApiFactory {
     private static String getRootUrl() {
         if (BuildConfig.BUILD_TYPE.equalsIgnoreCase("release"))
             return ""; //TODO: release backend url
-        return "http://192.168.102.1:8080/_ah/api/";
+        return "http://192.168.184.1:8080/_ah/api/";
     }
 }

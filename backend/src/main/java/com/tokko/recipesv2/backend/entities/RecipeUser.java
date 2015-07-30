@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 public class RecipeUser {
     @Id
-    private String email;
+    public String email;
     private List<String> registrationIds = new ArrayList<String>();
 
     public String getEmail() {
