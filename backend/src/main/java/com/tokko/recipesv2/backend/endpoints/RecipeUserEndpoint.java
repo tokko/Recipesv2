@@ -12,7 +12,6 @@ import com.tokko.recipesv2.backend.managers.RecipeUserManager;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
@@ -21,7 +20,7 @@ import static com.tokko.recipesv2.backend.util.GuiceModule.inject;
 @Api(
         name = "recipeUserApi",
         version = "v1",
-        // resource = "recipeUser",
+        resource = "recipeUser",
         clientIds = {Constants.ANDROID_CLIENT_ID, Constants.WEB_CLIENT_ID},
         audiences = {Constants.ANDROID_AUDIENCE},
         namespace = @ApiNamespace(
@@ -38,20 +37,16 @@ public class RecipeUserEndpoint {
         inject(this);
     }
 
-    @ApiMethod(name = "foo")
-    public RecipeUser foo() {
-        Logger.getLogger(RecipeUserEndpoint.class.getName()).info("Foo called.");
-        RecipeUser b = new RecipeUser();
-        b.setEmail("email");
-        return b;
-    }
-
-    @ApiMethod(name = "insert")
+    @ApiMethod(
+            name = "insert",
+            path = "recipeUser",
+            httpMethod = ApiMethod.HttpMethod.GET)
     public void registerDevice(@Named("regid") String regid, User user) throws UnauthorizedException {
         if (user == null) throw new UnauthorizedException("You shall not pass!");
         recipeUserManager.addRegistrationIdToRecipeUser(user.getEmail(), regid);
     }
-    @ApiMethod(name = "getMockList")
+
+    @ApiMethod(name = "getMockList", path = "mockList", httpMethod = ApiMethod.HttpMethod.GET)
     public CollectionResponse<RecipeUser> getMockList(User user) {
         List<RecipeUser> records = Arrays.asList(new RecipeUser("first"), new RecipeUser("Second"));//ofy().load().type(RegistrationRecord.class).limit(count).list();
         return CollectionResponse.<RecipeUser>builder().setItems(records).build();
