@@ -53,9 +53,9 @@ public class RecipeUserEndpoint {
         recipeUserManager.addRegistrationIdToRecipeUser(user.getEmail(), regid);
     }
     @ApiMethod(name = "getMockList")
-    public CollectionResponse<RegistrationRecord> getMockList(User user) {
-        List<RegistrationRecord> records = Arrays.asList(new RegistrationRecord("first"), new RegistrationRecord("Second"));//ofy().load().type(RegistrationRecord.class).limit(count).list();
-        return CollectionResponse.<RegistrationRecord>builder().setItems(records).build();
+    public CollectionResponse<RecipeUser> getMockList(User user) {
+        List<RecipeUser> records = Arrays.asList(new RecipeUser("first"), new RecipeUser("Second"));//ofy().load().type(RegistrationRecord.class).limit(count).list();
+        return CollectionResponse.<RecipeUser>builder().setItems(records).build();
     }
 
     public class Bean {

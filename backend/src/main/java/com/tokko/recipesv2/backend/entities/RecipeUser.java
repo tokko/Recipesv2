@@ -12,6 +12,14 @@ public class RecipeUser {
     public String email;
     private List<String> registrationIds = new ArrayList<String>();
 
+    public RecipeUser(String email) {
+        this.email = email;
+    }
+
+    public RecipeUser() {
+
+    }
+
     public String getEmail() {
         return email;
     }
