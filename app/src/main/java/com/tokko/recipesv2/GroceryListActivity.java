@@ -56,9 +56,11 @@ public class GroceryListActivity extends ListActivity {
         protected List<String> doInBackground(Void... params) {
             Registration reg = (Registration) ApiFactory.createApi(Registration.Builder.class);
             try {
-                return Stream.of(reg.listDevices().execute().getItems()).map(RegistrationRecord::getRegId).collect(Collectors.toList());
+                List<RegistrationRecord> items = reg.listDevices().execute().getItems();
+                return Stream.of(items).map(RegistrationRecord::getRegId).collect(Collectors.toList());
             } catch (IOException e) {
-                e.printStackTrace();
+                Throwable cause = e.getCause();
+                cause.printStackTrace();
             }
             return null;
         }
