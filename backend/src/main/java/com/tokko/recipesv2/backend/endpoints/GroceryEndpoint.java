@@ -82,16 +82,8 @@ public class GroceryEndpoint {
             name = "insert",
             path = "grocery",
             httpMethod = ApiMethod.HttpMethod.POST)
-    public Grocery insert(Grocery grocery) {
-        // Typically in a RESTful API a POST does not have a known ID (assuming the ID is used in the resource path).
-        // You should validate that grocery.id has not been set. If the ID type is not supported by the
-        // Objectify ID generator, e.g. long or String, then you should generate the unique ID yourself prior to saving.
-        //
-        // If your client provides the ID then you should probably use PUT instead.
-        ofy().save().entity(grocery).now();
-        logger.info("Created Grocery with ID: " + grocery.getId());
-
-        return ofy().load().entity(grocery).now();
+    public Grocery insert(Grocery grocery, User user) {
+        return groceryManager.commitGrocery(grocery, user.getEmail());
     }
 
     /**
