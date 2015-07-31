@@ -1,15 +1,21 @@
 package com.tokko.recipesv2.masterdetail;
 
 import android.app.Activity;
-import android.app.ListFragment;
+import android.app.LoaderManager;
+import android.content.Loader;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.inject.Inject;
 import com.tokko.recipesv2.masterdetail.dummy.DummyContent;
 
-public class ItemListFragment extends ListFragment {
+import java.util.List;
+
+import roboguice.fragment.provided.RoboListFragment;
+
+public class ItemListFragment<T> extends RoboListFragment implements LoaderManager.LoaderCallbacks<List<T>> {
 
     private static final String STATE_ACTIVATED_POSITION = "activated_position";
     private static Callbacks sDummyCallbacks = new Callbacks() {
@@ -19,6 +25,8 @@ public class ItemListFragment extends ListFragment {
     };
     private Callbacks mCallbacks = sDummyCallbacks;
     private int mActivatedPosition = ListView.INVALID_POSITION;
+    @Inject
+    private AbstractLoader<T> loader;
 
     public ItemListFragment() {
     }
@@ -100,6 +108,20 @@ public class ItemListFragment extends ListFragment {
         }
 
         mActivatedPosition = position;
+    }
+
+    @Override
+    public Loader<List<T>> onCreateLoader(int id, Bundle args) {
+        return loader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<T>> loader, List<T> data) {
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<T>> loader) {
+
     }
 
     public interface Callbacks {
