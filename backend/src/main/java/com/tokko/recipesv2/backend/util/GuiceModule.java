@@ -2,6 +2,7 @@ package com.tokko.recipesv2.backend.util;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
+import com.tokko.recipesv2.backend.engines.GroceryCrudEngine;
 import com.tokko.recipesv2.backend.engines.RecipeUserCrudEngine;
 import com.tokko.recipesv2.backend.managers.RecipeUserManager;
 
@@ -14,5 +15,6 @@ public class GuiceModule extends AbstractModule {
     protected void configure() {
         bind(RecipeUserManager.class);
         bind(RecipeUserCrudEngine.class);
+        bind(GroceryCrudEngine.class);
     }
 }

@@ -1,7 +1,10 @@
 package com.tokko.recipesv2.backend.entities;
 
+import com.google.appengine.repackaged.org.codehaus.jackson.annotate.JsonIgnore;
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Parent;
 
 @Entity
 public class Grocery {
@@ -9,15 +12,22 @@ public class Grocery {
     @Id
     private Long id;
     private String title;
-    //   @Parent @Load
-    //  private Ref<RecipeUser> user;
+
+    @Parent
+    @JsonIgnore
+    private Ref<RecipeUser> user;
 
     public Grocery() {
     }
 
-    public Grocery(Long id, String title) {
+    public Grocery(Long id, String title, RecipeUser user) {
         this.id = id;
         this.title = title;
+        setUser(user);
+    }
+
+    public Grocery(String title, RecipeUser user) {
+        this(null, title, user);
     }
 
     public Long getId() {
@@ -35,7 +45,6 @@ public class Grocery {
     public void setTitle(String title) {
         this.title = title;
     }
-/*
     public RecipeUser getUser() {
         return user.get();
     }
@@ -43,5 +52,4 @@ public class Grocery {
     public void setUser(RecipeUser user) {
         this.user = Ref.create(user);
     }
-    */
 }
