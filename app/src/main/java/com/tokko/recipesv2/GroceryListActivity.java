@@ -10,8 +10,8 @@ import android.widget.ArrayAdapter;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
-import com.tokko.recipesv2.backend.enteties.recipeUserApi.RecipeUserApi;
-import com.tokko.recipesv2.backend.enteties.recipeUserApi.model.RecipeUser;
+import com.tokko.recipesv2.backend.entities.groceryApi.GroceryApi;
+import com.tokko.recipesv2.backend.entities.groceryApi.model.Grocery;
 import com.tokko.recipesv2.gcm.GcmRegistrationService;
 
 import java.io.IOException;
@@ -54,13 +54,12 @@ public class GroceryListActivity extends ListActivity {
 
         @Override
         protected List<String> doInBackground(Void... params) {
-            RecipeUserApi reg = (RecipeUserApi) ApiFactory.createApi(RecipeUserApi.Builder.class);
+            GroceryApi reg = (GroceryApi) ApiFactory.createApi(GroceryApi.Builder.class);
             try {
-                List<RecipeUser> items = reg.getMockList().execute().getItems();
-                return Stream.of(items).map(RecipeUser::getEmail).collect(Collectors.toList());
+                List<Grocery> items = reg.list().execute().getItems();
+                return Stream.of(items).map(Grocery::getTitle).collect(Collectors.toList());
             } catch (IOException e) {
-                Throwable cause = e.getCause();
-                cause.printStackTrace();
+                e.printStackTrace();
             }
             return null;
         }
@@ -68,7 +67,6 @@ public class GroceryListActivity extends ListActivity {
         @Override
         protected void onPostExecute(List<String> list) {
             super.onPostExecute(list);
-            list = Stream.of(list).map(s -> s + "postfix").collect(Collectors.toList());
             setListAdapter(new ArrayAdapter<>(GroceryListActivity.this, android.R.layout.simple_list_item_1, android.R.id.text1, list));
         }
     }
