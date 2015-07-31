@@ -7,7 +7,6 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.tokko.recipesv2.ApiFactory;
 import com.tokko.recipesv2.backend.enteties.recipeUserApi.RecipeUserApi;
-import com.tokko.recipesv2.backend.enteties.recipeUserApi.model.RecipeUser;
 
 import java.io.IOException;
 
