@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import util.TestsWithObjectifyStorage;
 
+import static com.googlecode.objectify.ObjectifyService.ofy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -30,7 +31,7 @@ public class RecipeUserCrudEngineTest extends TestsWithObjectifyStorage {
         exists.setRegistrationIds(new ArrayList<String>() {{
             add("regid");
         }});
-        ofy.save().entity(exists).now();
+        ofy().save().entity(exists).now();
         doesNotExist = new RecipeUser();
         doesNotExist.setEmail("email2@domain.toplevel");
     }
@@ -61,7 +62,7 @@ public class RecipeUserCrudEngineTest extends TestsWithObjectifyStorage {
         String newRegId = "newRegId";
         exists.getRegistrationIds().add(newRegId);
         recipeUserCrudEngine.persistUser(exists);
-        RecipeUser updated = ofy.load().type(RecipeUser.class).id(exists.getEmail()).now();
+        RecipeUser updated = ofy().load().type(RecipeUser.class).id(exists.getEmail()).now();
         assertNotNull(updated);
         assertTrue(updated.getRegistrationIds().contains(newRegId));
     }

@@ -22,4 +22,9 @@ public class GroceryManager {
         RecipeUser user = recipeUserCrudEngine.getUserByEmail(email);
         return groceryCrudEngine.listGroceries(user);
     }
+
+    public Grocery commitGrocery(Grocery grocery, String email) {
+        RecipeUser user = recipeUserCrudEngine.getUserByEmail(email);
+        return groceryCrudEngine.save(grocery, user);
+    }
 }

@@ -30,6 +30,10 @@ public class Grocery {
         this(null, title, user);
     }
 
+    public Grocery(String title) {
+        this(null, title, null);
+    }
+
     public Long getId() {
         return id;
     }
@@ -50,6 +54,7 @@ public class Grocery {
     }
 
     public void setUser(RecipeUser user) {
+        if (user != null)
         this.user = Ref.create(user);
     }
 }

@@ -11,4 +11,10 @@ public class GroceryCrudEngine {
     public List<Grocery> listGroceries(RecipeUser user) {
         return ofy().load().type(Grocery.class).ancestor(user).list();
     }
+
+    public Grocery save(Grocery grocery, RecipeUser user) {
+        grocery.setUser(user);
+        ofy().save().entity(grocery).now();
+        return grocery;
+    }
 }
