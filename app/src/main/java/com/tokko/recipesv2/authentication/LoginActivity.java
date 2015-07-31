@@ -1,4 +1,4 @@
-package com.tokko.recipesv2;
+package com.tokko.recipesv2.authentication;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
@@ -7,7 +7,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.tokko.recipesv2.ApiFactory;
 import com.tokko.recipesv2.gcm.GcmRegistrationService;
+import com.tokko.recipesv2.groceries.GroceryListActivity;
 
 public class LoginActivity extends Activity {
     static final int REQUEST_ACCOUNT_PICKER = 2;

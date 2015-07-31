@@ -1,4 +1,4 @@
-package com.tokko.recipesv2;
+package com.tokko.recipesv2.groceries;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
+import com.tokko.recipesv2.ApiFactory;
+import com.tokko.recipesv2.R;
 import com.tokko.recipesv2.backend.entities.groceryApi.GroceryApi;
 import com.tokko.recipesv2.backend.entities.groceryApi.model.Grocery;
 import com.tokko.recipesv2.gcm.GcmRegistrationService;

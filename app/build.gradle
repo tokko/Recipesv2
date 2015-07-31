@@ -81,10 +81,11 @@ dependencies {
     provided 'org.roboguice:roboblender:3.0.1'
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(path: ':backend', configuration: 'android-endpoints')
     compile 'org.roboguice:roboguice:3.0.1'
     compile 'com.google.android.gms:play-services:7.5.0'
     compile 'com.google.code.gson:gson:2.3'
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.annimon:stream:1.0.1'
-    compile project(path: ':backend', configuration: 'android-endpoints')
+    compile 'com.android.support:support-v4:22.2.1'
 }
