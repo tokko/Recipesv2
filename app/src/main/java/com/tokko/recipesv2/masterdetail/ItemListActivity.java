@@ -3,6 +3,7 @@ package com.tokko.recipesv2.masterdetail;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.gson.Gson;
 import com.google.inject.Key;
 import com.google.inject.util.Types;
 import com.tokko.recipesv2.R;
@@ -43,11 +44,18 @@ public class ItemListActivity extends RoboActivity
     }
 
     @Override
-    public void onItemSelected(String id) {
+    public void onItemSelected(Object entity) {
+        Bundle arguments = new Bundle();
+        arguments.putSerializable(ItemDetailFragment.EXTRA_CLASS, entity.getClass());
+        arguments.putString(ItemDetailFragment.EXTRA_ENTITY, new Gson().toJson(entity));
+        /*
+        Class<?> groceryClass =  entity.getClass();
+        ParameterizedType type = Types.newParameterizedType(ItemDetailFragment.class, groceryClass);
+        Key<?> key = Key.get(type);
+        ItemDetailFragment fragment = RoboGuice.getInjector(this).getInstance(key);
+        */
+        ItemDetailFragment fragment = null;
         if (mTwoPane) {
-            Bundle arguments = new Bundle();
-            arguments.putString(ItemDetailFragment.ARG_ITEM_ID, id);
-            ItemDetailFragment fragment = new ItemDetailFragment();
             fragment.setArguments(arguments);
             getFragmentManager().beginTransaction()
                     .replace(R.id.item_detail_container, fragment)
@@ -55,7 +63,7 @@ public class ItemListActivity extends RoboActivity
 
         } else {
             Intent detailIntent = new Intent(this, ItemDetailActivity.class);
-            detailIntent.putExtra(ItemDetailFragment.ARG_ITEM_ID, id);
+            detailIntent.putExtras(arguments);
             startActivity(detailIntent);
         }
     }

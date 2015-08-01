@@ -20,13 +20,8 @@ import roboguice.fragment.provided.RoboListFragment;
 public class ItemListFragment<T> extends RoboListFragment implements LoaderManager.LoaderCallbacks<List<T>> {
     public static final String EXTRA_CLASS = "class";
     private static final String STATE_ACTIVATED_POSITION = "activated_position";
-    private static Callbacks sDummyCallbacks = new Callbacks() {
-        @Override
-        public void onItemSelected(String id) {
-        }
-    };
     Class<T> clz;
-    private Callbacks mCallbacks = sDummyCallbacks;
+    private Callbacks mCallbacks;
     private int mActivatedPosition = ListView.INVALID_POSITION;
     private StringifyableAdapter<T> adapter;
 
@@ -89,7 +84,7 @@ public class ItemListFragment<T> extends RoboListFragment implements LoaderManag
         super.onDetach();
 
         // Reset the active callbacks interface to the dummy implementation.
-        mCallbacks = sDummyCallbacks;
+        mCallbacks = null;
     }
 
     @Override
@@ -98,7 +93,7 @@ public class ItemListFragment<T> extends RoboListFragment implements LoaderManag
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+        mCallbacks.onItemSelected(adapter.getItem(position));
     }
 
     @Override
@@ -146,6 +141,6 @@ public class ItemListFragment<T> extends RoboListFragment implements LoaderManag
 
     public interface Callbacks {
 
-        void onItemSelected(String id);
+        void onItemSelected(Object entity);
     }
 }
