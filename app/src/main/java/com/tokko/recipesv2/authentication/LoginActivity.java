@@ -6,10 +6,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.tokko.recipesv2.ApiFactory;
+import com.tokko.recipesv2.backend.entities.groceryApi.model.Grocery;
 import com.tokko.recipesv2.gcm.GcmRegistrationService;
-import com.tokko.recipesv2.groceries.GroceryListActivity;
+import com.tokko.recipesv2.masterdetail.ItemListActivity;
 
 public class LoginActivity extends Activity {
     static final int REQUEST_ACCOUNT_PICKER = 2;
@@ -21,7 +21,6 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         // Inside your Activity class onCreate method
         settings = getSharedPreferences(LoginActivity.class.getSimpleName(), 0);
-        ApiFactory.credential = GoogleAccountCredential.usingAudience(this, "server:client_id:826803278070-0gs94ct68qhnn9b2tpi1mnuptu5al77n.apps.googleusercontent.com");
         setSelectedAccountName(settings.getString(PREF_ACCOUNT_NAME, null));
         if (ApiFactory.credential.getSelectedAccountName() != null) {
             continueToNextActivity();
@@ -68,7 +67,7 @@ public class LoginActivity extends Activity {
 
     private void continueToNextActivity() {
         startService(new Intent(this, GcmRegistrationService.class));
-        startActivity(new Intent(this, GroceryListActivity.class));
+        startActivity(new Intent(this, ItemListActivity.class).putExtra(ItemListActivity.EXTRA_ENTITY_CLASS, Grocery.class));
         finish();
     }
 }

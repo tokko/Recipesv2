@@ -8,25 +8,27 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.google.inject.Inject;
+import com.google.inject.Key;
+import com.google.inject.util.Types;
 import com.tokko.recipesv2.masterdetail.dummy.DummyContent;
 
 import java.util.List;
 
+import roboguice.RoboGuice;
 import roboguice.fragment.provided.RoboListFragment;
 
 public class ItemListFragment<T> extends RoboListFragment implements LoaderManager.LoaderCallbacks<List<T>> {
-
+    public static final String EXTRA_CLASS = "class";
     private static final String STATE_ACTIVATED_POSITION = "activated_position";
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
         public void onItemSelected(String id) {
         }
     };
+    Class<T> clz;
     private Callbacks mCallbacks = sDummyCallbacks;
     private int mActivatedPosition = ListView.INVALID_POSITION;
-    @Inject
-    private AbstractLoader<T> loader;
+    private StringifyableAdapter<T> adapter;
 
     public ItemListFragment() {
     }
@@ -41,6 +43,10 @@ public class ItemListFragment<T> extends RoboListFragment implements LoaderManag
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
                 DummyContent.ITEMS));
+        clz = (Class<T>) getArguments().getSerializable(EXTRA_CLASS);
+        adapter = (StringifyableAdapter<T>) RoboGuice.getInjector(getActivity()).getInstance(Key.<StringifyableAdapter<T>>get(Types.newParameterizedType(StringifyableAdapter.class, clz)));
+        setListAdapter(adapter);
+
     }
 
     @Override
@@ -64,6 +70,18 @@ public class ItemListFragment<T> extends RoboListFragment implements LoaderManag
         }
 
         mCallbacks = (Callbacks) activity;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getLoaderManager().initLoader(0, null, this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getLoaderManager().destroyLoader(0);
     }
 
     @Override
@@ -112,16 +130,18 @@ public class ItemListFragment<T> extends RoboListFragment implements LoaderManag
 
     @Override
     public Loader<List<T>> onCreateLoader(int id, Bundle args) {
-        return loader;
+        Loader<List<T>> instance = (Loader<List<T>>) RoboGuice.getInjector(getActivity()).getInstance(Key.<AbstractLoader<T>>get(Types.newParameterizedType(AbstractLoader.class, clz)));
+        return instance;
     }
 
     @Override
     public void onLoadFinished(Loader<List<T>> loader, List<T> data) {
+        adapter.replaceData(data);
     }
 
     @Override
     public void onLoaderReset(Loader<List<T>> loader) {
-
+        adapter.clear();
     }
 
     public interface Callbacks {

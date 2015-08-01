@@ -129,6 +129,7 @@ public class GroceryEndpoint {
             path = "grocery",
             httpMethod = ApiMethod.HttpMethod.GET)
     public CollectionResponse<Grocery> list(User user) {
+        //user is null
         List<Grocery> groceryList = groceryManager.listGroceries(user.getEmail());
         return CollectionResponse.<Grocery>builder().setItems(groceryList).build();
     }

@@ -11,29 +11,22 @@ import android.widget.TextView;
 import com.google.inject.Inject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-import roboguice.RoboGuice;
-
-public class StringifyableAdapter<T> implements ListAdapter {
+public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T> {
 
     private final Context context;
-    private final int resource;
-    private final int textViewResourceId;
     private ArrayList<T> data = new ArrayList<>();
     private ArrayList<DataSetObserver> observers = new ArrayList<>();
-
+    private int resource = android.R.layout.simple_list_item_1;
+    private int textViewResourceId = android.R.id.text1;
     @Inject
     private LayoutInflater inflater;
-    @Inject
-    private Stringifier<T> stringifier;
-    @Inject
-    private IdGetter<T> idGetter;
 
-    public StringifyableAdapter(Context context, int resource, int textViewResourceId) {
+    @Inject
+    public StringifyableAdapter(Context context) {
         this.context = context;
-        this.resource = resource;
-        this.textViewResourceId = textViewResourceId;
-        RoboGuice.getInjector(context).injectMembers(this);
     }
 
     @Override
@@ -66,10 +59,7 @@ public class StringifyableAdapter<T> implements ListAdapter {
         return data.get(position);
     }
 
-    @Override
-    public long getItemId(int position) {
-        return idGetter.getId(getItem(position));
-    }
+    protected abstract String getItemString(int position);
 
     @Override
     public boolean hasStableIds() {
@@ -78,10 +68,11 @@ public class StringifyableAdapter<T> implements ListAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View v = inflater.inflate(resource, null);
-        TextView tv = (TextView) v.findViewById(textViewResourceId);
-        tv.setText(stringifier.stringify(getItem(position)));
-        return v;
+        if (convertView == null)
+            convertView = inflater.inflate(resource, null);
+        TextView tv = (TextView) convertView.findViewById(textViewResourceId);
+        tv.setText(getItemString(position));
+        return convertView;
     }
 
     @Override
@@ -91,7 +82,7 @@ public class StringifyableAdapter<T> implements ListAdapter {
 
     @Override
     public int getViewTypeCount() {
-        return 0;
+        return 1;
     }
 
     @Override
@@ -99,11 +90,19 @@ public class StringifyableAdapter<T> implements ListAdapter {
         return data.isEmpty();
     }
 
-    public interface IdGetter<T> {
-        long getId(T t);
+    public void clear() {
+        data.clear();
     }
 
-    public interface Stringifier<T> {
-        String stringify(T t);
+    public void replaceData(List<T> data) {
+        clear();
+        if (data != null)
+            this.data.addAll(data);
     }
+
+    @Override
+    public Iterator<T> iterator() {
+        return data.iterator();
+    }
+
 }
