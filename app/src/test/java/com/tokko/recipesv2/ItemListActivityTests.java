@@ -87,9 +87,10 @@ public class ItemListActivityTests {
         StringifyableAdapter<Grocery> adapter = (StringifyableAdapter<Grocery>) listView.getAdapter();
         assertNotNull(adapter);
         assertEquals(groceries.size(), adapter.getCount());
-        List<Grocery> fromAdapter = Stream.of(adapter).collect(Collectors.toList());
-        for (Grocery g : fromAdapter) {
-            assertTrue(groceries.contains(g));
+        List<Long> fromAdapter = Stream.of(adapter).map(Grocery::getId).collect(Collectors.toList());
+        List<Long> actualIds = Stream.of(groceries).map(Grocery::getId).collect(Collectors.toList());
+        for (Long id : fromAdapter) {
+            assertTrue(actualIds.contains(id));
         }
 
     }
