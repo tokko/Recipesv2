@@ -48,13 +48,9 @@ public class ItemListActivity extends RoboActivity
         Bundle arguments = new Bundle();
         arguments.putSerializable(ItemDetailFragment.EXTRA_CLASS, entity.getClass());
         arguments.putString(ItemDetailFragment.EXTRA_ENTITY, new Gson().toJson(entity));
-        /*
-        Class<?> groceryClass =  entity.getClass();
-        ParameterizedType type = Types.newParameterizedType(ItemDetailFragment.class, groceryClass);
-        Key<?> key = Key.get(type);
-        ItemDetailFragment fragment = RoboGuice.getInjector(this).getInstance(key);
-        */
-        ItemDetailFragment fragment = null;
+        Class<?> entityClass = entity.getClass();
+        ItemDetailFragment fragment = (ItemDetailFragment) RoboGuice.getInjector(this).getInstance(Key.<ItemDetailFragment>get(Types.newParameterizedType(ItemDetailFragment.class, entityClass)));
+
         if (mTwoPane) {
             fragment.setArguments(arguments);
             getFragmentManager().beginTransaction()

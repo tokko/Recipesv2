@@ -50,6 +50,9 @@ android {
         debug {
             signingConfig signingConfigs.release
         }
+        mock {
+            signingConfig signingConfigs.release
+        }
     }
     dexOptions {
         javaMaxHeapSize "4g"
