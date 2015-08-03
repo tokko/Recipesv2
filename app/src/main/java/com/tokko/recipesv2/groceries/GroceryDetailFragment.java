@@ -23,11 +23,17 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
         if (parent == null)
             throw new IllegalStateException("Parent must have a view");
         View v = inflater.inflate(R.layout.grocerydetailfragment, null);
-        View C = parent.findViewById(R.id.content);
-        int index = parent.indexOfChild(C);
-        parent.removeView(C);
-        parent.addView(v, index);
+        ViewGroup C = (ViewGroup) parent.findViewById(R.id.content);
+        //int index = parent.indexOfChild(C);
+        //parent.removeView(C);
+        C.addView(v);
+        titleTextView = (TextView) v.findViewById(R.id.grocery_title);
         return parent;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override

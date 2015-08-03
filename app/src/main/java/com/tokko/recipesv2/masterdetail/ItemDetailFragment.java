@@ -9,8 +9,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.gson.Gson;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.tokko.recipesv2.R;
+
+import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -29,10 +31,14 @@ public abstract class ItemDetailFragment<T> extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            clz = (Class<T>) getArguments().getSerializable(EXTRA_CLASS);
-            entity = new Gson().fromJson(getArguments().getString(EXTRA_ENTITY), clz);
+        clz = (Class<T>) getArguments().getSerializable(EXTRA_CLASS);
+        String json = getArguments().getString(EXTRA_ENTITY);
+        try {
+            entity = new AndroidJsonFactory().fromString(json, clz);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        int i = 0;
     }
 
     @Override

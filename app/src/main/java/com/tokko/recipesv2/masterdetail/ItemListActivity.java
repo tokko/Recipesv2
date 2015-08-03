@@ -3,11 +3,12 @@ package com.tokko.recipesv2.masterdetail;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.gson.Gson;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.inject.Key;
 import com.google.inject.util.Types;
 import com.tokko.recipesv2.R;
 
+import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 
 import roboguice.RoboGuice;
@@ -47,7 +48,13 @@ public class ItemListActivity extends RoboActivity
     public void onItemSelected(Object entity) {
         Bundle arguments = new Bundle();
         arguments.putSerializable(ItemDetailFragment.EXTRA_CLASS, entity.getClass());
-        arguments.putString(ItemDetailFragment.EXTRA_ENTITY, new Gson().toJson(entity));
+        String json = null;
+        try {
+            json = new AndroidJsonFactory().toString(entity);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        arguments.putString(ItemDetailFragment.EXTRA_ENTITY, json);
         Class<?> entityClass = entity.getClass();
         ItemDetailFragment fragment = (ItemDetailFragment) RoboGuice.getInjector(this).getInstance(Key.<ItemDetailFragment>get(Types.newParameterizedType(ItemDetailFragment.class, entityClass)));
 

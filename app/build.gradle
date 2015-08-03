@@ -12,6 +12,9 @@ apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
+    packagingOptions {
+        exclude 'LICENSE.txt'
+    }
     lintOptions {
         abortOnError false
     }
@@ -39,6 +42,7 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -51,6 +55,7 @@ android {
             signingConfig signingConfigs.release
         }
         mock {
+            debuggable true
             signingConfig signingConfigs.release
         }
     }
@@ -76,17 +81,25 @@ dependencies {
     testCompile 'org.mockito:mockito-all:2.0.2-beta'
     androidTestCompile 'junit:junit:4.12'
     // androidTestCompile 'org.mockito:mockito-all:2.0.2-beta'
-    //  androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2'
-    androidTestCompile 'com.jayway.android.robotium:robotium:5.4.1'
-    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.4.1'
+    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
+    androidTestCompile('com.android.support.test:runner:0.3') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestCompile('com.android.support.test:rules:0.3') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2') {
+        exclude group: 'com.google.code.findbugs', module: 'jsr305'
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
     //androidTestCompile 'com.android.support.test:runner:0.3'
     provided 'org.roboguice:roboblender:3.0.1'
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(path: ':backend', configuration: 'android-endpoints')
     compile 'org.roboguice:roboguice:3.0.1'
     compile 'com.google.android.gms:play-services:7.5.0'
-    compile 'com.google.code.gson:gson:2.3'
+    //compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.annimon:stream:1.0.1'
     compile 'com.android.support:support-v4:22.2.1'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile project(path: ':backend', configuration: 'android-endpoints')
 }

@@ -93,7 +93,8 @@ public class ItemListFragment<T> extends RoboListFragment implements LoaderManag
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(adapter.getItem(position));
+        T item = adapter.getItem(position);
+        mCallbacks.onItemSelected(item);
     }
 
     @Override
