@@ -14,8 +14,8 @@ android:
 jdk:
 - oraclejdk8
 before_script:
-#  - "echo $JAVA_OPTS"
-#  - "export JAVA_OPTS=-Xmx3072m"
+  - "echo $JAVA_OPTS"
+  - "export JAVA_OPTS=-Xmx5122m"
 #  - chmod +x gradlew
 #  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
 #  - emulator -avd test -no-skin -no-audio -no-window &
