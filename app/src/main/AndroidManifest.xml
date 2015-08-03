@@ -68,7 +68,8 @@
         <activity
             android:name=".masterdetail.ItemDetailActivity"
             android:label="@string/title_item_detail"
-            android:parentActivityName=".masterdetail.ItemListActivity">
+            android:parentActivityName=".masterdetail.ItemListActivity"
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tokko.recipesv2.masterdetail.ItemListActivity" />
