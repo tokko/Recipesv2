@@ -42,7 +42,7 @@ public class ItemDetailActivityTests {
 
     @Test
     public void testGroceryDetails_TitleDisplayed() throws Exception {
-        String s = ((EditTextViewSwitchable) activity.findViewById(R.id.grocery_title)).getData());
+        String s = ((EditTextViewSwitchable) activity.findViewById(R.id.grocery_title)).getData();
         assertEquals(g.getTitle(), s);
     }
 
