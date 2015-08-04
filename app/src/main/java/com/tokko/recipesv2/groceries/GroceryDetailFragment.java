@@ -4,18 +4,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.tokko.recipesv2.R;
 import com.tokko.recipesv2.backend.entities.groceryApi.model.Grocery;
 import com.tokko.recipesv2.masterdetail.ItemDetailFragment;
+import com.tokko.recipesv2.views.EditTextViewSwitchable;
 
 import roboguice.inject.InjectView;
 
 public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
 
     @InjectView(R.id.grocery_title)
-    private TextView titleTextView;
+    private EditTextViewSwitchable titleTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -27,7 +27,7 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
         //int index = parent.indexOfChild(C);
         //parent.removeView(C);
         C.addView(v);
-        titleTextView = (TextView) v.findViewById(R.id.grocery_title);
+        titleTextView = (EditTextViewSwitchable) v.findViewById(R.id.grocery_title);
         return parent;
     }
 
@@ -38,7 +38,7 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
 
     @Override
     protected void bindView(Grocery entity) {
-        titleTextView.setText(entity.getTitle());
+        titleTextView.setData(entity.getTitle());
     }
 
     @Override

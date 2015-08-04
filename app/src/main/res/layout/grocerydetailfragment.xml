@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
+    <com.tokko.recipesv2.views.EditTextViewSwitchable
         android:id="@+id/grocery_title"
         style="@android:style/TextAppearance.DeviceDefault.Medium"
         android:layout_width="wrap_content"

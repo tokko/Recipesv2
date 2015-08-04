@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.tokko.recipesv2.R;
+import com.tokko.recipesv2.views.Editable;
 
 import java.io.IOException;
 
@@ -18,7 +19,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public abstract class ItemDetailFragment<T> extends Fragment {
-    public static final String ARG_ITEM_ID = "item_id";
     public static final String EXTRA_CLASS = "class";
     public static final String EXTRA_ENTITY = "entity";
     private Class<T> clz;
@@ -76,21 +76,40 @@ public abstract class ItemDetailFragment<T> extends Fragment {
     }
 
     private void enterEditMode() {
-
+        traverseView(Editable::edit);
     }
 
     @OnClick(R.id.buttonbar_cancel)
     public void onCancelButtonClick(View v) {
-
+        traverseView(Editable::discard);
     }
 
     @OnClick(R.id.buttonbar_ok)
     public void onOkButtonClick(View v) {
-
+        traverseView(Editable::accept);
     }
 
     @OnClick(R.id.buttonbar_cancel)
     public void onDeleteButtonClick(View v) {
+        traverseView(Editable::discard);
+    }
 
+    private void traverseView(Action action) {
+        traverseView((ViewGroup) getView(), action);
+    }
+
+    private void traverseView(ViewGroup root, Action action) {
+        for (int i = 0; i < root.getChildCount(); i++) {
+            View v = root.getChildAt(i);
+            if (v instanceof ViewGroup)
+                traverseView((ViewGroup) v, action);
+            else if (v instanceof Editable)
+                action.action((Editable) v);
+
+        }
+    }
+
+    private interface Action {
+        void action(Editable editable);
     }
 }
