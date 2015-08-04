@@ -60,7 +60,10 @@ android {
         }
     }
     dexOptions {
-        javaMaxHeapSize "4g"
+        incremental false
+        preDexLibraries = false
+        jumboMode = false
+        javaMaxHeapSize "2048M"
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

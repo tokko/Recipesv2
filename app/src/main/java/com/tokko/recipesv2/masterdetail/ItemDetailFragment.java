@@ -101,10 +101,10 @@ public abstract class ItemDetailFragment<T> extends Fragment {
     private void traverseView(ViewGroup root, Action action) {
         for (int i = 0; i < root.getChildCount(); i++) {
             View v = root.getChildAt(i);
-            if (v instanceof ViewGroup)
-                traverseView((ViewGroup) v, action);
-            else if (v instanceof Editable)
+            if (v instanceof Editable)
                 action.action((Editable) v);
+            else if (v instanceof ViewGroup)
+                traverseView((ViewGroup) v, action);
 
         }
     }
