@@ -10,6 +10,7 @@ import com.google.api.client.util.Key;
 import com.tokko.recipesv2.backend.entities.groceryApi.model.Grocery;
 import com.tokko.recipesv2.masterdetail.ItemDetailActivity;
 import com.tokko.recipesv2.masterdetail.ItemDetailFragment;
+import com.tokko.recipesv2.views.EditTextViewSwitchable;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +42,7 @@ public class ItemDetailActivityTests {
 
     @Test
     public void testGroceryDetails_TitleDisplayed() throws Exception {
-        String s = ((TextView) activity.findViewById(R.id.grocery_title)).getText().toString();
+        String s = ((EditTextViewSwitchable) activity.findViewById(R.id.grocery_title)).getData());
         assertEquals(g.getTitle(), s);
     }
 

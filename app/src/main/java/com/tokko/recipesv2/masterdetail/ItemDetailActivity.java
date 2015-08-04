@@ -1,6 +1,5 @@
 package com.tokko.recipesv2.masterdetail;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -10,6 +9,7 @@ import com.google.inject.util.Types;
 import com.tokko.recipesv2.R;
 
 import roboguice.RoboGuice;
+import roboguice.activity.RoboActivity;
 
 /**
  * An activity representing a single Item detail screen. This
@@ -20,7 +20,7 @@ import roboguice.RoboGuice;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link ItemDetailFragment}.
  */
-public class ItemDetailActivity extends Activity {
+public class ItemDetailActivity extends RoboActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
