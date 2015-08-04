@@ -43,6 +43,7 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
 
     @Override
     protected Grocery getEntity() {
-        return null;
+        entity.setTitle(titleTextView.getText().toString());
+        return entity;
     }
 }

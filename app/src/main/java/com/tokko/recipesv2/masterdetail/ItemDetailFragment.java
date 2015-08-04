@@ -1,6 +1,5 @@
 package com.tokko.recipesv2.masterdetail;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -8,21 +7,30 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.tokko.recipesv2.R;
 import com.tokko.recipesv2.views.Editable;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import roboguice.fragment.provided.RoboFragment;
+import roboguice.inject.InjectView;
 
-public abstract class ItemDetailFragment<T> extends Fragment {
+public abstract class ItemDetailFragment<T> extends RoboFragment {
     public static final String EXTRA_CLASS = "class";
     public static final String EXTRA_ENTITY = "entity";
+    protected T entity;
     private Class<T> clz;
-    private T entity;
+    @InjectView(R.id.buttonbar)
+    private ViewGroup buttonBar;
+
+    @InjectView(R.id.buttonbar_delete)
+    private Button deleteButton;
 
     public ItemDetailFragment() {
     }
@@ -38,7 +46,6 @@ public abstract class ItemDetailFragment<T> extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        int i = 0;
     }
 
     @Override
@@ -51,6 +58,10 @@ public abstract class ItemDetailFragment<T> extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.inject(this, view);
+        try {
+            buttonBar.setEnabled(entity.getClass().getMethod("getId").invoke(entity) != null);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {
+        }
         bindView(entity);
     }
 
@@ -77,23 +88,37 @@ public abstract class ItemDetailFragment<T> extends Fragment {
 
     private void enterEditMode() {
         traverseView(Editable::edit);
+        showButtonBar();
+    }
+
+    private void leaveEditMode(Action action) {
+        traverseView(action);
+        hideButtonBar();
     }
 
     @OnClick(R.id.buttonbar_cancel)
     public void onCancelButtonClick(View v) {
-        traverseView(Editable::discard);
+        leaveEditMode(Editable::discard);
     }
 
     @OnClick(R.id.buttonbar_ok)
     public void onOkButtonClick(View v) {
-        traverseView(Editable::accept);
+        leaveEditMode(Editable::accept);
     }
 
-    @OnClick(R.id.buttonbar_cancel)
+    @OnClick(R.id.buttonbar_delete)
     public void onDeleteButtonClick(View v) {
-        traverseView(Editable::discard);
+        leaveEditMode(Editable::discard);
+
     }
 
+    private void showButtonBar() {
+        buttonBar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideButtonBar() {
+        buttonBar.setVisibility(View.GONE);
+    }
     private void traverseView(Action action) {
         traverseView((ViewGroup) getView(), action);
     }
