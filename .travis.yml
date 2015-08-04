@@ -14,10 +14,19 @@ android:
   - sys-img-armeabi-v7a-android-21
 jdk:
 - oraclejdk8
+
+cache:
+  directories:
+    - $HOME/.gradle/wrapper
+    - $HOME/.gradle/native
+    - $HOME/.gradle/daemon
+    - $HOME/.gradle/caches/jars-1
+    - $HOME/.gradle/caches/2.3
+
 before_script:
 #  - "echo $JAVA_OPTS"
-  - export JAVA_OPTS=-Xmx40962m
-  - export GRADLE_OPTS="-Xmx4096m -XX:MaxPermSize=40+6m"
+  - export JAVA_OPTS=-Xmx4096m #TODO: REMOVE THESE LINES
+  - export GRADLE_OPTS="-Xmx4096m -XX:MaxPermSize=4096m"
   - chmod +x gradlew
   - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
   - emulator -avd test -no-skin -no-audio -no-window &
