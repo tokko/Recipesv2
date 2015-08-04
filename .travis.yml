@@ -16,8 +16,8 @@ jdk:
 - oraclejdk8
 before_script:
 #  - "echo $JAVA_OPTS"
-#  - "export JAVA_OPTS=-Xmx5122m"
-  - GRADLE_OPTS="-Xmx2048m -XX:MaxPermSize=1024m"
+  - export JAVA_OPTS=-Xmx512m
+  - export GRADLE_OPTS="-Xmx512m -XX:MaxPermSize=512m"
   - chmod +x gradlew
   - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
   - emulator -avd test -no-skin -no-audio -no-window &
