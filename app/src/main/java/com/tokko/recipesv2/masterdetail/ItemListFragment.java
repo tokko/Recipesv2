@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Loader;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.inject.Key;
 import com.google.inject.util.Types;
+import com.tokko.recipesv2.R;
 import com.tokko.recipesv2.masterdetail.dummy.DummyContent;
 
 import java.util.List;
@@ -41,7 +45,7 @@ public class ItemListFragment<T> extends RoboListFragment implements LoaderManag
         clz = (Class<T>) getArguments().getSerializable(EXTRA_CLASS);
         adapter = (StringifyableAdapter<T>) RoboGuice.getInjector(getActivity()).getInstance(Key.<StringifyableAdapter<T>>get(Types.newParameterizedType(StringifyableAdapter.class, clz)));
         setListAdapter(adapter);
-
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -52,6 +56,29 @@ public class ItemListFragment<T> extends RoboListFragment implements LoaderManag
         if (savedInstanceState != null
                 && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
             setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.itemfragmentlist, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.listad_add:
+                try {
+                    T t = clz.newInstance();
+                    mCallbacks.onItemSelected(t);
+                } catch (java.lang.InstantiationException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
         }
     }
 
