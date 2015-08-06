@@ -5,10 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.inject.Inject;
 import com.tokko.recipesv2.R;
+import com.tokko.recipesv2.backend.entities.groceryApi.GroceryApi;
 import com.tokko.recipesv2.backend.entities.groceryApi.model.Grocery;
 import com.tokko.recipesv2.masterdetail.ItemDetailFragment;
 import com.tokko.recipesv2.views.EditTextViewSwitchable;
+
+import java.io.IOException;
 
 import roboguice.inject.InjectView;
 
@@ -16,6 +20,8 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
 
     @InjectView(R.id.grocery_title)
     private EditTextViewSwitchable titleTextView;
+    @Inject
+    private GroceryApi api;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,5 +51,23 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
     protected Grocery getEntity() {
         entity.setTitle(titleTextView.getText().toString());
         return entity;
+    }
+
+    @Override
+    protected void onOk() {
+        try {
+            api.insert(entity).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onDelete() {
+        try {
+            api.remove(entity.getId()).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

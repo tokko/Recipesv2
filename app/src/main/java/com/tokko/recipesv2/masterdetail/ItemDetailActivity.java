@@ -9,7 +9,7 @@ import com.google.inject.util.Types;
 import com.tokko.recipesv2.R;
 
 import roboguice.RoboGuice;
-import roboguice.activity.RoboActivity;
+import roboguice.activity.RoboFragmentActivity;
 
 /**
  * An activity representing a single Item detail screen. This
@@ -20,7 +20,7 @@ import roboguice.activity.RoboActivity;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link ItemDetailFragment}.
  */
-public class ItemDetailActivity extends RoboActivity {
+public class ItemDetailActivity extends RoboFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

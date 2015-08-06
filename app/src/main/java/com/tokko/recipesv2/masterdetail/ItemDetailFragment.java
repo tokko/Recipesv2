@@ -58,11 +58,17 @@ public abstract class ItemDetailFragment<T> extends RoboFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.inject(this, view);
+        setDeleteButtonEnabledState();
+        bindView(entity);
+        enterEditMode();
+    }
+
+    private void setDeleteButtonEnabledState() {
         try {
-            buttonBar.setEnabled(entity.getClass().getMethod("getId").invoke(entity) != null);
+            Object getId = entity.getClass().getMethod("getId").invoke(entity);
+            deleteButton.setEnabled(getId != null);
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {
         }
-        bindView(entity);
     }
 
     protected abstract void bindView(T entity);
@@ -96,6 +102,10 @@ public abstract class ItemDetailFragment<T> extends RoboFragment {
         hideButtonBar();
     }
 
+    protected abstract void onOk();
+
+    protected abstract void onDelete();
+
     @OnClick(R.id.buttonbar_cancel)
     public void onCancelButtonClick(View v) {
         leaveEditMode(Editable::discard);
@@ -104,12 +114,13 @@ public abstract class ItemDetailFragment<T> extends RoboFragment {
     @OnClick(R.id.buttonbar_ok)
     public void onOkButtonClick(View v) {
         leaveEditMode(Editable::accept);
+        onOk();
     }
 
     @OnClick(R.id.buttonbar_delete)
     public void onDeleteButtonClick(View v) {
         leaveEditMode(Editable::discard);
-
+        onDelete();
     }
 
     private void showButtonBar() {
