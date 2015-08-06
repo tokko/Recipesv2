@@ -30,8 +30,6 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
             throw new IllegalStateException("Parent must have a view");
         View v = inflater.inflate(R.layout.grocerydetailfragment, null);
         ViewGroup C = (ViewGroup) parent.findViewById(R.id.content);
-        //int index = parent.indexOfChild(C);
-        //parent.removeView(C);
         C.addView(v);
         titleTextView = (EditTextViewSwitchable) v.findViewById(R.id.grocery_title);
         return parent;
