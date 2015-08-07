@@ -1,6 +1,7 @@
 package com.tokko.recipesv2;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -30,7 +31,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.robolectric.util.FragmentTestUtil.startFragment;
+import static org.robolectric.util.FragmentTestUtil.startVisibleFragment;
 
 @SuppressWarnings("ConstantConditions")
 @RunWith(RobolectricGradleTestRunner.class)
@@ -62,8 +63,24 @@ public class ItemDetailFragmentTests {
         });
         RoboGuice.getInjector(RuntimeEnvironment.application).injectMembers(this);
         fragment.setArguments(i.getExtras());
-        startFragment(fragment);
+        startVisibleFragment(fragment);
         fragment.enterEditMode();
+    }
+
+    @Test
+    public void testEdit_IsEditing_DeleteButtonIsEnabled() throws Exception {
+        ItemDetailFragment<Grocery> fragment = new GroceryDetailFragment();
+        Grocery g = new Grocery();
+        g.setId(1L);
+        Bundle b = new Bundle();
+        b.putString(ItemDetailFragment.EXTRA_ENTITY, new AndroidJsonFactory().toString(g));
+        b.putSerializable(ItemDetailFragment.EXTRA_CLASS, Grocery.class);
+        fragment.setArguments(b);
+        startVisibleFragment(fragment);
+        fragment.enterEditMode();
+        View v = fragment.getView().findViewById(R.id.buttonbar_delete);
+        assertTrue(v.isEnabled());
+        assertEquals(View.VISIBLE, v.getVisibility());
     }
 
     @Test
