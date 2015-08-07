@@ -20,7 +20,7 @@ import roboguice.activity.RoboFragmentActivity;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link ItemDetailFragment}.
  */
-public class ItemDetailActivity extends RoboFragmentActivity {
+public class ItemDetailActivity extends RoboFragmentActivity implements ItemDetailFragment.Callbacks {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,5 +48,10 @@ public class ItemDetailActivity extends RoboFragmentActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void detailFinished() {
+        getFragmentManager().popBackStack();
     }
 }

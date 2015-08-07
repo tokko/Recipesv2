@@ -1,5 +1,6 @@
 package com.tokko.recipesv2.masterdetail;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,6 +32,7 @@ public abstract class ItemDetailFragment<T> extends RoboFragment {
 
     @InjectView(R.id.buttonbar_delete)
     private Button deleteButton;
+    private Callbacks callbacks;
 
     public ItemDetailFragment() {
     }
@@ -48,6 +50,9 @@ public abstract class ItemDetailFragment<T> extends RoboFragment {
         }
     }
 
+    public void setCallbacks(Callbacks callbacks) {
+        this.callbacks = callbacks;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,6 +65,17 @@ public abstract class ItemDetailFragment<T> extends RoboFragment {
         ButterKnife.inject(this, view);
         setDeleteButtonEnabledState();
         bindView(entity);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            setCallbacks((Callbacks) activity);
+        } catch (ClassCastException ignored) {
+            // throw new IllegalStateException("Host activity must implement callbacks");
+            //TODO: see to this
+        }
     }
 
     private void setDeleteButtonEnabledState() {
@@ -121,6 +137,7 @@ public abstract class ItemDetailFragment<T> extends RoboFragment {
     public void onDeleteButtonClick(View v) {
         leaveEditMode(Editable::discard);
         onDelete();
+        callbacks.detailFinished();
     }
 
     private void showButtonBar() {
@@ -147,5 +164,9 @@ public abstract class ItemDetailFragment<T> extends RoboFragment {
 
     private interface Action {
         void action(Editable editable);
+    }
+
+    public interface Callbacks {
+        void detailFinished();
     }
 }

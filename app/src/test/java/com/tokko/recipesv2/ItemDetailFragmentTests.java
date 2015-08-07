@@ -42,6 +42,7 @@ public class ItemDetailFragmentTests {
     ItemDetailFragment<Grocery> fragment;
     private Grocery g;
     private GroceryApi api;
+    private ItemDetailFragment.Callbacks callbacks;
 
     @Before
     public void setUp() throws Exception {
@@ -55,6 +56,7 @@ public class ItemDetailFragmentTests {
         when(api.insert(any())).thenReturn(ins);
         GroceryApi.Remove rem = mock(GroceryApi.Remove.class);
         when(api.remove(any())).thenReturn(rem);
+        callbacks = mock(ItemDetailFragment.Callbacks.class);
         RoboGuice.overrideApplicationInjector(RuntimeEnvironment.application, new AbstractModule() {
             @Override
             protected void configure() {
@@ -64,6 +66,7 @@ public class ItemDetailFragmentTests {
             }
         });
         RoboGuice.getInjector(RuntimeEnvironment.application).injectMembers(this);
+        fragment.setCallbacks(callbacks);
         fragment.setArguments(i.getExtras());
         startVisibleFragment(fragment);
         fragment.enterEditMode();
@@ -128,5 +131,11 @@ public class ItemDetailFragmentTests {
     public void testEdit_OnDeleteClick_GroceryDeleted() throws Exception {
         fragment.getView().findViewById(R.id.buttonbar_delete).performClick();
         verify(api).remove(any());
+    }
+
+    @Test
+    public void testEdit_DeleteButtonClickNotifiesParent() throws Exception {
+        fragment.getView().findViewById(R.id.buttonbar_delete).performClick();
+        verify(callbacks).detailFinished();
     }
 }
