@@ -63,6 +63,7 @@ public class ItemDetailFragmentTests {
         RoboGuice.getInjector(RuntimeEnvironment.application).injectMembers(this);
         fragment.setArguments(i.getExtras());
         startFragment(fragment);
+        fragment.enterEditMode();
     }
 
     @Test

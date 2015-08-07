@@ -91,7 +91,7 @@ public abstract class ItemDetailFragment<T> extends RoboFragment {
         }
     }
 
-    private void enterEditMode() {
+    public void enterEditMode() {
         traverseView(Editable::edit);
         showButtonBar();
     }
