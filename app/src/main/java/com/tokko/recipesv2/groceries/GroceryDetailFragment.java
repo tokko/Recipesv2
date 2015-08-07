@@ -1,6 +1,7 @@
 package com.tokko.recipesv2.groceries;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,31 +54,23 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
 
     @Override
     protected void onOk() {
-        new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                try {
-                    api.insert(entity).execute();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        new Handler().post(() -> {
+            try {
+                api.insert(entity).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        }.start();
+        });
     }
 
     @Override
     protected void onDelete() {
-        new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                try {
-                    api.remove(entity.getId()).execute();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        new Handler().post(() -> {
+            try {
+                api.remove(entity.getId()).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        }.start();
+        });
     }
 }

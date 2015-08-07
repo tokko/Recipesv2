@@ -53,6 +53,8 @@ public class ItemDetailFragmentTests {
         api = mock(GroceryApi.class);
         GroceryApi.Insert ins = mock(GroceryApi.Insert.class);
         when(api.insert(any())).thenReturn(ins);
+        GroceryApi.Remove rem = mock(GroceryApi.Remove.class);
+        when(api.remove(any())).thenReturn(rem);
         RoboGuice.overrideApplicationInjector(RuntimeEnvironment.application, new AbstractModule() {
             @Override
             protected void configure() {
@@ -120,5 +122,11 @@ public class ItemDetailFragmentTests {
     public void testEdit_OnOkClick_GrocerySaved() throws Exception {
         fragment.getView().findViewById(R.id.buttonbar_ok).performClick();
         verify(api).insert(any());
+    }
+
+    @Test
+    public void testEdit_OnDeleteClick_GroceryDeleted() throws Exception {
+        fragment.getView().findViewById(R.id.buttonbar_delete).performClick();
+        verify(api).remove(any());
     }
 }
