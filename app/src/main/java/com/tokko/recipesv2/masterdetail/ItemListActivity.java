@@ -15,7 +15,7 @@ import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
 
 public class ItemListActivity extends RoboActivity
-        implements ItemListFragment.Callbacks {
+        implements ItemListFragment.Callbacks, ItemDetailFragment.Callbacks {
 
     public static final String EXTRA_ENTITY_CLASS = "class";
     ItemListFragment<?> listFragment;
@@ -69,5 +69,10 @@ public class ItemListActivity extends RoboActivity
             detailIntent.putExtras(arguments);
             startActivity(detailIntent);
         }
+    }
+
+    @Override
+    public void detailFinished() {
+        getFragmentManager().popBackStack();
     }
 }
