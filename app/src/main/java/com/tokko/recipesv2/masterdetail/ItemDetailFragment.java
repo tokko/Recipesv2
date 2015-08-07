@@ -60,7 +60,6 @@ public abstract class ItemDetailFragment<T> extends RoboFragment {
         ButterKnife.inject(this, view);
         setDeleteButtonEnabledState();
         bindView(entity);
-        enterEditMode();
     }
 
     private void setDeleteButtonEnabledState() {
