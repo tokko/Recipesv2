@@ -39,7 +39,6 @@ public class ItemDetailFragmentTests {
 
     @Inject
     ItemDetailFragment<Grocery> fragment;
-    //private ItemDetailActivity activity;
     private Grocery g;
     private GroceryApi api;
 
@@ -61,8 +60,6 @@ public class ItemDetailFragmentTests {
                 }).to(GroceryDetailFragment.class);
             }
         });
-//        activity = Robolectric.buildActivity(ItemDetailActivity.class).withIntent(i).create().start().resume().visible().get();
-        //      activity.findViewById(R.id.edit).performClick();
         RoboGuice.getInjector(RuntimeEnvironment.application).injectMembers(this);
         fragment.setArguments(i.getExtras());
         startFragment(fragment);
