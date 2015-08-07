@@ -98,6 +98,9 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
         clear();
         if (data != null)
             this.data.addAll(data);
+        for (DataSetObserver obs : observers) {
+            obs.onChanged();
+        }
     }
 
     @Override

@@ -25,10 +25,11 @@ public class GroceryLoader extends AbstractLoader<Grocery> {
     public List<Grocery> loadInBackground() {
         try {
             CollectionResponseGrocery execute = api.list().execute();
-            return execute.getItems();
+            List<Grocery> items = execute.getItems();
+            return items;
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 }

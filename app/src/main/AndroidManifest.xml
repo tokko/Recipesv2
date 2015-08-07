@@ -61,7 +61,8 @@
 
         <activity
             android:name=".masterdetail.ItemListActivity"
-            android:label="@string/title_item_list">
+            android:label="@string/title_item_list"
+            android:launchMode="singleTop">
 
         </activity>
         <activity

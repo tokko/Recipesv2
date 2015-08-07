@@ -114,6 +114,7 @@ public abstract class ItemDetailFragment<T> extends RoboFragment {
     @OnClick(R.id.buttonbar_ok)
     public void onOkButtonClick(View v) {
         leaveEditMode(Editable::accept);
+        entity = getEntity();
         onOk();
     }
 
