@@ -68,10 +68,16 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
 
     @Override
     protected void onDelete() {
-        try {
-            api.remove(entity.getId()).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    api.remove(entity.getId()).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
     }
 }
