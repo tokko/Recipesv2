@@ -52,6 +52,6 @@ public class ItemDetailActivity extends RoboFragmentActivity implements ItemDeta
 
     @Override
     public void detailFinished() {
-        getFragmentManager().popBackStack();
+        finish();
     }
 }
