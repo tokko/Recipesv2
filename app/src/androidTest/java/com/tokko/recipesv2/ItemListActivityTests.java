@@ -81,4 +81,9 @@ public class ItemListActivityTests extends ActivityInstrumentationTestCase2<Item
         onData(anything()).atPosition(2).perform(click());
         onView(withId(R.id.grocery_title)).check(matches(isDisplayed()));
     }
+
+    public void testOnBackPressed_doDetailFragment_ActivityFinishes() throws Exception {
+        activity.onBackPressed();
+        assertTrue(activity.isFinishing()); //TODO: only true on small screens. Redesign the test i think
+    }
 }
