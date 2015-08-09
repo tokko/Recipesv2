@@ -28,6 +28,6 @@ public class ApiFactory {
     private static String getRootUrl() {
         if (BuildConfig.BUILD_TYPE.equalsIgnoreCase("release"))
             return ""; //TODO: release backend url
-        return "http://192.168.56.1:8080/_ah/api/";
+        return "http://192.168.2.13:8080/_ah/api/";
     }
 }

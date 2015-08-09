@@ -18,6 +18,7 @@ public class ItemListActivity extends RoboActivity
         implements ItemListFragment.Callbacks, ItemDetailFragment.Callbacks {
 
     public static final String EXTRA_ENTITY_CLASS = "class";
+    public static final String EXTRA_TITLE = "title";
     ItemListFragment<?> listFragment;
     private boolean mTwoPane;
 
@@ -31,6 +32,9 @@ public class ItemListActivity extends RoboActivity
             clz = (Class<?>) i.getSerializableExtra(EXTRA_ENTITY_CLASS);
         else
             throw new IllegalArgumentException("Activity extras must contain Class<Entity> with key 'class'");
+        if (i.getExtras().containsKey(EXTRA_TITLE))
+            setTitle(i.getStringExtra(EXTRA_TITLE));
+        else setTitle("Groceries");
         ParameterizedType parameterizedType = Types.newParameterizedType(ItemListFragment.class, clz);
         Key<?> key = Key.get(parameterizedType);
         listFragment = (ItemListFragment<?>) RoboGuice.getInjector(getApplicationContext()).getInstance(key);
