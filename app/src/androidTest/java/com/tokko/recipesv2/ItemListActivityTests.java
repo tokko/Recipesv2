@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.UiThreadTest;
+import android.widget.TextView;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
@@ -80,10 +82,5 @@ public class ItemListActivityTests extends ActivityInstrumentationTestCase2<Item
     public void testOnListItemClick_opensDetailFragment() {
         onData(anything()).atPosition(2).perform(click());
         onView(withId(R.id.grocery_title)).check(matches(isDisplayed()));
-    }
-
-    public void testOnBackPressed_doDetailFragment_ActivityFinishes() throws Exception {
-        activity.onBackPressed();
-        assertTrue(activity.isFinishing()); //TODO: only true on small screens. Redesign the test i think
     }
 }
