@@ -83,7 +83,12 @@ public class GroceryEndpoint {
             path = "grocery",
             httpMethod = ApiMethod.HttpMethod.POST)
     public Grocery insert(Grocery grocery, User user) {
-        return groceryManager.commitGrocery(grocery, user.getEmail());
+        try {
+            return groceryManager.commitGrocery(grocery, user.getEmail());
+        } catch (Exception e) {
+            Logger.getLogger(GroceryEndpoint.class.getName()).info(e.getMessage());
+            return null;
+        }
     }
 
     /**

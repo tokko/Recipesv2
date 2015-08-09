@@ -32,7 +32,17 @@ before_script:
   - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
+before_deploy:
+  - git config --global user.email "builds@travis-ci.com"
+  - git config --global user.name "Travis CI"
+  - ls -R
 script:
-  - "./gradlew testRelease connectedAndroidTestDebug --stacktrace"
+  - "./gradlew testRelease connectedAndroidTest assembleRelease --stacktrace"
+  - if [ "$TRAVIS_BRANCH" = "alpha" ]; then ./gradlew publishRelease; fi
+after_success:
+  - git config user.email $GIT_EMAIL
+  - git config user.name $GIT_NAME
+  - git commit -a -m "Committed by Travis-CI for updated versioncodes"
+  - if [ "$TRAVIS_BRANCH" = "alpha" ]; then git push https://$GIT_CREDS@github.com/tokko/EventTasks.git HEAD:master; fi
 dd:
   secure: oNUiykroCyjutmxvAbEOJtYx7Saknbo0GENkeqoHulpLccwT8UudUzCS2i+aUqxZh3bPyR3Hmki2Bwf1nSdlvTmTs7RC33Xrizlbl4Wky5A1yUQlgLdpofnDfE2/PQiLBB8SJB0ZMf0y1FjqHPIkDEKnRaUVctM/Pfs0GzDaoERRJWS8hFAej2KslybiV4Lxnecy53Elh1Tj2vTYCDdP6eyG2nMy5usL3/I3k0J+yHK6NTTcgIF8A8osuY4VMQuoEVRDbV/ejNwvLeN4GNeQxUw3mUCCDQ5Vt+uKgCs0qYeU1+LEzSq3iTavv4P11LKmI2nICTvyN/zEucqPD8Rh+r8f8Cci25qF2PQ/OVFSh36zdaUxIy8iV3f8fo+O0/8IKd00CAJapCVU+ZkXKuFjlNie4MN3mN027M8cQJ9VPnD9m7ZouHhLPE4un2k9KzMP97sTpTLZPddA4vUrqZewSziKF+9Ps/t7PSZibIwzN1H8+HaVGE7bFH79LYC18MM3ZxQM0yZwANp1dhkyUbaPzBIs22m4sbhCEsv+P3rHl4ZgxSvaeVWCEsI1SH+EAVDVJGyM4imderoMRMmliN1uLP2nSrlQD/bxg+gnalUFt4cKqYaAAunxOrko7o0RAizCNDYNiR9TAyifLRIp4c79E64LmSeWtjNC/0Z/jqbO5x0=

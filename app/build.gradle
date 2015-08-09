@@ -2,6 +2,7 @@ buildscript {
     dependencies {
         classpath 'me.tatarka:gradle-retrolambda:3.2.0'
         classpath 'com.google.gms:google-services:1.3.0-beta1'
+        classpath 'com.github.triplet.gradle:play-publisher:1.1.2'
     }
     repositories {
         jcenter()
@@ -10,6 +11,7 @@ buildscript {
 }
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.github.triplet.play'
 
 android {
     packagingOptions {
@@ -35,12 +37,58 @@ android {
 
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
+
+    def versionPropsFile = file('version.properties')
+    if (versionPropsFile.canRead()) {
+        def Properties versionProps = new Properties()
+        versionProps.load(new FileInputStream(versionPropsFile))
+        def value = 0
+        def runTasks = gradle.startParameter.taskNames
+        if ('assemble' in runTasks || 'publishRelease' in runTasks || 'assembleRelease' in runTasks || 'aR' in runTasks) {
+            value = 1;
+        }
+        def code = versionProps['VERSION_CODE'] != null ? versionProps['VERSION_CODE'].toInteger() + value : 2
+        def name = versionProps['VERSION_NAME'] != null ? versionProps['VERSION_NAME'].toInteger() + 1 : 1
+        versionProps['VERSION_CODE'] = code.toString()
+        versionProps['VERSION_NAME'] = name.toString()
+        versionProps.store(versionPropsFile.newWriter(), null)
+        defaultConfig {
+            versionCode code
+            versionName "0.0." + name
+
+        }
+    }
+    play {
+        serviceAccountEmail = '92588905880-fdolvkj29p3l637u5fgaa3jke0vksd17@developer.gserviceaccount.com'
+        pk12File = file('key.p12')
+        //   uploadImages = true
+    }
+    /*
+    task updateVersions{
+        def Properties versionProps = new Properties()
+        def versionPropsFile = file('version.properties')
+        if(versionPropsFile.exists())
+            versionProps.load(new FileInputStream(versionPropsFile))
+        def code = (versionProps['VERSION_CODE'] ?: "1").toInteger() + 1
+        def buildNumber = (versionProps['BUILD_NUMBER'] ?: "0").toInteger() + 1
+        versionProps['VERSION_CODE'] = code.toString()
+        versionProps['BUILD_NUMBER'] = code.toString()
+        versionProps.store(versionPropsFile.newWriter(), null)
+    }
+    defaultConfig {
+        versionCode code
+        versionName "1.0."+buildNumber
+        applicationId "com.tokko.recipesv2"
+        minSdkVersion 19
+        targetSdkVersion 22
+        multiDexEnabled true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    */
     defaultConfig {
         applicationId "com.tokko.recipesv2"
         minSdkVersion 19
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -102,7 +150,7 @@ dependencies {
     //compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.annimon:stream:1.0.1'
-    compile 'com.android.support:support-v4:22.2.1'
+    // compile 'com.android.support:support-v4:22.2.1'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(path: ':backend', configuration: 'android-endpoints')
 }

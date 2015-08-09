@@ -27,7 +27,7 @@ public class ApiFactory {
 
     private static String getRootUrl() {
         if (BuildConfig.BUILD_TYPE.equalsIgnoreCase("release"))
-            return ""; //TODO: release backend url
+            return "https://river-pillar-94516.appspot.com/_ah_api";
         return "http://192.168.2.13:8080/_ah/api/";
     }
 }
