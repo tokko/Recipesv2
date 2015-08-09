@@ -3,6 +3,7 @@ package com.tokko.recipesv2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.inject.AbstractModule;
@@ -137,5 +138,23 @@ public class ItemDetailFragmentTests {
     public void testEdit_DeleteButtonClickNotifiesParent() throws Exception {
         fragment.getView().findViewById(R.id.buttonbar_delete).performClick();
         verify(callbacks).detailFinished();
+    }
+
+    @Test
+    public void testEdit_EntityIdIsNull_EnterInEditMode() throws Exception{
+        assertEquals(View.VISIBLE, fragment.getView().findViewById(R.id.buttonbar).getVisibility());
+    }
+
+    @Test
+    public void testEdit_EntityIdIsNotNull_EnterInDetailMode() throws  Exception{
+        ItemDetailFragment<Grocery> fragment = new GroceryDetailFragment();
+        Grocery g = new Grocery();
+        g.setId(1L);
+        Bundle b = new Bundle();
+        b.putString(ItemDetailFragment.EXTRA_ENTITY, new AndroidJsonFactory().toString(g));
+        b.putSerializable(ItemDetailFragment.EXTRA_CLASS, Grocery.class);
+        fragment.setArguments(b);
+        startVisibleFragment(fragment);
+        assertEquals(View.GONE, fragment.getView().findViewById(R.id.buttonbar).getVisibility());
     }
 }

@@ -1,7 +1,7 @@
 package com.tokko.recipesv2.groceries;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +54,7 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
 
     @Override
     protected void onOk() {
-        new Handler().post(() -> {
+        AsyncTask.execute(() -> {
             try {
                 api.insert(entity).execute();
             } catch (IOException e) {
@@ -65,7 +65,7 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
 
     @Override
     protected void onDelete() {
-        new Handler().post(() -> {
+        AsyncTask.execute(() -> {
             try {
                 api.remove(entity.getId()).execute();
             } catch (IOException e) {

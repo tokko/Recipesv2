@@ -48,6 +48,7 @@ public abstract class ItemDetailFragment<T> extends RoboFragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     public void setCallbacks(Callbacks callbacks) {
@@ -65,6 +66,13 @@ public abstract class ItemDetailFragment<T> extends RoboFragment {
         ButterKnife.inject(this, view);
         setDeleteButtonEnabledState();
         bindView(entity);
+        try {
+            if (entity.getClass().getMethod("getId").invoke(entity) == null) {
+                enterEditMode();
+            }
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
