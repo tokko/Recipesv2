@@ -3,7 +3,6 @@ package com.tokko.recipesv2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.inject.AbstractModule;
@@ -131,12 +130,14 @@ public class ItemDetailFragmentTests {
     @Test
     public void testEdit_OnDeleteClick_GroceryDeleted() throws Exception {
         fragment.getView().findViewById(R.id.buttonbar_delete).performClick();
+        Thread.sleep(500);
         verify(api).remove(any());
     }
 
     @Test
     public void testEdit_DeleteButtonClickNotifiesParent() throws Exception {
         fragment.getView().findViewById(R.id.buttonbar_delete).performClick();
+        Thread.sleep(500);
         verify(callbacks).detailFinished();
     }
 
