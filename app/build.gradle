@@ -102,6 +102,10 @@ android {
         debug {
             signingConfig signingConfigs.release
         }
+        realBackend {
+            signingConfig signingConfigs.release
+            debuggable true
+        }
         mock {
             debuggable true
             signingConfig signingConfigs.release

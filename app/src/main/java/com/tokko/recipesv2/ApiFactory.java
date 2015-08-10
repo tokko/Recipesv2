@@ -18,7 +18,7 @@ public class ApiFactory {
         try {
             return clz.getConstructor(HttpTransport.class, JsonFactory.class, HttpRequestInitializer.class)
                     .newInstance(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), credential)
-                    .setRootUrl(getRootUrl()).setApplicationName("recipesv2").build();
+                    .setRootUrl(getRootUrl()).setApplicationName("river-pillar-94516").build();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -26,8 +26,8 @@ public class ApiFactory {
     }
 
     private static String getRootUrl() {
-        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase("release"))
-            return "https://river-pillar-94516.appspot.com/_ah_api";
+        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase("release") || BuildConfig.BUILD_TYPE.equalsIgnoreCase("realBackend"))
+            return "https://river-pillar-94516.appspot.com/_ah/api/";
         return "http://192.168.2.13:8080/_ah/api/";
     }
 }

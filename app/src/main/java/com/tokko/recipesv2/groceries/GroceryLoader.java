@@ -24,7 +24,8 @@ public class GroceryLoader extends AbstractLoader<Grocery> {
     @Override
     public List<Grocery> loadInBackground() {
         try {
-            CollectionResponseGrocery execute = api.list().execute();
+            GroceryApi.List list = api.list();
+            CollectionResponseGrocery execute = list.execute();
             List<Grocery> items = execute.getItems();
             return items;
         } catch (IOException e) {
