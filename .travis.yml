@@ -30,14 +30,16 @@ before_script:
   - chmod +x gradlew
   - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
   - emulator -avd test -no-skin -no-audio -no-window &
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
+
 before_deploy:
   - git config --global user.email "builds@travis-ci.com"
   - git config --global user.name "Travis CI"
   - ls -R
 script:
-  - "./gradlew testRelease connectedAndroidTest --stacktrace"
+  - "./gradlew testRelease --stacktrace"
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
+  - "./gradlew connectedAndroidTest --stacktrace"
   - if [ "$TRAVIS_BRANCH" = "alpha" ]; then ./gradlew publishRelease; fi
 after_success:
   - git config user.email $GIT_EMAIL
