@@ -16,6 +16,7 @@ import static com.tokko.recipesv2.backend.util.GuiceModule.inject;
         name = "recipeUserApi",
         version = Constants.API_VERSION,
         resource = "recipeUser",
+        scopes = {Constants.EMAIL_SCOPE},
         clientIds = {Constants.ANDROID_CLIENT_ID, Constants.WEB_CLIENT_ID},
         audiences = {Constants.ANDROID_AUDIENCE},
         namespace = @ApiNamespace(

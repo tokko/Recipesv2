@@ -124,6 +124,7 @@ public class ItemDetailFragmentTests {
     @Test
     public void testEdit_OnOkClick_GrocerySaved() throws Exception {
         fragment.getView().findViewById(R.id.buttonbar_ok).performClick();
+        Thread.sleep(500);
         verify(api).insert(any());
     }
 
@@ -137,7 +138,6 @@ public class ItemDetailFragmentTests {
     @Test
     public void testEdit_DeleteButtonClickNotifiesParent() throws Exception {
         fragment.getView().findViewById(R.id.buttonbar_delete).performClick();
-        Thread.sleep(500);
         verify(callbacks).detailFinished();
     }
 

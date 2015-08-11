@@ -5,6 +5,7 @@ import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.api.server.spi.response.NotFoundException;
+import com.google.appengine.api.oauth.OAuthRequestException;
 import com.google.appengine.api.users.User;
 import com.google.inject.Inject;
 import com.googlecode.objectify.ObjectifyService;
@@ -30,6 +31,7 @@ import static com.tokko.recipesv2.backend.util.GuiceModule.inject;
         name = "groceryApi",
         version = Constants.API_VERSION,
         resource = "grocery",
+        scopes = {Constants.EMAIL_SCOPE},
         clientIds = {Constants.ANDROID_CLIENT_ID, Constants.WEB_CLIENT_ID},
         audiences = {Constants.ANDROID_AUDIENCE},
         namespace = @ApiNamespace(
@@ -55,34 +57,12 @@ public class GroceryEndpoint {
     public GroceryEndpoint() {
         inject(this);
     }
-    /**
-     * Returns the {@link Grocery} with the corresponding ID.
-     *
-     * @param id the ID of the entity to be retrieved
-     * @return the entity with the corresponding ID
-     * @throws NotFoundException if there is no {@code Grocery} with the provided ID.
-     */
-    @ApiMethod(
-            name = "get",
-            path = "grocery/{id}",
-            httpMethod = ApiMethod.HttpMethod.GET)
-    public Grocery get(@Named("id") Long id) throws NotFoundException {
-        logger.info("Getting Grocery with ID: " + id);
-        Grocery grocery = ofy().load().type(Grocery.class).id(id).now();
-        if (grocery == null) {
-            throw new NotFoundException("Could not find Grocery with ID: " + id);
-        }
-        return grocery;
-    }
-
-    /**
-     * Inserts a new {@code Grocery}.
-     */
     @ApiMethod(
             name = "insert",
             path = "grocery",
             httpMethod = ApiMethod.HttpMethod.POST)
-    public Grocery insert(Grocery grocery, User user) {
+    public Grocery insert(Grocery grocery, User user) throws OAuthRequestException {
+        if (user == null) throw new OAuthRequestException("User us not allowed");
         try {
             return groceryManager.commitGrocery(grocery, user.getEmail());
         } catch (Exception e) {
@@ -91,52 +71,27 @@ public class GroceryEndpoint {
         }
     }
 
-    /**
-     * Updates an existing {@code Grocery}.
-     *
-     * @param id      the ID of the entity to be updated
-     * @param grocery the desired state of the entity
-     * @return the updated version of the entity
-     * @throws NotFoundException if the {@code id} does not correspond to an existing
-     *                           {@code Grocery}
-     */
-    @ApiMethod(
-            name = "update",
-            path = "grocery/{id}",
-            httpMethod = ApiMethod.HttpMethod.PUT)
-    public Grocery update(@Named("id") Long id, Grocery grocery) throws NotFoundException {
-        // TODO: You should validate your ID parameter against your resource's ID here.
-        checkExists(id);
-        ofy().save().entity(grocery).now();
-        logger.info("Updated Grocery: " + grocery);
-        return ofy().load().entity(grocery).now();
-    }
-
-    /**
-     * Deletes the specified {@code Grocery}.
-     *
-     * @param id the ID of the entity to delete
-     * @throws NotFoundException if the {@code id} does not correspond to an existing
-     *                           {@code Grocery}
-     */
     @ApiMethod(
             name = "remove",
             path = "grocery/{id}",
             httpMethod = ApiMethod.HttpMethod.DELETE)
     public void remove(@Named("id") Long id) throws NotFoundException {
-        checkExists(id);
-        ofy().delete().type(Grocery.class).id(id).now();
-        logger.info("Deleted Grocery with ID: " + id);
+        throw new UnsupportedOperationException("not implemented");
     }
 
     @ApiMethod(
             name = "list",
             path = "grocery",
             httpMethod = ApiMethod.HttpMethod.GET)
-    public CollectionResponse<Grocery> list(User user) {
-        //user is null
-        List<Grocery> groceryList = groceryManager.listGroceries(user.getEmail());
-        return CollectionResponse.<Grocery>builder().setItems(groceryList).build();
+    public CollectionResponse<Grocery> list(User user) throws OAuthRequestException {
+        if (user == null) throw new OAuthRequestException("User is not allowed");
+        try {
+            List<Grocery> groceryList = groceryManager.listGroceries(user.getEmail());
+            return CollectionResponse.<Grocery>builder().setItems(groceryList).build();
+        } catch (Exception e) {
+            Logger.getLogger(GroceryEndpoint.class.getName()).info(e.getMessage());
+            return null;
+        }
     }
 
     private void checkExists(Long id) throws NotFoundException {

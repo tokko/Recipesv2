@@ -48,7 +48,7 @@ android {
             value = 1;
         }
         def code = versionProps['VERSION_CODE'] != null ? versionProps['VERSION_CODE'].toInteger() + value : 2
-        def name = versionProps['VERSION_NAME'] != null ? versionProps['VERSION_NAME'].toInteger() + 1 : 1
+        def name = versionProps['VERSION_NAME'] != null ? versionProps['VERSION_NAME'].toInteger() + value : 1
         versionProps['VERSION_CODE'] = code.toString()
         versionProps['VERSION_NAME'] = name.toString()
         versionProps.store(versionPropsFile.newWriter(), null)
@@ -63,28 +63,7 @@ android {
         pk12File = file('key.p12')
         //   uploadImages = true
     }
-    /*
-    task updateVersions{
-        def Properties versionProps = new Properties()
-        def versionPropsFile = file('version.properties')
-        if(versionPropsFile.exists())
-            versionProps.load(new FileInputStream(versionPropsFile))
-        def code = (versionProps['VERSION_CODE'] ?: "1").toInteger() + 1
-        def buildNumber = (versionProps['BUILD_NUMBER'] ?: "0").toInteger() + 1
-        versionProps['VERSION_CODE'] = code.toString()
-        versionProps['BUILD_NUMBER'] = code.toString()
-        versionProps.store(versionPropsFile.newWriter(), null)
-    }
-    defaultConfig {
-        versionCode code
-        versionName "1.0."+buildNumber
-        applicationId "com.tokko.recipesv2"
-        minSdkVersion 19
-        targetSdkVersion 22
-        multiDexEnabled true
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
-    */
+
     defaultConfig {
         applicationId "com.tokko.recipesv2"
         minSdkVersion 19
@@ -101,6 +80,10 @@ android {
         }
         debug {
             signingConfig signingConfigs.release
+        }
+        realBackend {
+            signingConfig signingConfigs.release
+            debuggable true
         }
         mock {
             debuggable true

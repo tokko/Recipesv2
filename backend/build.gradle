@@ -51,4 +51,7 @@ appengine {
         getClientLibsOnBuild = true
         getDiscoveryDocsOnBuild = true
     }
+    app {
+        id = 'river-pillar-94516'
+    }
 }
