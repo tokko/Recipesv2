@@ -1,3 +1,5 @@
+import java.util.regex.Pattern
+
 // If you would like more information on the gradle-appengine-plugin please refer to the github page
 // https://github.com/GoogleCloudPlatform/gradle-appengine-plugin
 
@@ -41,6 +43,20 @@ dependencies {
     compile 'org.mockito:mockito-all:2.0.2-beta'
 }
 
+def runTasks = gradle.startParameter.taskNames
+if ('appengineUpdate' in runTasks) {
+    def appenginewebxml = file('/src/main/webapp/WEB-INF/appengine-web.xml')
+    if (appenginewebxml.canRead()) {
+        def xml = appenginewebxml.getText()
+        def matcher = Pattern.compile('<version>v(\\d+)').matcher(xml)
+        matcher.find()
+        def currentVersion = matcher.group(1)
+        def newVersion = currentVersion.toInteger() + 1
+        xml = matcher.replaceAll('<version>v' + newVersion)
+        appenginewebxml.write(xml);
+    }
+}
+
 appengine {
     downloadSdk = true
     appcfg {
@@ -51,7 +67,10 @@ appengine {
         getClientLibsOnBuild = true
         getDiscoveryDocsOnBuild = true
     }
+    /*
     app {
         id = 'river-pillar-94516'
+        version = 2
     }
+    */
 }
