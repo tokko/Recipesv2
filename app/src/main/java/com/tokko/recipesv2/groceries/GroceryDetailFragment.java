@@ -39,6 +39,7 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        titleTextView.setHint("Title");
     }
 
     @Override

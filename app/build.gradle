@@ -51,7 +51,8 @@ android {
         def name = versionProps['VERSION_NAME'] != null ? versionProps['VERSION_NAME'].toInteger() + value : 1
         versionProps['VERSION_CODE'] = code.toString()
         versionProps['VERSION_NAME'] = name.toString()
-        versionProps.store(versionPropsFile.newWriter(), null)
+        if (value == 1)
+            versionProps.store(versionPropsFile.newWriter(), null)
         defaultConfig {
             versionCode code
             versionName "0.0." + name
