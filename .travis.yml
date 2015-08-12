@@ -17,11 +17,12 @@ jdk:
 
 cache:
   directories:
-    - $HOME/.gradle/wrapper
-    - $HOME/.gradle/native
-    - $HOME/.gradle/daemon
-    - $HOME/.gradle/caches/jars-1
-    - $HOME/.gradle/caches/2.3
+    - $HOME/.gradle
+    #- $HOME/.gradle/wrapper
+    #- $HOME/.gradle/native
+    #- $HOME/.gradle/daemon
+    #- $HOME/.gradle/caches/jars-1
+    #- $HOME/.gradle/caches/2.3
 
 before_script:
 #  - "echo $JAVA_OPTS"
