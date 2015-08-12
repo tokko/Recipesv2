@@ -89,7 +89,7 @@ public class RecipeEndpoint {
             path = "recipe",
             httpMethod = ApiMethod.HttpMethod.GET)
     public CollectionResponse<Recipe> list(User user) {
-        List<Recipe> recipeList = recipeManager.listRecipiesForUser(user.getEmail());
+        List<Recipe> recipeList = recipeManager.listRecipesForUser(user.getEmail());
         return CollectionResponse.<Recipe>builder().setItems(recipeList).build();
     }
 }
