@@ -65,6 +65,7 @@ public class ItemListActivity extends RoboActivity
         if (mTwoPane) {
             fragment.setArguments(arguments);
             getFragmentManager().beginTransaction()
+                    .addToBackStack("name")
                     .replace(R.id.item_detail_container, fragment)
                     .commit();
 
