@@ -59,13 +59,15 @@
         <activity
             android:name=".masterdetail.ItemListActivity"
             android:label="@string/title_item_list"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize">
 
         </activity>
         <activity
             android:name=".masterdetail.ItemDetailActivity"
             android:label="@string/title_item_detail"
-            android:parentActivityName=".masterdetail.ItemListActivity">
+            android:parentActivityName=".masterdetail.ItemListActivity"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tokko.recipesv2.masterdetail.ItemListActivity" />
