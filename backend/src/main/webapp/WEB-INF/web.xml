@@ -15,7 +15,8 @@
             <param-name>services</param-name>
             <param-value>com.tokko.recipesv2.backend.endpoints.MessagingEndpoint,
                 com.tokko.recipesv2.backend.endpoints.RecipeUserEndpoint,
-                com.tokko.recipesv2.backend.endpoints.GroceryEndpoint
+                com.tokko.recipesv2.backend.endpoints.GroceryEndpoint,
+                com.tokko.recipesv2.backend.endpoints.RecipeEndpoint
             </param-value>
         </init-param>
     </servlet>

@@ -7,6 +7,7 @@ import com.tokko.recipesv2.backend.engines.GroceryCrudEngine;
 import com.tokko.recipesv2.backend.engines.MessagingEngine;
 import com.tokko.recipesv2.backend.engines.RecipeUserCrudEngine;
 import com.tokko.recipesv2.backend.managers.GroceryManager;
+import com.tokko.recipesv2.backend.managers.RecipeManager;
 import com.tokko.recipesv2.backend.managers.RecipeUserManager;
 
 public class GuiceModule extends AbstractModule {
@@ -21,6 +22,8 @@ public class GuiceModule extends AbstractModule {
         bind(GroceryCrudEngine.class);
         bind(GroceryManager.class);
         bind(MessagingEngine.class);
+        bind(RecipeUserCrudEngine.class);
+        bind(RecipeManager.class);
         bind(Sender.class).toInstance(new Sender(MessagingEngine.API_KEY));
     }
 }
