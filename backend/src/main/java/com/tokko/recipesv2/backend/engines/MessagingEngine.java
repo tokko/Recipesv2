@@ -12,20 +12,17 @@ import java.util.List;
 
 public class MessagingEngine {
     public static final String API_KEY = "AIzaSyAcfYjzlHQaAuroVdB26hczjVkZ0PKqDNc";
-    private RecipeUserCrudEngine registrationRA;
     private Sender sender;
 
     @Inject
-    public MessagingEngine(RecipeUserCrudEngine recipeUserEngine, Sender sender) {
-        this.registrationRA = recipeUserEngine;
+    public MessagingEngine(Sender sender) {
         this.sender = sender;
     }
 
-    public <T> void sendMessage(T entity, String email) {
+    public <T> void sendMessage(T entity, RecipeUser user) {
         Message msg = new Message.Builder().addData("message", new Gson().toJson(entity)).build();
-        RecipeUser recipeUser = registrationRA.getUserByEmail(email);
 
-        List<String> records = recipeUser.getRegistrationIds();
+        List<String> records = user.getRegistrationIds();
         try {
             for (String record : records) {
                 Result res = sender.send(msg, record, 5);

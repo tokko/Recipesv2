@@ -24,6 +24,10 @@ public class Recipe {
         setRecipeUser(recipeUser);
     }
 
+    public Recipe(String title) {
+        setTitle(title);
+    }
+
     public Long getId() {
         return id;
     }

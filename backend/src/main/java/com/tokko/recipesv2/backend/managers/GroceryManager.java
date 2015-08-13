@@ -30,7 +30,7 @@ public class GroceryManager {
         RecipeUser user = recipeUserCrudEngine.getUserByEmail(email);
         Grocery save = groceryCrudEngine.save(grocery, user);
         if (save != null)
-            messagingEngine.sendMessage(save, email);
+            messagingEngine.sendMessage(save, user);
         return save;
     }
 }

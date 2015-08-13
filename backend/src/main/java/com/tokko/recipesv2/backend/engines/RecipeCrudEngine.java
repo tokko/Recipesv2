@@ -11,4 +11,10 @@ public class RecipeCrudEngine {
     public List<Recipe> listRecipesForUser(RecipeUser user) {
         return ofy().load().type(Recipe.class).ancestor(user).list();
     }
+
+    public Recipe commitRecipe(Recipe recipe, RecipeUser user) {
+        recipe.setRecipeUser(user);
+        ofy().save().entity(recipe).now();
+        return recipe;
+    }
 }

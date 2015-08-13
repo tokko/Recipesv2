@@ -1,5 +1,6 @@
 package engines;
 
+import com.googlecode.objectify.Key;
 import com.tokko.recipesv2.backend.engines.RecipeCrudEngine;
 import com.tokko.recipesv2.backend.entities.Recipe;
 import com.tokko.recipesv2.backend.entities.RecipeUser;
@@ -37,5 +38,18 @@ public class RecipeCrudEngineTests extends TestsWithObjectifyStorage {
         assertNotNull(recipes);
         assertEquals(1, recipes.size());
         assertEquals(recipe.getId(), recipes.get(0).getId());
+    }
+
+    @Test
+    public void testInsertRecipe_DoesNotExist_IsInserted() throws Exception {
+        Recipe recipe = new Recipe("recipe");
+        Recipe saved = recipeCrudEngine.commitRecipe(recipe, user);
+        assertNotNull(saved);
+        assertNotNull(saved.getId());
+        saved = ofy().load().key(Key.create(Key.create(RecipeUser.class, user.getEmail()), Recipe.class, saved.getId())).now();
+        assertNotNull(saved);
+        assertNotNull(saved.getId());
+        assertEquals(user, saved.getRecipeUser());
+        assertEquals(recipe.getTitle(), saved.getTitle());
     }
 }

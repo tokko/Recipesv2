@@ -63,8 +63,8 @@ public class RecipeEndpoint {
             name = "insert",
             path = "recipe",
             httpMethod = ApiMethod.HttpMethod.POST)
-    public Recipe insert(Recipe recipe) {
-        throw new UnsupportedOperationException("Not implemented");
+    public Recipe insert(Recipe recipe, User user) {
+        return recipeManager.commitRecipe(recipe, user.getEmail());
     }
 
     @ApiMethod(
