@@ -9,8 +9,8 @@ import com.googlecode.objectify.annotation.Parent;
 @Entity
 public class Recipe {
     @Id
-    private Long id;
-    private String title;
+    public Long id;
+    public String title;
 
     @JsonIgnore
     @Parent
