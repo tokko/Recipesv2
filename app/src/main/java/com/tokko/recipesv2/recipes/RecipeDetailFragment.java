@@ -1,24 +1,30 @@
 package com.tokko.recipesv2.recipes;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.inject.Inject;
 import com.tokko.recipesv2.R;
+import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Recipe;
 import com.tokko.recipesv2.masterdetail.ItemDetailFragment;
 import com.tokko.recipesv2.views.EditTextViewSwitchable;
 
+import java.io.IOException;
+
+import roboguice.inject.InjectView;
+
 public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
 
-    @Inject
+    @InjectView(R.id.recipe_title)
     private EditTextViewSwitchable title;
 
+    @Inject
+    private RecipeApi api;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.recipedetailfragment, null);
+    protected int getLayoutResource() {
+        return R.layout.recipedetailfragment;
     }
 
     @Override
@@ -40,11 +46,23 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
 
     @Override
     protected void onOk() {
-
+        AsyncTask.execute(() -> {
+            try {
+                api.insert(entity).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
     protected void onDelete() {
-
+        AsyncTask.execute(() -> {
+            try {
+                api.remove(entity.getId()).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

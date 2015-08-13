@@ -57,8 +57,16 @@ public abstract class ItemDetailFragment<T> extends RoboFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_item_detail, container, false);
+        ViewGroup parent = (ViewGroup) inflater.inflate(R.layout.fragment_item_detail, container, false);
+        if (parent == null)
+            throw new IllegalStateException("Parent must have a view");
+        View v = inflater.inflate(getLayoutResource(), null);
+        ViewGroup C = (ViewGroup) parent.findViewById(R.id.content);
+        C.addView(v);
+        return parent;
     }
+
+    protected abstract int getLayoutResource();
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {

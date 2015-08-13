@@ -3,6 +3,7 @@ package com.tokko.recipesv2.recipes;
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.tokko.recipesv2.ApiFactory;
+import com.tokko.recipesv2.BuildConfig;
 import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Recipe;
 import com.tokko.recipesv2.masterdetail.AbstractLoader;
@@ -18,7 +19,12 @@ public class RecipeGuiceModule extends AbstractModule {
         bind(new TypeLiteral<ItemDetailFragment<Recipe>>() {
         }).to(RecipeDetailFragment.class);
         bind(RecipeApi.class).toInstance((RecipeApi) ApiFactory.createApi(RecipeApi.Builder.class));
-        bind(new TypeLiteral<AbstractLoader<Recipe>>() {
-        }).to(RecipeLoader.class);
+
+        if (BuildConfig.BUILD_TYPE.equals("mock")) {
+            bind(new TypeLiteral<AbstractLoader<Recipe>>() {
+            }).to(MockRecipeLoader.class);
+        } else
+            bind(new TypeLiteral<AbstractLoader<Recipe>>() {
+            }).to(RecipeLoader.class);
     }
 }

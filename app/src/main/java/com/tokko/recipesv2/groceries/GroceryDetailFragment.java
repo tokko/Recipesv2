@@ -2,9 +2,7 @@ package com.tokko.recipesv2.groceries;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.inject.Inject;
 import com.tokko.recipesv2.R;
@@ -25,15 +23,8 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
     private GroceryApi api;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup parent = (ViewGroup) super.onCreateView(inflater, container, savedInstanceState);
-        if (parent == null)
-            throw new IllegalStateException("Parent must have a view");
-        View v = inflater.inflate(R.layout.grocerydetailfragment, null);
-        ViewGroup C = (ViewGroup) parent.findViewById(R.id.content);
-        C.addView(v);
-        titleTextView = (EditTextViewSwitchable) v.findViewById(R.id.grocery_title);
-        return parent;
+    protected int getLayoutResource() {
+        return R.layout.grocerydetailfragment;
     }
 
     @Override

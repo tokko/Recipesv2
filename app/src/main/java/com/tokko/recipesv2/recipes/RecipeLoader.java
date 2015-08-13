@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.google.inject.Inject;
 import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
-import com.tokko.recipesv2.backend.entities.recipeApi.model.CollectionResponseRecipe;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Recipe;
 import com.tokko.recipesv2.masterdetail.AbstractLoader;
 
@@ -24,9 +23,8 @@ public class RecipeLoader extends AbstractLoader<Recipe> {
     public List<Recipe> loadInBackground() {
         try {
             RecipeApi.List list = api.list();
-            CollectionResponseRecipe execute = list.execute();
-            List<Recipe> items = execute.getItems();
-            return items;
+            List<Recipe> execute = list.execute().getItems();
+            return execute;
         } catch (IOException e) {
             e.printStackTrace();
             return null;

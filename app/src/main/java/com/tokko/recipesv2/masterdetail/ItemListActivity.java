@@ -34,7 +34,7 @@ public class ItemListActivity extends RoboActivity
             throw new IllegalArgumentException("Activity extras must contain Class<Entity> with key 'class'");
         if (i.getExtras().containsKey(EXTRA_TITLE))
             setTitle(i.getStringExtra(EXTRA_TITLE));
-        else setTitle("Groceries");
+        else setTitle("Recipes");
         ParameterizedType parameterizedType = Types.newParameterizedType(ItemListFragment.class, clz);
         Key<?> key = Key.get(parameterizedType);
         listFragment = (ItemListFragment<?>) RoboGuice.getInjector(getApplicationContext()).getInstance(key);
