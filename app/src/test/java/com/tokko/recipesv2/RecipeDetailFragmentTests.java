@@ -3,12 +3,9 @@ package com.tokko.recipesv2;
 import android.os.Bundle;
 
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
-import com.google.inject.TypeLiteral;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Recipe;
 import com.tokko.recipesv2.masterdetail.ItemDetailFragment;
-import com.tokko.recipesv2.recipes.RecipeDetailFragment;
 import com.tokko.recipesv2.views.EditTextViewSwitchable;
 
 import org.junit.Before;
@@ -36,13 +33,7 @@ public class RecipeDetailFragmentTests {
     public void setUp() throws Exception {
         recipe = new Recipe();
         recipe.setTitle("Recipe");
-        RoboGuice.overrideApplicationInjector(RuntimeEnvironment.application, new AbstractModule() {
-            @Override
-            protected void configure() {
-                bind(new TypeLiteral<ItemDetailFragment<Recipe>>() {
-                }).to(RecipeDetailFragment.class);
-            }
-        });
+
         RoboGuice.getInjector(RuntimeEnvironment.application).injectMembers(this);
         callbacks = mock(ItemDetailFragment.Callbacks.class);
         fragment.setCallbacks(callbacks);
