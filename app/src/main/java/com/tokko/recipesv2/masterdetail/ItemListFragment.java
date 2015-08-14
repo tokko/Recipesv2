@@ -2,19 +2,19 @@ package com.tokko.recipesv2.masterdetail;
 
 import android.app.Activity;
 import android.app.LoaderManager;
+import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.inject.Key;
 import com.google.inject.util.Types;
 import com.tokko.recipesv2.R;
-import com.tokko.recipesv2.masterdetail.dummy.DummyContent;
+import com.tokko.recipesv2.backend.entities.groceryApi.model.Grocery;
 
 import java.util.List;
 
@@ -35,13 +35,6 @@ public class ItemListFragment<T> extends RoboListFragment implements LoaderManag
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(
-                getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                DummyContent.ITEMS));
         clz = (Class<T>) getArguments().getSerializable(EXTRA_CLASS);
         adapter = (StringifyableAdapter<T>) RoboGuice.getInjector(getActivity()).getInstance(Key.<StringifyableAdapter<T>>get(Types.newParameterizedType(StringifyableAdapter.class, clz)));
         setListAdapter(adapter);
@@ -75,6 +68,12 @@ public class ItemListFragment<T> extends RoboListFragment implements LoaderManag
                 } catch (java.lang.InstantiationException | IllegalAccessException e) {
                     e.printStackTrace();
                 }
+                return true;
+            case R.id.manage_groceries:
+                Intent i = new Intent(getActivity(), ItemListActivity.class).addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.putExtra(ItemListActivity.EXTRA_TITLE, "Groceries");
+                i.putExtra(ItemListActivity.EXTRA_ENTITY_CLASS, Grocery.class);
+                startActivity(i);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

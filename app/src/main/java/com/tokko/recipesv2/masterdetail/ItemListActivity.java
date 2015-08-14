@@ -27,6 +27,10 @@ public class ItemListActivity extends RoboActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
         Intent i = getIntent();
+        setup(i);
+    }
+
+    private void setup(Intent i) {
         Class<?> clz;
         if (i.getExtras().containsKey(EXTRA_ENTITY_CLASS))
             clz = (Class<?>) i.getSerializableExtra(EXTRA_ENTITY_CLASS);
@@ -46,6 +50,12 @@ public class ItemListActivity extends RoboActivity
             mTwoPane = true;
         }
         getFragmentManager().beginTransaction().replace(R.id.item_list, listFragment).commit();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setup(intent);
     }
 
     @Override
