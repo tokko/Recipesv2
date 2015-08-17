@@ -25,7 +25,8 @@ public class RecipeCrudEngine {
     }
 
     public Recipe getRecipe(RecipeUser user, Long id) {
-        return ofy().load().key(Key.create(Key.create(RecipeUser.class, user.getEmail()), Recipe.class, id)).now();
-
+        Recipe recipe = ofy().load().key(Key.create(Key.create(RecipeUser.class, user.getEmail()), Recipe.class, id)).now();
+        recipe.load();
+        return recipe;
     }
 }

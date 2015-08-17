@@ -12,6 +12,7 @@ import static com.tokko.recipesv2.backend.resourceaccess.OfyService.ofy;
 public class IngredientCrudEngine {
     public Ingredient commitIngredient(Ingredient ingredient, RecipeUser user) {
         ingredient.setUser(user);
+        ingredient.prepare();
         ofy().save().entity(ingredient).now();
         return ingredient;
     }
@@ -23,12 +24,15 @@ public class IngredientCrudEngine {
     }
 
     public List<Ingredient> getIngredientsToDelete(Recipe recipe, Recipe existing) {
-        recipe.load();
-        existing.load();
         List<Ingredient> toDelete = new ArrayList<>();
-        for (Ingredient i : existing.getIngredients()) {
-            if (!recipe.getIngredients().contains(i)) toDelete.add(i);
+        for (Ingredient existingIngredient : existing.getIngredients()) {
+            if (!recipe.getIngredients().contains(existingIngredient))
+                toDelete.add(existingIngredient);
         }
         return toDelete;
+    }
+
+    public void deleteIngredients(Iterable<Ingredient> toDelete) {
+        ofy().delete().entities(toDelete).now();
     }
 }

@@ -7,6 +7,7 @@ import com.tokko.recipesv2.backend.engines.MessagingEngine;
 import com.tokko.recipesv2.backend.engines.RecipeCrudEngine;
 import com.tokko.recipesv2.backend.engines.RecipeUserCrudEngine;
 import com.tokko.recipesv2.backend.entities.Grocery;
+import com.tokko.recipesv2.backend.entities.Ingredient;
 import com.tokko.recipesv2.backend.entities.Recipe;
 import com.tokko.recipesv2.backend.entities.RecipeUser;
 
@@ -44,13 +45,12 @@ public class RecipeManager {
         RecipeUser user = recipeUserCrudEngine.getUserByEmail(email);
         List<Grocery> groceries = ingredientEngine.getGroceries(recipe.getIngredients());
         groceryManager.commitGroceries(groceries, user.getEmail());
-        ingredientCrudEngine.commitIngredients(recipe.ingredients, user);
-/*
+        ingredientCrudEngine.commitIngredients(recipe.getIngredients(), user);
         if(recipe.getId() != null){
             Recipe existing = recipeCrudEngine.getRecipe(user, recipe.getId());
             List<Ingredient> toDelete = ingredientCrudEngine.getIngredientsToDelete(recipe, existing);
+            ingredientCrudEngine.deleteIngredients(toDelete);
         }
-        */
         Recipe save = recipeCrudEngine.commitRecipe(recipe, user);
         if (save != null)
             messagingEngine.sendMessage(save, user);
