@@ -28,9 +28,20 @@ public class GroceryManager {
 
     public Grocery commitGrocery(Grocery grocery, String email) {
         RecipeUser user = recipeUserCrudEngine.getUserByEmail(email);
+        return commitGrocery(grocery, user);
+    }
+
+    public Grocery commitGrocery(Grocery grocery, RecipeUser user) {
         Grocery save = groceryCrudEngine.save(grocery, user);
         if (save != null)
             messagingEngine.sendMessage(save, user);
         return save;
+    }
+
+    public void commitGroceries(Iterable<Grocery> groceries, String email) {
+        RecipeUser user = recipeUserCrudEngine.getUserByEmail(email);
+        for (Grocery g : groceries) {
+            commitGrocery(g, user);
+        }
     }
 }
