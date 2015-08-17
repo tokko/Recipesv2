@@ -50,4 +50,28 @@ public class RecipeManagerTests extends TestsWithObjectifyStorage {
         assertEquals(1, saved.ingredients.size());
         assertEquals(g.getTitle(), saved.ingredients.get(0).getGrocery().getTitle());
     }
+
+    @Test
+    public void testCommitRecipe_WithIngredientEdited_IngredientEdited() throws Exception {
+        Grocery g = new Grocery("g");
+        Ingredient i = new Ingredient();
+        i.setGrocery(g);
+        RecipeUser user = new RecipeUser("emial");
+        Recipe recipe = new Recipe();
+        recipe.ingredients = new ArrayList<>();
+        recipe.ingredients.add(i);
+        recipe.setTitle("recipe");
+        ofy().save().entity(user).now();
+        recipeManager.commitRecipe(recipe, user.getEmail());
+
+        g.setTitle("h");
+        recipeManager.commitRecipe(recipe, user.getEmail());
+
+        Recipe saved = ofy().load().key(Key.create(Key.create(RecipeUser.class, user.getEmail()), Recipe.class, recipe.getId())).now();
+        assertNotNull(saved);
+        assertEquals(recipe.getTitle(), saved.getTitle());
+        recipe.load();
+        assertEquals(1, saved.ingredients.size());
+        assertEquals(g.getTitle(), saved.ingredients.get(0).getGrocery().getTitle());
+    }
 }
