@@ -4,11 +4,9 @@ import com.google.appengine.repackaged.org.codehaus.jackson.annotate.JsonIgnore;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Ignore;
 import com.googlecode.objectify.annotation.Load;
 import com.googlecode.objectify.annotation.Parent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,14 +14,11 @@ public class Recipe {
     @Id
     public Long id;
     public String title;
-    @Ignore
-    public List<Ingredient> ingredients = new ArrayList<>();
-    @JsonIgnore
     @Parent
     private Ref<RecipeUser> recipeUser;
     @Load
     @JsonIgnore
-    private List<Ref<Ingredient>> stiredIngredients;
+    private List<Ref<Ingredient>> storedIngredients;
 
     public Recipe() {
     }
