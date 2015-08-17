@@ -8,7 +8,6 @@ import com.google.api.server.spi.response.NotFoundException;
 import com.google.appengine.api.oauth.OAuthRequestException;
 import com.google.appengine.api.users.User;
 import com.google.inject.Inject;
-import com.googlecode.objectify.ObjectifyService;
 import com.tokko.recipesv2.backend.entities.Grocery;
 import com.tokko.recipesv2.backend.managers.GroceryManager;
 
@@ -17,16 +16,8 @@ import java.util.logging.Logger;
 
 import javax.inject.Named;
 
-import static com.googlecode.objectify.ObjectifyService.ofy;
 import static com.tokko.recipesv2.backend.util.GuiceModule.inject;
 
-/**
- * WARNING: This generated code is intended as a sample or starting point for using a
- * Google Cloud Endpoints RESTful API with an Objectify entity. It provides no data access
- * restrictions and no data validation.
- * <p>
- * DO NOT deploy this code unchanged as part of a real application to real users.
- */
 @Api(
         name = "groceryApi",
         version = Constants.API_VERSION,
@@ -41,15 +32,6 @@ import static com.tokko.recipesv2.backend.util.GuiceModule.inject;
         )
 )
 public class GroceryEndpoint {
-
-    private static final Logger logger = Logger.getLogger(GroceryEndpoint.class.getName());
-
-    private static final int DEFAULT_LIST_LIMIT = 20;
-
-    static {
-        // Typically you would register this inside an OfyServive wrapper. See: https://code.google.com/p/objectify-appengine/wiki/BestPractices
-        ObjectifyService.register(Grocery.class);
-    }
 
     @Inject
     private GroceryManager groceryManager;
@@ -91,14 +73,6 @@ public class GroceryEndpoint {
         } catch (Exception e) {
             Logger.getLogger(GroceryEndpoint.class.getName()).info(e.getMessage());
             return null;
-        }
-    }
-
-    private void checkExists(Long id) throws NotFoundException {
-        try {
-            ofy().load().type(Grocery.class).id(id).safe();
-        } catch (com.googlecode.objectify.NotFoundException e) {
-            throw new NotFoundException("Could not find Grocery with ID: " + id);
         }
     }
 }
