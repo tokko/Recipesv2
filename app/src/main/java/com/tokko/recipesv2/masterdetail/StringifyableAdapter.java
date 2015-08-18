@@ -108,4 +108,7 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
         return data.iterator();
     }
 
+    public List<T> getItems() {
+        return data;
+    }
 }

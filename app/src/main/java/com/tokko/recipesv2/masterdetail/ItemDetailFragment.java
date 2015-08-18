@@ -89,8 +89,6 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
         try {
             setCallbacks((Callbacks) activity);
         } catch (ClassCastException ignored) {
-            // throw new IllegalStateException("Host activity must implement callbacks");
-            //TODO: see to this
         }
     }
 
@@ -153,7 +151,8 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
     public void onDeleteButtonClick(View v) {
         leaveEditMode(Editable::discard);
         onDelete();
-        callbacks.detailFinished();
+        if (callbacks != null)
+            callbacks.detailFinished();
     }
 
     private void showButtonBar() {

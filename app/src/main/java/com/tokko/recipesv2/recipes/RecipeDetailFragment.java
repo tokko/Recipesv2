@@ -7,9 +7,11 @@ import android.view.View;
 import com.google.inject.Inject;
 import com.tokko.recipesv2.R;
 import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.Ingredient;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Recipe;
 import com.tokko.recipesv2.masterdetail.ItemDetailFragment;
 import com.tokko.recipesv2.views.EditTextViewSwitchable;
+import com.tokko.recipesv2.views.EditableListView;
 
 import java.io.IOException;
 
@@ -19,6 +21,9 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
 
     @InjectView(R.id.recipe_title)
     private EditTextViewSwitchable title;
+
+    @InjectView(R.id.ingredient_list)
+    private EditableListView<Ingredient> list;
 
     @Inject
     private RecipeApi api;
@@ -36,11 +41,13 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
     @Override
     protected void bindView(Recipe entity) {
         title.setData(entity.getTitle());
+        list.setData(entity.getIngredients());
     }
 
     @Override
     protected Recipe getEntity() {
         entity.setTitle(title.getData());
+        entity.setIngredients(list.getData());
         return entity;
     }
 

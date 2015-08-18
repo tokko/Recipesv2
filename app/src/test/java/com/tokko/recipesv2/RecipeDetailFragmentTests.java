@@ -4,9 +4,12 @@ import android.os.Bundle;
 
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.inject.Inject;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.Grocery;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.Ingredient;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Recipe;
 import com.tokko.recipesv2.masterdetail.ItemDetailFragment;
 import com.tokko.recipesv2.views.EditTextViewSwitchable;
+import com.tokko.recipesv2.views.EditableListView;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +17,9 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+
+import java.util.Collections;
+import java.util.List;
 
 import roboguice.RoboGuice;
 
@@ -33,7 +39,11 @@ public class RecipeDetailFragmentTests {
     public void setUp() throws Exception {
         recipe = new Recipe();
         recipe.setTitle("Recipe");
-
+        Grocery g = new Grocery();
+        g.setTitle("foo");
+        Ingredient i = new Ingredient();
+        i.setGrocery(g);
+        recipe.setIngredients(Collections.singletonList(i));
         RoboGuice.getInjector(RuntimeEnvironment.application).injectMembers(this);
         callbacks = mock(ItemDetailFragment.Callbacks.class);
         fragment.setCallbacks(callbacks);
@@ -48,6 +58,11 @@ public class RecipeDetailFragmentTests {
 
     @Test
     public void testRecipeIsDisplayed() throws Exception {
-        assertEquals(((EditTextViewSwitchable) fragment.getView().findViewById(R.id.recipe_title)).getData(), recipe.getTitle());
+        assertEquals(recipe.getTitle(), ((EditTextViewSwitchable) fragment.getView().findViewById(R.id.recipe_title)).getData());
+    }
+
+    @Test
+    public void testIngredientListIsDisplayed() throws Exception {
+        assertEquals(1, ((EditableListView<List<Ingredient>>) fragment.getView().findViewById(R.id.ingredient_list)).getData().size());
     }
 }
