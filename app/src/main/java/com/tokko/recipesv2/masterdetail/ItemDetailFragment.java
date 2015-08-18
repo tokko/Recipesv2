@@ -19,10 +19,10 @@ import java.lang.reflect.InvocationTargetException;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import roboguice.fragment.provided.RoboFragment;
+import roboguice.fragment.provided.RoboDialogFragment;
 import roboguice.inject.InjectView;
 
-public abstract class ItemDetailFragment<T> extends RoboFragment {
+public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
     public static final String EXTRA_CLASS = "class";
     public static final String EXTRA_ENTITY = "entity";
     protected T entity;
