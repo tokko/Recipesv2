@@ -1,5 +1,12 @@
 language: android
 sudo: false
+branches:
+  only:
+    - master
+    - dev
+    - alpha
+    - beta
+    - prod
 android:
   components:
   - platform-tools
