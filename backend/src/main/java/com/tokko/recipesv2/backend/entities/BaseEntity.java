@@ -4,6 +4,10 @@ public abstract class BaseEntity<T> {
 
     public abstract T getId();
 
+    public abstract void load();
+
+    public abstract void prepare();
+
     @Override
     public boolean equals(Object obj) {
         try {

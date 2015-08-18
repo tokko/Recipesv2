@@ -37,7 +37,15 @@ public class IterableUtil {
         return null;
     }
 
-    public <T> List<T> deRef(Iterable<Ref<T>> iter) {
+    public static <T> List<Ref<T>> ref(Iterable<T> iter) {
+        List<Ref<T>> ret = new ArrayList<>();
+        for (T t : iter) {
+            ret.add(Ref.create(t));
+        }
+        return ret;
+    }
+
+    public static <T> List<T> deRef(Iterable<Ref<T>> iter) {
         List<T> ret = new ArrayList<T>();
         for (Ref<T> t : iter) {
             ret.add(t.get());
