@@ -30,12 +30,13 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
     @InjectView(R.id.ingredientdetail_grocery)
     private AutoCompleteTextView grocery;
     private IngredientDetailFragmentCallbacks ingredientCallbacks;
-
+    private Grocery selectedGrocery;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         grocery.setAdapter(adapter);
+        grocery.setOnItemClickListener((av, v, pos, id) -> selectedGrocery = adapter.getItem(pos));
     }
 
     @Override
@@ -72,7 +73,7 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
     @Override
     protected void onOk() {
         Ingredient ingredient = new Ingredient();
-        ingredient.setGrocery(adapter.getItem(grocery.getListSelection()));
+        ingredient.setGrocery(selectedGrocery);
         ingredientCallbacks.ingredientAdded(ingredient);
         dismiss();
     }

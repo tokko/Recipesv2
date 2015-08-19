@@ -27,13 +27,11 @@ public class EditableListView<T> extends LinearLayout implements Editable<List<T
     private final Button addButton;
     @Inject
     protected StringifyableAdapter<T> adapter;
+    @Inject
+    protected ItemDetailFragment<T> detailFragment;
     private String original;
     @Inject
     private LayoutInflater inflater;
-
-    @Inject
-    private ItemDetailFragment<T> detailFragment;
-
     @Inject
     private FragmentManager fragmentManager;
 
@@ -54,6 +52,7 @@ public class EditableListView<T> extends LinearLayout implements Editable<List<T
         }
         detailFragment.setArguments(b);
         addButton.setOnClickListener((view) -> detailFragment.show(fragmentManager, "tag"));
+
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.tokko.recipesv2.recipes.IngredientDetailFragment;
 public class EditableIngredientList extends EditableListView<Ingredient> implements IngredientDetailFragment.IngredientDetailFragmentCallbacks {
     public EditableIngredientList(Context context, AttributeSet attrs) {
         super(context, attrs);
+        ((IngredientDetailFragment) detailFragment).setIngredientDetailFragmentCallbacks(adapter::addItem);
     }
 
     @Override
