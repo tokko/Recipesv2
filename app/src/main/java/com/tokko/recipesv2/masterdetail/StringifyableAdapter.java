@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.google.inject.Inject;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -140,6 +141,16 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
             }
 
             @Override
+            public CharSequence convertResultToString(Object resultValue) {
+                try {
+                    return (CharSequence) resultValue.getClass().getMethod("getTitle").invoke(resultValue);
+                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+                return super.convertResultToString(resultValue);
+            }
+
+            @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 data.clear();
                 final List<T> values = (List<T>) results.values;
@@ -149,5 +160,12 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
                 }
             }
         };
+    }
+
+    public void addItem(T t) {
+        data.add(t);
+        for (DataSetObserver obs : observers) {
+            obs.onChanged();
+        }
     }
 }

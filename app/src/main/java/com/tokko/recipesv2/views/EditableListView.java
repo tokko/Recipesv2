@@ -25,11 +25,9 @@ import roboguice.RoboGuice;
 
 public class EditableListView<T> extends LinearLayout implements Editable<List<T>> {
     private final Button addButton;
-    private String original;
-
     @Inject
-    private StringifyableAdapter<T> adapter;
-
+    protected StringifyableAdapter<T> adapter;
+    private String original;
     @Inject
     private LayoutInflater inflater;
 
@@ -82,4 +80,5 @@ public class EditableListView<T> extends LinearLayout implements Editable<List<T
     public void setData(List<T> data) {
         adapter.replaceData(data);
     }
+
 }
