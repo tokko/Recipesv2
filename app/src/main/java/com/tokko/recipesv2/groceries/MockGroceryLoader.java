@@ -3,8 +3,8 @@ package com.tokko.recipesv2.groceries;
 import android.content.Context;
 
 import com.google.inject.Inject;
-import com.tokko.recipesv2.backend.entities.groceryApi.GroceryApi;
-import com.tokko.recipesv2.backend.entities.groceryApi.model.Grocery;
+import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.Grocery;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,7 +14,7 @@ public class MockGroceryLoader extends GroceryLoader {
     private final List<Grocery> groceries;
 
     @Inject
-    public MockGroceryLoader(Context context, GroceryApi api) {
+    public MockGroceryLoader(Context context, RecipeApi api) {
         super(context, api);
         Grocery g1 = new Grocery();
         Grocery g2 = new Grocery();
@@ -28,7 +28,7 @@ public class MockGroceryLoader extends GroceryLoader {
         groceries = Arrays.asList(g1, g2, g3);
     }
 
-    public MockGroceryLoader(Context context, GroceryApi api, List<Grocery> groceries) {
+    public MockGroceryLoader(Context context, RecipeApi api, List<Grocery> groceries) {
         super(context, api);
         this.groceries = groceries;
     }

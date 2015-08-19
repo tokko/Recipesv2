@@ -22,7 +22,7 @@ public class RecipeLoader extends AbstractLoader<Recipe> {
     @Override
     public List<Recipe> loadInBackground() {
         try {
-            RecipeApi.List list = api.list();
+            RecipeApi.ListRecipes list = api.listRecipes();
             List<Recipe> execute = list.execute().getItems();
             return execute;
         } catch (IOException e) {

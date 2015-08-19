@@ -14,7 +14,7 @@ import android.widget.ListView;
 import com.google.inject.Key;
 import com.google.inject.util.Types;
 import com.tokko.recipesv2.R;
-import com.tokko.recipesv2.backend.entities.groceryApi.model.Grocery;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.Grocery;
 
 import java.util.List;
 

@@ -6,8 +6,8 @@ import android.view.View;
 
 import com.google.inject.Inject;
 import com.tokko.recipesv2.R;
-import com.tokko.recipesv2.backend.entities.groceryApi.GroceryApi;
-import com.tokko.recipesv2.backend.entities.groceryApi.model.Grocery;
+import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.Grocery;
 import com.tokko.recipesv2.masterdetail.ItemDetailFragment;
 import com.tokko.recipesv2.views.EditTextViewSwitchable;
 
@@ -20,7 +20,7 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
     @InjectView(R.id.grocery_title)
     private EditTextViewSwitchable titleTextView;
     @Inject
-    private GroceryApi api;
+    private RecipeApi api;
 
     @Override
     protected int getLayoutResource() {
@@ -48,7 +48,7 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
     protected void onOk() {
         AsyncTask.execute(() -> {
             try {
-                api.insert(entity).execute();
+                api.commitGrocery(entity).execute();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -59,7 +59,7 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
     protected void onDelete() {
         AsyncTask.execute(() -> {
             try {
-                api.remove(entity.getId()).execute();
+                api.deleteGrocery(entity.getId()).execute();
             } catch (IOException e) {
                 e.printStackTrace();
             }

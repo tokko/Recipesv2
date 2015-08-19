@@ -8,8 +8,8 @@ import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.TypeLiteral;
-import com.tokko.recipesv2.backend.entities.groceryApi.GroceryApi;
-import com.tokko.recipesv2.backend.entities.groceryApi.model.Grocery;
+import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.Grocery;
 import com.tokko.recipesv2.groceries.GroceryDetailFragment;
 import com.tokko.recipesv2.masterdetail.ItemDetailActivity;
 import com.tokko.recipesv2.masterdetail.ItemDetailFragment;
@@ -41,7 +41,7 @@ public class ItemDetailFragmentTests {
     @Inject
     ItemDetailFragment<Grocery> fragment;
     private Grocery g;
-    private GroceryApi api;
+    private RecipeApi api;
     private ItemDetailFragment.Callbacks callbacks;
 
     @Before
@@ -51,16 +51,16 @@ public class ItemDetailFragmentTests {
         g.setTitle("Title");
         i.putExtra(ItemDetailFragment.EXTRA_CLASS, Grocery.class);
         i.putExtra(ItemDetailFragment.EXTRA_ENTITY, new AndroidJsonFactory().toString(g));
-        api = mock(GroceryApi.class);
-        GroceryApi.Insert ins = mock(GroceryApi.Insert.class);
-        when(api.insert(any())).thenReturn(ins);
-        GroceryApi.Remove rem = mock(GroceryApi.Remove.class);
-        when(api.remove(any())).thenReturn(rem);
+        api = mock(RecipeApi.class);
+        RecipeApi.CommitGrocery ins = mock(RecipeApi.CommitGrocery.class);
+        when(api.commitGrocery(any())).thenReturn(ins);
+        RecipeApi.DeleteGrocery rem = mock(RecipeApi.DeleteGrocery.class);
+        when(api.deleteGrocery(any())).thenReturn(rem);
         callbacks = mock(ItemDetailFragment.Callbacks.class);
         RoboGuice.overrideApplicationInjector(RuntimeEnvironment.application, new AbstractModule() {
             @Override
             protected void configure() {
-                bind(GroceryApi.class).toInstance(api);
+                bind(RecipeApi.class).toInstance(api);
                 bind(new TypeLiteral<ItemDetailFragment<Grocery>>() {
                 }).to(GroceryDetailFragment.class);
             }
@@ -125,14 +125,14 @@ public class ItemDetailFragmentTests {
     public void testEdit_OnOkClick_GrocerySaved() throws Exception {
         fragment.getView().findViewById(R.id.buttonbar_ok).performClick();
         Thread.sleep(500);
-        verify(api).insert(any());
+        verify(api).commitGrocery(any());
     }
 
     @Test
     public void testEdit_OnDeleteClick_GroceryDeleted() throws Exception {
         fragment.getView().findViewById(R.id.buttonbar_delete).performClick();
         Thread.sleep(500);
-        verify(api).remove(any());
+        verify(api).deleteGrocery(any());
     }
 
     @Test

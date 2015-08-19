@@ -55,7 +55,7 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
     protected void onOk() {
         AsyncTask.execute(() -> {
             try {
-                api.insert(entity).execute();
+                api.commitRecipe(entity).execute();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -66,7 +66,7 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
     protected void onDelete() {
         AsyncTask.execute(() -> {
             try {
-                api.remove(entity.getId()).execute();
+                api.deleteRecipe(entity.getId()).execute();
             } catch (IOException e) {
                 e.printStackTrace();
             }
