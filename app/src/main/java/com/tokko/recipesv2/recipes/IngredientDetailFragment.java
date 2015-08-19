@@ -63,8 +63,9 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
             public void afterTextChanged(Editable s) {
             }
         });
+        if (getDialog() != null)
+            getDialog().setTitle("Ingredient");
 
-        getDialog().setTitle("Ingredient");
     }
 
     @Override
