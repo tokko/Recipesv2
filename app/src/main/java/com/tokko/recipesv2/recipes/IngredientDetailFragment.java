@@ -1,19 +1,29 @@
 package com.tokko.recipesv2.recipes;
 
 import android.app.LoaderManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.Loader;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.tokko.recipesv2.R;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Grocery;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Ingredient;
+import com.tokko.recipesv2.groceries.GroceryDetailFragment;
 import com.tokko.recipesv2.masterdetail.AbstractLoader;
 import com.tokko.recipesv2.masterdetail.ItemDetailFragment;
 import com.tokko.recipesv2.masterdetail.StringifyableAdapter;
 
+import java.io.IOException;
 import java.util.List;
 
 import butterknife.OnClick;
@@ -26,17 +36,33 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
 
     @Inject
     StringifyableAdapter<Grocery> adapter;
-
+    @Inject
+    GroceryDetailFragment groceryDetailFragment;
     @InjectView(R.id.ingredientdetail_grocery)
     private AutoCompleteTextView grocery;
     private IngredientDetailFragmentCallbacks ingredientCallbacks;
     private Grocery selectedGrocery;
+    private BroadcastReceiver br;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         grocery.setAdapter(adapter);
         grocery.setOnItemClickListener((av, v, pos, id) -> selectedGrocery = adapter.getItem(pos));
+        grocery.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                selectedGrocery = null;
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
     }
 
     @Override
@@ -49,6 +75,8 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
     public void onStop() {
         super.onStop();
         getActivity().getLoaderManager().destroyLoader(0);
+        if (br != null)
+            getActivity().unregisterReceiver(br);
     }
 
     @Override
@@ -73,9 +101,34 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
     @Override
     protected void onOk() {
         Ingredient ingredient = new Ingredient();
-        ingredient.setGrocery(selectedGrocery);
-        ingredientCallbacks.ingredientAdded(ingredient);
-        dismiss();
+        if (selectedGrocery != null) {
+            ingredient.setGrocery(selectedGrocery);
+            ingredientCallbacks.ingredientAdded(ingredient);
+            dismiss();
+        } else {
+            br = new BroadcastReceiver() {
+
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    try {
+                        ingredient.setGrocery(new AndroidJsonFactory().fromString(intent.getStringExtra(GroceryDetailFragment.EXTRA_GROCERY), Grocery.class));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    ingredientCallbacks.ingredientAdded(ingredient);
+                    groceryDetailFragment.dismiss();
+                    IngredientDetailFragment.this.dismiss();
+                }
+            };
+            getActivity().registerReceiver(br, new IntentFilter(GroceryDetailFragment.ACTION_GROCERY_COMMITED));
+            Grocery g = new Grocery();
+            g.setTitle(grocery.getText().toString());
+            Bundle b = new Bundle();
+            b.putSerializable(ItemDetailFragment.EXTRA_CLASS, Grocery.class);
+            b.putString(IngredientDetailFragment.EXTRA_ENTITY, new Gson().toJson(g));
+            groceryDetailFragment.setArguments(b);
+            groceryDetailFragment.show(getActivity().getFragmentManager(), "tag2");
+        }
     }
 
     @Override
