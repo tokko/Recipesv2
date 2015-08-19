@@ -19,6 +19,7 @@ public class Recipe {
     public String title;
     @Ignore
     public List<Ingredient> ingredients;
+    public List<String> instructions;
     @Parent
     private Ref<RecipeUser> recipeUser;
     @Load
@@ -41,6 +42,14 @@ public class Recipe {
         for (Ingredient i : ingredients) {
             i.load();
         }
+    }
+
+    public List<String> getInstructions() {
+        return instructions;
+    }
+
+    public void setInstructions(List<String> instructions) {
+        this.instructions = instructions;
     }
 
     public void prepare() {

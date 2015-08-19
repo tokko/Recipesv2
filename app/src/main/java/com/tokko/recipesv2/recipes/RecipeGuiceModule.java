@@ -19,10 +19,14 @@ public class RecipeGuiceModule extends AbstractModule {
         }).to(RecipeAdapter.class);
         bind(new TypeLiteral<StringifyableAdapter<Ingredient>>() {
         }).to(IngredientAdapter.class);
+        bind(new TypeLiteral<StringifyableAdapter<String>>() {
+        }).to(InstructionsAdapter.class);
         bind(new TypeLiteral<ItemDetailFragment<Recipe>>() {
         }).to(RecipeDetailFragment.class);
         bind(new TypeLiteral<ItemDetailFragment<Ingredient>>() {
         }).to(IngredientDetailFragment.class);
+        bind(new TypeLiteral<ItemDetailFragment<String>>() {
+        }).to(InstructionsDetailFragment.class);
         bind(RecipeApi.class).toInstance((RecipeApi) ApiFactory.createApi(RecipeApi.Builder.class));
 
         if (BuildConfig.BUILD_TYPE.equals("mock")) {

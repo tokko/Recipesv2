@@ -9,10 +9,22 @@
         android:layout_width="150dp"
         android:layout_height="match_parent" />
 
-    <com.tokko.recipesv2.views.EditTextViewSwitchable
-        android:id="@+id/recipe_title"
-        style="@android:style/TextAppearance.DeviceDefault.Medium"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <com.tokko.recipesv2.views.EditTextViewSwitchable
+            android:id="@+id/recipe_title"
+            style="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.tokko.recipesv2.views.EditableInstructionList
+            android:id="@+id/instructionList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
 </LinearLayout>

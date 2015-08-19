@@ -25,6 +25,9 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
     @InjectView(R.id.ingredient_list)
     private EditableListView<Ingredient> list;
 
+    @InjectView(R.id.instructionList)
+    private EditableListView<String> instructions;
+
     @Inject
     private RecipeApi api;
     @Override
@@ -42,12 +45,14 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
     protected void bindView(Recipe entity) {
         title.setData(entity.getTitle());
         list.setData(entity.getIngredients());
+        instructions.setData(entity.getInstructions());
     }
 
     @Override
     protected Recipe getEntity() {
         entity.setTitle(title.getData());
         entity.setIngredients(list.getData());
+        entity.setInstructions(instructions.getData());
         return entity;
     }
 
