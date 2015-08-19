@@ -38,6 +38,9 @@ public class Recipe {
 
     public void load() {
         ingredients = deRef(storedIngredients);
+        for (Ingredient i : ingredients) {
+            i.load();
+        }
     }
 
     public void prepare() {
