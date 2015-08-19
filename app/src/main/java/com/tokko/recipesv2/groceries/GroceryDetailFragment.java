@@ -39,6 +39,7 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
         super.onViewCreated(view, savedInstanceState);
         titleTextView.setHint("Title");
         persist = getArguments().getBoolean(EXTRA_PERSIST_GROCERY, true);
+        getDialog().setTitle("Grocery");
     }
 
     @Override
