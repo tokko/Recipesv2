@@ -78,7 +78,7 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
                 enterEditMode();
             }
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            e.printStackTrace();
+            enterEditMode();
         }
     }
 
