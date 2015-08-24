@@ -70,7 +70,7 @@ public class ItemListFragment<T> extends RoboListFragment implements LoaderManag
                 }
                 return true;
             case R.id.manage_groceries:
-                Intent i = new Intent(getActivity(), ItemListActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                Intent i = new Intent(getActivity(), ItemListActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.putExtra(ItemListActivity.EXTRA_TITLE, "Groceries");
                 i.putExtra(ItemListActivity.EXTRA_ENTITY_CLASS, Grocery.class);
                 startActivity(i);

@@ -55,7 +55,7 @@ public class ItemListActivity extends RoboActivity
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        setup(intent);
+        //  setup(intent);
     }
 
     @Override
