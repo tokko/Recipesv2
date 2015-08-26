@@ -6,6 +6,7 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Ignore;
 import com.googlecode.objectify.annotation.Load;
 import com.googlecode.objectify.annotation.Parent;
+import com.tokko.recipesv2.backend.units.Quantity;
 
 @Entity
 public class Ingredient extends BaseEntity<Long> {
@@ -14,6 +15,7 @@ public class Ingredient extends BaseEntity<Long> {
     public Long id;
     @Ignore
     public Grocery grocery;
+    public Quantity quantity;
     @Load
     private Ref<Grocery> storedGrocery;
     @Parent
@@ -25,6 +27,14 @@ public class Ingredient extends BaseEntity<Long> {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Quantity getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Quantity quantity) {
+        this.quantity = quantity;
     }
 
     @Override
