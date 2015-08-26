@@ -3,36 +3,29 @@ package com.tokko.recipesv2.backend.units;
 public class Quantity implements Comparable<Quantity> {
 
     private double quantity;
+    private String unit;
 
     public Quantity() {
     }
 
-    public Quantity(Number quantity, Unit unit) {
-        setQuantity(quantity, unit);
+    public String getUnit() {
+        return unit;
     }
 
-    public Number getQuantity() {
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public double getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Number quantity, Unit unit) {
-        this.quantity = unit.convertToBase(quantity).doubleValue();
-    }
-
-    public Quantity add(Quantity quantity) {
-        this.quantity += quantity.getQuantity().doubleValue();
-        return this;
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
     }
 
     @Override
     public int compareTo(Quantity o) {
-        return (int) (quantity - o.getQuantity().doubleValue());
-    }
-
-    @Override
-    public String toString() {
-        Unit upScaled = new Grams().upscale();
-        double newQuality = upScaled.convertToThis(quantity).doubleValue();
-        return newQuality + upScaled.getSuffix();
+        return (int) (quantity - o.quantity);
     }
 }
