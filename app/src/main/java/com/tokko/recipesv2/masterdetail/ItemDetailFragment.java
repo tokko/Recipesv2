@@ -27,11 +27,11 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
     public static final String EXTRA_ENTITY = "entity";
     protected T entity;
     protected Callbacks callbacks;
+    @InjectView(R.id.buttonbar_delete)
+    protected Button deleteButton;
     private Class<T> clz;
     @InjectView(R.id.buttonbar)
     private ViewGroup buttonBar;
-    @InjectView(R.id.buttonbar_delete)
-    private Button deleteButton;
 
     public ItemDetailFragment() {
     }

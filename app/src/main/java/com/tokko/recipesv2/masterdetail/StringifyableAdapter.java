@@ -11,6 +11,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
+import com.tokko.recipesv2.R;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -23,10 +24,11 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
     protected ArrayList<T> data = new ArrayList<>();
     protected ArrayList<T> original = new ArrayList<>();
     private ArrayList<DataSetObserver> observers = new ArrayList<>();
-    private int resource = android.R.layout.simple_list_item_1;
+    private int resource = R.layout.adapterentry;
     private int textViewResourceId = android.R.id.text1;
     @Inject
     private LayoutInflater inflater;
+    private boolean delete;
 
     @Inject
     public StringifyableAdapter(Context context) {
@@ -65,6 +67,11 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
 
     protected abstract String getItemString(int position);
 
+    public void setDeleteEnabled(boolean delete) {
+        this.delete = delete;
+        replaceData(data);
+    }
+
     @Override
     public boolean hasStableIds() {
         return false;
@@ -76,6 +83,13 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
             convertView = inflater.inflate(resource, null);
         TextView tv = (TextView) convertView.findViewById(textViewResourceId);
         tv.setText(getItemString(position));
+        View deleteButton = convertView.findViewById(R.id.deleteImageButton);
+        if (delete) {
+            deleteButton.setTag(position);
+            deleteButton.setOnClickListener(v -> removeItem((Integer) v.getTag()));
+            deleteButton.setVisibility(View.VISIBLE);
+        } else
+            deleteButton.setVisibility(View.GONE);
         return convertView;
     }
 

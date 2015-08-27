@@ -17,9 +17,10 @@ public class IngredientAdapter extends StringifyableAdapter<Ingredient> {
 
     @Override
     protected String getItemString(int position) {
+        if (getItem(position) == null) return "";
         Grocery grocery = getItem(position).getGrocery();
         Quantity q = getItem(position).getQuantity();
-        return q.getQuantity() + q.getUnit() + " " + grocery.getTitle();
+        return q != null ? (q.getQuantity() + q.getUnit() + " ") : "" + grocery.getTitle();
     }
 
     @Override

@@ -89,6 +89,7 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
             getDialog().setTitle("Ingredient");
         unitSpinner.setAdapter(unitAdapter);
         enterEditMode();
+        deleteButton.setVisibility(View.GONE);
     }
 
     private void resolveChosenGrocery() {
@@ -115,8 +116,10 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
     public void onStop() {
         super.onStop();
         getActivity().getLoaderManager().destroyLoader(0);
-        if (br != null)
+        if (br != null) {
             getActivity().unregisterReceiver(br);
+            br = null;
+        }
     }
 
     @Override
@@ -126,8 +129,11 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
 
     @Override
     protected void bindView(Ingredient entity) {
-        grocery.setText(entity.getGrocery().getTitle());
-        quantityEditText.setText(entity.getQuantity().getQuantity().toString());
+        if (entity == null) return;
+        if (entity.getGrocery() != null)
+            grocery.setText(entity.getGrocery().getTitle());
+        if (entity.getQuantity() != null)
+            quantityEditText.setText(entity.getQuantity().getQuantity().toString());
         resolveChosenGrocery();
         grocery.dismissDropDown();
     }
@@ -187,7 +193,8 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
 
     @Override
     protected void onDelete() {
-
+        ingredientCallbacks.ingredientDeleted(entity);
+        dismiss();
     }
 
     @Override
@@ -209,6 +216,7 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
     public interface IngredientDetailFragmentCallbacks {
         void ingredientAdded(Ingredient ingredient);
 
+        void ingredientDeleted(Ingredient entity);
     }
 
     private class UnitDownloader extends AsyncTask<Void, Void, List<String>> {

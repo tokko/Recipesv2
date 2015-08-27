@@ -35,6 +35,8 @@ public class EditableListView<T> extends LinearLayout implements Editable<List<T
     private FragmentManager fragmentManager;
 
     private ListView lv;
+    private Class<? extends List> clz;
+
     public EditableListView(Context context, AttributeSet attrs) {
         super(context, attrs);
         RoboGuice.getInjector(context).injectMembers(this);
@@ -61,11 +63,18 @@ public class EditableListView<T> extends LinearLayout implements Editable<List<T
     @Override
     public void edit() {
         addButton.setVisibility(View.VISIBLE);
+        adapter.setDeleteEnabled(true);
     }
 
     @Override
     public void discard() {
         addButton.setVisibility(View.GONE);
+        adapter.setDeleteEnabled(false);
+        try {
+            setData(new AndroidJsonFactory().fromString(original, clz));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -80,6 +89,13 @@ public class EditableListView<T> extends LinearLayout implements Editable<List<T
 
     @Override
     public void setData(List<T> data) {
+        if (data == null) return;
+        try {
+            original = new AndroidJsonFactory().toPrettyString(data);
+            clz = data.getClass();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         adapter.replaceData(data);
     }
 
