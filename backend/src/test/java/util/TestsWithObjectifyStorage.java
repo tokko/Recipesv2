@@ -3,6 +3,7 @@ package util;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalMemcacheServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.googlecode.objectify.ObjectifyService;
 
 import org.junit.After;
 import org.junit.Before;
@@ -17,6 +18,7 @@ public abstract class TestsWithObjectifyStorage {
     @Before
     public void setup() {
         helper.setUp();
+        ObjectifyService.begin();
     }
 
     @After

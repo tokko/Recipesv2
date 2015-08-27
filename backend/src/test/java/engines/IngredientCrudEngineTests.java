@@ -5,6 +5,7 @@ import com.tokko.recipesv2.backend.engines.IngredientCrudEngine;
 import com.tokko.recipesv2.backend.entities.Grocery;
 import com.tokko.recipesv2.backend.entities.Ingredient;
 import com.tokko.recipesv2.backend.entities.RecipeUser;
+import com.tokko.recipesv2.backend.units.Quantity;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,9 +32,13 @@ public class IngredientCrudEngineTests extends TestsWithObjectifyStorage {
     @Test
     public void testCommitIngredient_IsCommitted() throws Exception {
         Grocery g = new Grocery("g", user);
+        Quantity q = new Quantity();
+        q.setQuantity(1);
+        q.setUnit("hg");
         ofy().save().entity(g).now();
         Ingredient ingredient = new Ingredient();
         ingredient.setGrocery(g);
+        ingredient.setQuantity(q);
         ingredientCrudEngine.commitIngredient(ingredient, user);
         Ingredient saved = ofy().load().key(Key.create(Key.create(RecipeUser.class, user.getEmail()), Ingredient.class, ingredient.getId())).now();
         assertNotNull(saved);

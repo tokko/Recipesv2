@@ -9,6 +9,7 @@ import com.google.api.server.spi.response.UnauthorizedException;
 import com.google.appengine.api.oauth.OAuthRequestException;
 import com.google.appengine.api.users.User;
 import com.google.inject.Inject;
+import com.tokko.recipesv2.backend.engines.QuantityCalculatorEngine;
 import com.tokko.recipesv2.backend.entities.Grocery;
 import com.tokko.recipesv2.backend.entities.Recipe;
 import com.tokko.recipesv2.backend.managers.GroceryManager;
@@ -44,6 +45,9 @@ public class RecipesApi {
     private RecipeUserManager recipeUserManager;
     @Inject
     private GroceryManager groceryManager;
+
+    @Inject
+    private QuantityCalculatorEngine quantityCalculatorEngine;
 
     public RecipesApi() {
         inject(this);
@@ -92,6 +96,14 @@ public class RecipesApi {
     public void registerDevice(@com.google.api.server.spi.config.Named("regid") String regid, User user) throws UnauthorizedException {
         if (user == null) throw new UnauthorizedException("You shall not pass!");
         recipeUserManager.addRegistrationIdToRecipeUser(user.getEmail(), regid);
+    }
+
+    @ApiMethod(
+            name = "listUnits",
+            path = "quantity",
+            httpMethod = ApiMethod.HttpMethod.GET)
+    public CollectionResponse<String> listUnits() throws UnauthorizedException {
+        return CollectionResponse.<String>builder().setItems(quantityCalculatorEngine.listUnits()).build();
     }
     @ApiMethod(
             name = "get",

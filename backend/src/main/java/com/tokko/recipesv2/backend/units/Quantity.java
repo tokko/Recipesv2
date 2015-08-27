@@ -1,6 +1,6 @@
 package com.tokko.recipesv2.backend.units;
 
-public class Quantity implements Comparable<Quantity> {
+public class Quantity {
 
     private double quantity;
     private String unit;
@@ -22,10 +22,5 @@ public class Quantity implements Comparable<Quantity> {
 
     public void setQuantity(double quantity) {
         this.quantity = quantity;
-    }
-
-    @Override
-    public int compareTo(Quantity o) {
-        return (int) (quantity - o.quantity);
     }
 }

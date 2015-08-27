@@ -5,6 +5,7 @@ import android.content.Context;
 import com.google.inject.Inject;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Grocery;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Ingredient;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.Quantity;
 import com.tokko.recipesv2.masterdetail.StringifyableAdapter;
 
 public class IngredientAdapter extends StringifyableAdapter<Ingredient> {
@@ -17,7 +18,8 @@ public class IngredientAdapter extends StringifyableAdapter<Ingredient> {
     @Override
     protected String getItemString(int position) {
         Grocery grocery = getItem(position).getGrocery();
-        return grocery.getTitle();
+        Quantity q = getItem(position).getQuantity();
+        return q.getQuantity() + q.getUnit() + " " + grocery.getTitle();
     }
 
     @Override
