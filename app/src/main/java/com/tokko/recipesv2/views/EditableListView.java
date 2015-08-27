@@ -2,6 +2,7 @@ package com.tokko.recipesv2.views;
 
 import android.app.FragmentManager;
 import android.content.Context;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +11,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.inject.Inject;
 import com.tokko.recipesv2.R;
 import com.tokko.recipesv2.masterdetail.ItemDetailFragment;
 import com.tokko.recipesv2.masterdetail.StringifyableAdapter;
 
+import java.io.IOException;
 import java.util.List;
 
 import roboguice.RoboGuice;
@@ -41,7 +44,16 @@ public class EditableListView<T> extends LinearLayout implements Editable<List<T
         addButton = (Button) v.findViewById(R.id.editableList_addButton);
 
         addButton.setOnClickListener((view) -> detailFragment.show(fragmentManager, "tag"));
-
+        lv.setOnItemClickListener((parent, view, position, id) -> {
+            T entity = adapter.getItem(position);
+            Bundle b = detailFragment.getArguments();
+            try {
+                b.putSerializable(ItemDetailFragment.EXTRA_ENTITY, new AndroidJsonFactory().toPrettyString(entity));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            detailFragment.show(fragmentManager, "tagae");
+        });
     }
 
     @Override

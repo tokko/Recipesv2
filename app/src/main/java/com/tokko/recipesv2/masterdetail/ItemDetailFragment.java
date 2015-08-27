@@ -40,14 +40,15 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        clz = (Class<T>) getArguments().getSerializable(EXTRA_CLASS);
-        String json = getArguments().getString(EXTRA_ENTITY);
-        try {
-            entity = new AndroidJsonFactory().fromString(json, clz);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (getArguments() != null) {
+            clz = (Class<T>) getArguments().getSerializable(EXTRA_CLASS);
+            String json = getArguments().getString(EXTRA_ENTITY);
+            try {
+                entity = new AndroidJsonFactory().fromString(json, clz);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
     public void setCallbacks(Callbacks callbacks) {

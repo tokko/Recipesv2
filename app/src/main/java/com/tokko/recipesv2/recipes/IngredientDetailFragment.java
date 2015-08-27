@@ -78,6 +78,7 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                resolveChosenGrocery();
             }
 
             @Override
@@ -87,6 +88,20 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
         if (getDialog() != null)
             getDialog().setTitle("Ingredient");
         unitSpinner.setAdapter(unitAdapter);
+        enterEditMode();
+    }
+
+    private void resolveChosenGrocery() {
+        CharSequence s = grocery.getText();
+        if (s != null && s.length() > 0) {
+            for (int i = 0; i < adapter.getCount(); i++) {
+                if (adapter.getItem(i).getTitle().equals(s.toString())) {
+                    grocery.setSelection(i);
+                    selectedGrocery = adapter.getItem(i);
+                    break;
+                }
+            }
+        }
     }
 
     @Override
@@ -111,12 +126,15 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
 
     @Override
     protected void bindView(Ingredient entity) {
-
+        grocery.setText(entity.getGrocery().getTitle());
+        quantityEditText.setText(entity.getQuantity().getQuantity().toString());
+        resolveChosenGrocery();
+        grocery.dismissDropDown();
     }
 
     @Override
     protected Ingredient getEntity() {
-        return null;
+        return entity;
     }
 
     public void setIngredientDetailFragmentCallbacks(IngredientDetailFragmentCallbacks callbacks) {
@@ -125,7 +143,7 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
 
     @Override
     protected void onOk() {
-        Ingredient ingredient = new Ingredient();
+        Ingredient ingredient = entity;
         if (selectedGrocery != null) {
             ingredient.setGrocery(selectedGrocery);
             Quantity q = new Quantity();
@@ -180,6 +198,7 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
     @Override
     public void onLoadFinished(Loader<List<Grocery>> loader, List<Grocery> data) {
         adapter.replaceData(data);
+        resolveChosenGrocery();
     }
 
     @Override
@@ -210,6 +229,14 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
                 unitAdapter.clear();
                 unitAdapter.addAll(units);
                 unitAdapter.notifyDataSetChanged();
+                if (entity != null && entity.getQuantity() != null) {
+                    for (int i = 0; i < unitAdapter.getCount(); i++) {
+                        if (unitAdapter.getItem(i).equals(entity.getQuantity().getUnit())) {
+                            unitSpinner.setSelection(i);
+                            break;
+                        }
+                    }
+                }
             }
             super.onPostExecute(units);
         }

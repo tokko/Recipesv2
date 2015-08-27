@@ -168,4 +168,11 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
             obs.onChanged();
         }
     }
+
+    public void removeItem(int i) {
+        data.remove(i);
+        for (DataSetObserver obs : observers) {
+            obs.onChanged();
+        }
+    }
 }
