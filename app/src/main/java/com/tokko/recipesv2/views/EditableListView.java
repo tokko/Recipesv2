@@ -80,6 +80,7 @@ public class EditableListView<T> extends LinearLayout implements Editable<List<T
     @Override
     public void accept() {
         addButton.setVisibility(View.GONE);
+        adapter.setDeleteEnabled(false);
     }
 
     @Override

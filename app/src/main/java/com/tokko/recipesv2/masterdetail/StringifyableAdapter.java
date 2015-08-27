@@ -69,7 +69,7 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
 
     public void setDeleteEnabled(boolean delete) {
         this.delete = delete;
-        replaceData(data);
+        notifyChange();
     }
 
     @Override
@@ -119,6 +119,10 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
             this.data.addAll(data);
             original.addAll(data);
         }
+        notifyChange();
+    }
+
+    private void notifyChange() {
         for (DataSetObserver obs : observers) {
             obs.onChanged();
         }
@@ -169,24 +173,18 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
                 data.clear();
                 final List<T> values = (List<T>) results.values;
                 data.addAll(values);
-                for (DataSetObserver obs : observers) {
-                    obs.onChanged();
-                }
+                notifyChange();
             }
         };
     }
 
     public void addItem(T t) {
         data.add(t);
-        for (DataSetObserver obs : observers) {
-            obs.onChanged();
-        }
+        notifyChange();
     }
 
     public void removeItem(int i) {
         data.remove(i);
-        for (DataSetObserver obs : observers) {
-            obs.onChanged();
-        }
+        notifyChange();
     }
 }
