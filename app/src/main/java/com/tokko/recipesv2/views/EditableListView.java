@@ -34,17 +34,19 @@ public class EditableListView<T> extends LinearLayout implements Editable<List<T
     @Inject
     private FragmentManager fragmentManager;
 
+    private ListView lv;
     public EditableListView(Context context, AttributeSet attrs) {
         super(context, attrs);
         RoboGuice.getInjector(context).injectMembers(this);
 
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.editablelistview, this, true);
-        ListView lv = (ListView) v.findViewById(R.id.editable_list);
+        lv = (ListView) v.findViewById(R.id.editable_list);
         lv.setAdapter(adapter);
         addButton = (Button) v.findViewById(R.id.editableList_addButton);
 
         addButton.setOnClickListener((view) -> detailFragment.show(fragmentManager, "tag"));
         lv.setOnItemClickListener((parent, view, position, id) -> {
+            if (addButton.getVisibility() != View.VISIBLE) return;
             T entity = adapter.getItem(position);
             Bundle b = detailFragment.getArguments();
             try {
