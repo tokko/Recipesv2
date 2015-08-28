@@ -37,18 +37,9 @@ public class GroceryCrudEngineTest extends TestsWithObjectifyStorage {
     }
 
     @Test
-    public void testListGroceries_AllUsersGroceriesReturned() throws Exception {
-        List<Grocery> groceries = groceryCrudEngine.listGroceries(user);
-        assertEquals(groceryList.size(), groceries.size());
-        assertEquals(groceryList, groceries);
-    }
-
-    @Test
     public void testListGroceries_OnlyUsersGroceriesReturned() {
         List<Grocery> groceries = groceryCrudEngine.listGroceries(user);
-        for (Grocery g : groceries) {
-            assertTrue(groceryList.contains(g));
-        }
+        assertEquals(groceryList.toArray(), groceries.toArray());
     }
 
     @Test
