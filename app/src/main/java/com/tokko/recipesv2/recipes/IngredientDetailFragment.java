@@ -132,8 +132,12 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
         if (entity == null) return;
         if (entity.getGrocery() != null)
             grocery.setText(entity.getGrocery().getTitle());
+        else
+            grocery.setText("");
         if (entity.getQuantity() != null)
             quantityEditText.setText(entity.getQuantity().getQuantity().toString());
+        else
+            quantityEditText.setText("");
         resolveChosenGrocery();
         grocery.dismissDropDown();
     }

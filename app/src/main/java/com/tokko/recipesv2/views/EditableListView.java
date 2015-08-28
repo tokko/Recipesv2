@@ -28,7 +28,7 @@ public class EditableListView<T> extends LinearLayout implements Editable<List<T
     protected StringifyableAdapter<T> adapter;
     @Inject
     protected ItemDetailFragment<T> detailFragment;
-    private String original;
+    private List<T> original;
     @Inject
     private LayoutInflater inflater;
     @Inject
@@ -46,7 +46,10 @@ public class EditableListView<T> extends LinearLayout implements Editable<List<T
         lv.setAdapter(adapter);
         addButton = (Button) v.findViewById(R.id.editableList_addButton);
 
-        addButton.setOnClickListener((view) -> detailFragment.show(fragmentManager, "tag"));
+        addButton.setOnClickListener((view) -> {
+            detailFragment.getArguments().remove(ItemDetailFragment.EXTRA_ENTITY);
+            detailFragment.show(fragmentManager, "tag");
+        });
         lv.setOnItemClickListener((parent, view, position, id) -> {
             if (addButton.getVisibility() != View.VISIBLE) return;
             T entity = adapter.getItem(position);
@@ -56,7 +59,7 @@ public class EditableListView<T> extends LinearLayout implements Editable<List<T
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            detailFragment.show(fragmentManager, "tagae");
+            detailFragment.show(fragmentManager, "tag");
         });
     }
 
@@ -70,10 +73,8 @@ public class EditableListView<T> extends LinearLayout implements Editable<List<T
     public void discard() {
         addButton.setVisibility(View.GONE);
         adapter.setDeleteEnabled(false);
-        try {
-            setData(new AndroidJsonFactory().fromString(original, clz));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (original != null) {
+            setData(original);
         }
     }
 
@@ -91,12 +92,8 @@ public class EditableListView<T> extends LinearLayout implements Editable<List<T
     @Override
     public void setData(List<T> data) {
         if (data == null) return;
-        try {
-            original = new AndroidJsonFactory().toPrettyString(data);
-            clz = data.getClass();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        original = data;
+        clz = data.getClass();
         adapter.replaceData(data);
     }
 

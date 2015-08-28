@@ -1,6 +1,9 @@
 package com.tokko.recipesv2;
 
+import android.app.Fragment;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
 
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.inject.Inject;
@@ -55,6 +58,7 @@ public class RecipeDetailFragmentTests {
         startVisibleFragment(fragment);
         fragment.enterEditMode();
     }
+
 
     @Test
     public void testRecipeIsDisplayed() throws Exception {

@@ -170,10 +170,12 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                data.clear();
-                final List<T> values = (List<T>) results.values;
-                data.addAll(values);
-                notifyChange();
+                if (data != null) {
+                    data.clear();
+                    final List<T> values = (List<T>) results.values;
+                    data.addAll(values);
+                    notifyChange();
+                }
             }
         };
     }

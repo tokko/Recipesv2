@@ -42,12 +42,19 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
         setHasOptionsMenu(true);
         if (getArguments() != null) {
             clz = (Class<T>) getArguments().getSerializable(EXTRA_CLASS);
-            String json = getArguments().getString(EXTRA_ENTITY);
-            try {
-                entity = new AndroidJsonFactory().fromString(json, clz);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            if (getArguments().containsKey(EXTRA_ENTITY)) {
+                String json = getArguments().getString(EXTRA_ENTITY);
+                try {
+                    entity = new AndroidJsonFactory().fromString(json, clz);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else
+                try {
+                    entity = clz.newInstance();
+                } catch (java.lang.InstantiationException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
         }
     }
 
