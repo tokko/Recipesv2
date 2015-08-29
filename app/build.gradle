@@ -113,9 +113,9 @@ retrolambda {
 dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'org.robolectric:robolectric:3.0'
-    testCompile 'org.mockito:mockito-all:2.0.2-beta'
+    testCompile 'org.mockito:mockito-core:2.0.31-beta'
     androidTestCompile 'junit:junit:4.12'
-    androidTestCompile 'org.mockito:mockito-all:2.0.2-beta'
+    androidTestCompile 'org.mockito:mockito-core:2.0.31-beta'
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
     androidTestCompile('com.android.support.test:runner:0.3') {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -136,6 +136,6 @@ dependencies {
     compile 'com.annimon:stream:1.0.1'
     compile 'com.google.code.gson:gson:2.3.1'
     // compile 'com.android.support:support-v4:22.2.1'
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    // compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(path: ':backend', configuration: 'android-endpoints')
 }
