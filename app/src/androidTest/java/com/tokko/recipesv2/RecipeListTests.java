@@ -113,16 +113,29 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
 
     @Test
     public void testAddTwoIngredients_IngredientDetailsShouldBeCleared() throws Exception {
-        onView(withId(R.id.listad_add)).perform(click());
-        onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.ingredient_list)))).perform(click());
-        onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("grocery"));
-        onView(withId(R.id.ingredient_quantity)).perform(typeText("1"));
-        onView(withId(R.id.buttonbar_ok)).perform(click());
-        onView(withId(R.id.buttonbar_ok)).perform(click());
+        createIngredient("grocery", 1, true);
+
         onView(withText("grocery")).check(matches(isDisplayed()));
 
         onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.ingredient_list)))).perform(click());
         onView(withId(R.id.ingredientdetail_grocery)).check(matches(withText("")));
         onView(withId(R.id.ingredient_quantity)).check(matches(withText("")));
+    }
+
+    @Test
+    public void testAddIngredients_IsAddedToList() throws Exception {
+        createIngredient("grocery", 1, true);
+
+        onView(withText("grocery")).check(matches(isDisplayed()));
+    }
+
+    private void createIngredient(String groceryTitle, int quantity, boolean newGrocery) {
+        onView(withId(R.id.listad_add)).perform(click());
+        onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.ingredient_list)))).perform(click());
+        onView(withId(R.id.ingredientdetail_grocery)).perform(typeText(groceryTitle));
+        onView(withId(R.id.ingredient_quantity)).perform(typeText(String.valueOf(quantity)));
+        onView(withId(R.id.buttonbar_ok)).perform(click());
+        if(newGrocery)
+            onView(withId(R.id.buttonbar_ok)).perform(click());
     }
 }
