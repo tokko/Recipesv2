@@ -99,6 +99,8 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
         }
     }
 
+    public abstract ItemDetailFragment<T> newInstance(Bundle args);
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

@@ -23,6 +23,13 @@ public class InstructionsDetailFragment extends ItemDetailFragment<String> {
     }
 
     @Override
+    public ItemDetailFragment<String> newInstance(Bundle args) {
+        InstructionsDetailFragment f = new InstructionsDetailFragment();
+        f.setArguments(args);
+        return f;
+    }
+
+    @Override
     protected int getLayoutResource() {
         return R.layout.instructionsdetailfragment;
     }

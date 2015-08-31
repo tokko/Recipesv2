@@ -93,6 +93,13 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
     }
 
     @Override
+    public ItemDetailFragment<Ingredient> newInstance(Bundle args) {
+        IngredientDetailFragment f = new IngredientDetailFragment();
+        f.setArguments(args);
+        return f;
+    }
+
+    @Override
     public void clear() {
         selectedGrocery = null;
         super.clear();
@@ -116,9 +123,6 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
         super.onStart();
         getActivity().getLoaderManager().initLoader(0, null, this);
         RoboGuice.getInjector(getActivity()).getInstance(UnitDownloader.class).setCallbacks(this).execute();
-        String groceryTitle = groceryAutoCompleteTextView.getText().toString();
-        String quantity = quantityEditText.getText().toString();
-        int a = 1;
     }
 
     @Override
@@ -147,9 +151,6 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
             quantityEditText.setText(entity.getQuantity().getQuantity().toString());
         else
             quantityEditText.setText("");
-        String groceryTitle = groceryAutoCompleteTextView.getText().toString();
-        String quantity = quantityEditText.getText().toString();
-        int a = 1;
         resolveChosenGrocery();
         groceryAutoCompleteTextView.dismissDropDown();
     }

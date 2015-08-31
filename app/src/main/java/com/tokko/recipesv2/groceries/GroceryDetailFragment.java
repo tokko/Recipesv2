@@ -44,6 +44,13 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
     }
 
     @Override
+    public ItemDetailFragment<Grocery> newInstance(Bundle args) {
+        GroceryDetailFragment f = new GroceryDetailFragment();
+        f.setArguments(args);
+        return f;
+    }
+
+    @Override
     protected void bindView(Grocery entity) {
         titleTextView.setData(entity.getTitle());
     }

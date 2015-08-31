@@ -14,7 +14,6 @@ import java.io.IOException;
 public class EditableIngredientList extends EditableListView<Ingredient> implements IngredientDetailFragment.IngredientDetailFragmentCallbacks {
     public EditableIngredientList(Context context, AttributeSet attrs) {
         super(context, attrs);
-        ((IngredientDetailFragment) detailFragment).setIngredientDetailFragmentCallbacks(this);
         Bundle b = new Bundle();
         b.putSerializable(ItemDetailFragment.EXTRA_CLASS, Ingredient.class);
         try {
@@ -23,6 +22,11 @@ public class EditableIngredientList extends EditableListView<Ingredient> impleme
             e.printStackTrace();
         }
         detailFragment.setArguments(b);
+    }
+
+    @Override
+    protected void prepare(ItemDetailFragment<Ingredient> detailFragment) {
+        ((IngredientDetailFragment) detailFragment).setIngredientDetailFragmentCallbacks(this);
     }
 
     @Override

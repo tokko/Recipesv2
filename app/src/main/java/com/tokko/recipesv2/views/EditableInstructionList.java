@@ -25,6 +25,11 @@ public class EditableInstructionList extends EditableListView<String> implements
     }
 
     @Override
+    protected void prepare(ItemDetailFragment<String> detailFragment) {
+
+    }
+
+    @Override
     public void instructionAdded(String instruction) {
         adapter.addItem(instruction);
     }

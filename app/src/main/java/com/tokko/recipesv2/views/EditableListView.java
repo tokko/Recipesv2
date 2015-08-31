@@ -13,6 +13,8 @@ import android.widget.ListView;
 
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.inject.Inject;
+import com.google.inject.Key;
+import com.google.inject.TypeLiteral;
 import com.tokko.recipesv2.R;
 import com.tokko.recipesv2.masterdetail.ItemDetailFragment;
 import com.tokko.recipesv2.masterdetail.StringifyableAdapter;
@@ -23,7 +25,7 @@ import java.util.List;
 
 import roboguice.RoboGuice;
 
-public class EditableListView<T> extends LinearLayout implements Editable<List<T>> {
+public abstract class EditableListView<T> extends LinearLayout implements Editable<List<T>> {
     protected final Button addButton;
     @Inject
     protected StringifyableAdapter<T> adapter;
@@ -48,12 +50,16 @@ public class EditableListView<T> extends LinearLayout implements Editable<List<T
         addButton = (Button) v.findViewById(R.id.editableList_addButton);
 
         addButton.setOnClickListener((view) -> {
+            detailFragment = detailFragment.newInstance(detailFragment.getArguments());
+            prepare(detailFragment);
             detailFragment.getArguments().remove(ItemDetailFragment.EXTRA_ENTITY);
             detailFragment.clear();
             detailFragment.show(fragmentManager, "tag");
         });
         lv.setOnItemClickListener((parent, view, position, id) -> {
             if (addButton.getVisibility() != View.VISIBLE) return;
+            detailFragment = detailFragment.newInstance(detailFragment.getArguments());
+            prepare(detailFragment);
             T entity = adapter.getItem(position);
             Bundle b = detailFragment.getArguments();
             try {
@@ -65,6 +71,8 @@ public class EditableListView<T> extends LinearLayout implements Editable<List<T
             detailFragment.show(fragmentManager, "tag");
         });
     }
+
+    protected abstract void prepare(ItemDetailFragment<T> detailFragment);
 
     @Override
     public void edit() {

@@ -42,6 +42,13 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
     }
 
     @Override
+    public ItemDetailFragment<Recipe> newInstance(Bundle args) {
+        RecipeDetailFragment f = new RecipeDetailFragment();
+        f.setArguments(args);
+        return f;
+    }
+
+    @Override
     protected void bindView(Recipe entity) {
         title.setData(entity.getTitle());
         list.setData(entity.getIngredients());
