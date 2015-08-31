@@ -44,6 +44,7 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -127,6 +128,18 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
         createIngredient("grocery", 1, true);
 
         onView(withText("grocery")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testEditIngredient_IsUpdated_NotAddingNew() throws Exception{
+        createIngredient("grocery", 1, true);
+
+        onView(withText("grocery")).perform(click());
+        onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("postfix"));
+        onView(withId(R.id.buttonbar_ok)).perform(click());
+        onView(withId(R.id.buttonbar_ok)).perform(click());
+        onView(withText("grocery")).check(doesNotExist());
+        onView(withText("grocerypostfix")).check(matches(isDisplayed()));
     }
 
     private void createIngredient(String groceryTitle, int quantity, boolean newGrocery) {

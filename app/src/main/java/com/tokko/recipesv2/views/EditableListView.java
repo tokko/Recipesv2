@@ -61,6 +61,7 @@ public abstract class EditableListView<T> extends LinearLayout implements Editab
             detailFragment = detailFragment.newInstance(detailFragment.getArguments());
             prepare(detailFragment);
             T entity = adapter.getItem(position);
+            adapter.removeItem(position);
             Bundle b = detailFragment.getArguments();
             try {
                 b.putSerializable(ItemDetailFragment.EXTRA_ENTITY, new AndroidJsonFactory().toPrettyString(entity));
