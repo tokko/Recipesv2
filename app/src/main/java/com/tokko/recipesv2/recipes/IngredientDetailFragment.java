@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.Loader;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -33,9 +32,10 @@ import java.io.IOException;
 import java.util.List;
 
 import butterknife.OnClick;
+import roboguice.RoboGuice;
 import roboguice.inject.InjectView;
 
-public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> implements LoaderManager.LoaderCallbacks<List<Grocery>> {
+public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> implements LoaderManager.LoaderCallbacks<List<Grocery>>,UnitDownloader.UnitDownloaderCallback {
 
     @Inject
     private AbstractLoader<Grocery> loader;
@@ -47,7 +47,7 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
     private GroceryDetailFragment groceryDetailFragment;
 
     @InjectView(R.id.ingredientdetail_grocery)
-    private AutoCompleteTextView grocery;
+    private AutoCompleteTextView groceryAutoCompleteTextView;
     @InjectView(R.id.ingredient_quantity)
     private EditText quantityEditText;
     @InjectView(R.id.ingredient_unit)
@@ -68,9 +68,9 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        grocery.setAdapter(adapter);
-        grocery.setOnItemClickListener((av, v, pos, id) -> selectedGrocery = adapter.getItem(pos));
-        grocery.addTextChangedListener(new TextWatcher() {
+        groceryAutoCompleteTextView.setAdapter(adapter);
+        groceryAutoCompleteTextView.setOnItemClickListener((av, v, pos, id) -> selectedGrocery = adapter.getItem(pos));
+        groceryAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 selectedGrocery = null;
@@ -92,12 +92,18 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
         deleteButton.setVisibility(View.GONE);
     }
 
+    @Override
+    public void clear() {
+        selectedGrocery = null;
+        super.clear();
+    }
+
     private void resolveChosenGrocery() {
-        CharSequence s = grocery.getText();
+        CharSequence s = groceryAutoCompleteTextView.getText();
         if (s != null && s.length() > 0) {
             for (int i = 0; i < adapter.getCount(); i++) {
                 if (adapter.getItem(i).getTitle().equals(s.toString())) {
-                    grocery.setSelection(i);
+                    groceryAutoCompleteTextView.setSelection(i);
                     selectedGrocery = adapter.getItem(i);
                     break;
                 }
@@ -109,7 +115,10 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
     public void onStart() {
         super.onStart();
         getActivity().getLoaderManager().initLoader(0, null, this);
-        new UnitDownloader().execute();
+        RoboGuice.getInjector(getActivity()).getInstance(UnitDownloader.class).setCallbacks(this).execute();
+        String groceryTitle = groceryAutoCompleteTextView.getText().toString();
+        String quantity = quantityEditText.getText().toString();
+        int a = 1;
     }
 
     @Override
@@ -131,15 +140,18 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
     protected void bindView(Ingredient entity) {
         if (entity == null) return;
         if (entity.getGrocery() != null)
-            grocery.setText(entity.getGrocery().getTitle());
+            groceryAutoCompleteTextView.setText(entity.getGrocery().getTitle());
         else
-            grocery.setText("");
+            groceryAutoCompleteTextView.setText("");
         if (entity.getQuantity() != null)
             quantityEditText.setText(entity.getQuantity().getQuantity().toString());
         else
             quantityEditText.setText("");
+        String groceryTitle = groceryAutoCompleteTextView.getText().toString();
+        String quantity = quantityEditText.getText().toString();
+        int a = 1;
         resolveChosenGrocery();
-        grocery.dismissDropDown();
+        groceryAutoCompleteTextView.dismissDropDown();
     }
 
     @Override
@@ -179,9 +191,10 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
             };
             getActivity().registerReceiver(br, new IntentFilter(GroceryDetailFragment.ACTION_GROCERY_COMMITED));
             Grocery g = new Grocery();
-            g.setTitle(grocery.getText().toString());
+            g.setTitle(groceryAutoCompleteTextView.getText().toString());
             Bundle b = new Bundle();
             b.putSerializable(ItemDetailFragment.EXTRA_CLASS, Grocery.class);
+            b.putBoolean(GroceryDetailFragment.EXTRA_PERSIST_GROCERY, false);
             b.putString(IngredientDetailFragment.EXTRA_ENTITY, new Gson().toJson(g));
             groceryDetailFragment.setArguments(b);
             groceryDetailFragment.show(getActivity().getFragmentManager(), "tag2");
@@ -217,40 +230,26 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
         adapter.replaceData(null);
     }
 
+    @Override
+    public void onUnitDownloaded(List<String> units) {
+        unitAdapter.clear();
+        unitAdapter.addAll(units);
+        unitAdapter.notifyDataSetChanged();
+        if (entity != null && entity.getQuantity() != null) {
+            for (int i = 0; i < unitAdapter.getCount(); i++) {
+                if (unitAdapter.getItem(i).equals(entity.getQuantity().getUnit())) {
+                    unitSpinner.setSelection(i);
+                    break;
+                }
+            }
+        }
+    }
+
     public interface IngredientDetailFragmentCallbacks {
         void ingredientAdded(Ingredient ingredient);
 
         void ingredientDeleted(Ingredient entity);
     }
 
-    private class UnitDownloader extends AsyncTask<Void, Void, List<String>> {
 
-        @Override
-        protected List<String> doInBackground(Void... params) {
-            try {
-                return api.listUnits().execute().getItems();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(List<String> units) {
-            if (units != null) {
-                unitAdapter.clear();
-                unitAdapter.addAll(units);
-                unitAdapter.notifyDataSetChanged();
-                if (entity != null && entity.getQuantity() != null) {
-                    for (int i = 0; i < unitAdapter.getCount(); i++) {
-                        if (unitAdapter.getItem(i).equals(entity.getQuantity().getUnit())) {
-                            unitSpinner.setSelection(i);
-                            break;
-                        }
-                    }
-                }
-            }
-            super.onPostExecute(units);
-        }
-    }
 }

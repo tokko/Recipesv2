@@ -173,7 +173,8 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
                 if (data != null) {
                     data.clear();
                     final List<T> values = (List<T>) results.values;
-                    data.addAll(values);
+                    if(values != null)
+                        data.addAll(values);
                     notifyChange();
                 }
             }

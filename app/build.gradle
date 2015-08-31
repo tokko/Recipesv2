@@ -111,11 +111,14 @@ retrolambda {
 }
 
 dependencies {
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.robolectric:robolectric:3.0'
-    testCompile 'org.mockito:mockito-core:2.0.31-beta'
+    repositories{
+        jcenter()
+    }
+
     androidTestCompile 'junit:junit:4.12'
-    androidTestCompile 'org.mockito:mockito-core:2.0.31-beta'
+    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.0'
+    androidTestCompile 'com.google.dexmaker:dexmaker:1.0'
+   // Compile 'org.mockito:mockito-core:2.0.31-beta'
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
     androidTestCompile('com.android.support.test:runner:0.3') {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -127,6 +130,11 @@ dependencies {
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
         exclude group: 'com.android.support', module: 'support-annotations'
     }
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.robolectric:robolectric:3.0'
+    testCompile 'org.mockito:mockito-core:2.0.31-beta'
+
     //androidTestCompile 'com.android.support.test:runner:0.3'
     provided 'org.roboguice:roboblender:3.0.1'
     compile 'org.roboguice:roboguice:3.0.1'

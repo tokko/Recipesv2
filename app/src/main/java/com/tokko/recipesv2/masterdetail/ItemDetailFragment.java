@@ -58,6 +58,15 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
         }
     }
 
+    public void clear(){
+        if(clz == null) return;
+        try {
+            entity = clz.newInstance();
+        } catch (java.lang.InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        bindView(entity);
+    }
     public void setCallbacks(Callbacks callbacks) {
         this.callbacks = callbacks;
     }

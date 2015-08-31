@@ -28,12 +28,15 @@ import com.tokko.recipesv2.recipes.InstructionsDetailFragment;
 import com.tokko.recipesv2.recipes.MockRecipeLoader;
 import com.tokko.recipesv2.recipes.RecipeAdapter;
 import com.tokko.recipesv2.recipes.RecipeDetailFragment;
+import com.tokko.recipesv2.recipes.UnitDownloader;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import roboguice.RoboGuice;
 
@@ -47,8 +50,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListActivity> {
@@ -66,15 +67,15 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
         Context context = getInstrumentation().getTargetContext().getApplicationContext();
         Intent startIntent = new Intent(context, ItemListActivity.class);
         startIntent.putExtra(ItemListActivity.EXTRA_ENTITY_CLASS, Recipe.class);
-        RecipeApi api = mock(RecipeApi.class);
-        RecipeApi.ListUnits listUnits = mock(RecipeApi.ListUnits.class);
-        when(api.listUnits()).thenReturn(listUnits);
-        CollectionResponseString value = new CollectionResponseString();
-        value.setItems(new ArrayList<>());
-        when(listUnits.execute()).thenReturn(value);
         RoboGuice.overrideApplicationInjector(((Application) context.getApplicationContext()), new AbstractModule() {
             @Override
             protected void configure() {
+                bind(UnitDownloader.class).toProvider(() -> new UnitDownloader(null){
+                    @Override
+                    protected List<String> doInBackground(Void... params) {
+                        return Arrays.asList("g", "kg");
+                    }
+                });
                 bind(new TypeLiteral<StringifyableAdapter<Recipe>>() {
                 }).to(RecipeAdapter.class);
                 bind(new TypeLiteral<StringifyableAdapter<Ingredient>>() {
@@ -117,8 +118,8 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
         onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("grocery"));
         onView(withId(R.id.ingredient_quantity)).perform(typeText("1"));
         onView(withId(R.id.buttonbar_ok)).perform(click());
-
-        onData(withText("grocery")).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonbar_ok)).perform(click());
+        onView(withText("grocery")).check(matches(isDisplayed()));
 
         onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.ingredient_list)))).perform(click());
         onView(withId(R.id.ingredientdetail_grocery)).check(matches(withText("")));

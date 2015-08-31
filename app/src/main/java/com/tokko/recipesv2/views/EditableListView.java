@@ -16,6 +16,7 @@ import com.google.inject.Inject;
 import com.tokko.recipesv2.R;
 import com.tokko.recipesv2.masterdetail.ItemDetailFragment;
 import com.tokko.recipesv2.masterdetail.StringifyableAdapter;
+import com.tokko.recipesv2.recipes.IngredientDetailFragment;
 
 import java.io.IOException;
 import java.util.List;
@@ -48,6 +49,7 @@ public class EditableListView<T> extends LinearLayout implements Editable<List<T
 
         addButton.setOnClickListener((view) -> {
             detailFragment.getArguments().remove(ItemDetailFragment.EXTRA_ENTITY);
+            detailFragment.clear();
             detailFragment.show(fragmentManager, "tag");
         });
         lv.setOnItemClickListener((parent, view, position, id) -> {
@@ -59,6 +61,7 @@ public class EditableListView<T> extends LinearLayout implements Editable<List<T
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            detailFragment.clear();
             detailFragment.show(fragmentManager, "tag");
         });
     }
@@ -94,6 +97,7 @@ public class EditableListView<T> extends LinearLayout implements Editable<List<T
         if (data == null) return;
         original = data;
         clz = data.getClass();
+        detailFragment.getArguments().putSerializable(IngredientDetailFragment.EXTRA_CLASS, clz);
         adapter.replaceData(data);
     }
 
