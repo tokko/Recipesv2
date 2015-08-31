@@ -154,6 +154,18 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
         onView(withText("grocery")).check(doesNotExist());
     }
 
+    @Test
+    public void testEditIngredient_Cancel_NotEdited() throws Exception {
+        createIngredient("grocery", 1, true);
+
+        onView(withText("grocery")).perform(click());
+        onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("postfix"));
+        onView(withId(R.id.buttonbar_cancel)).perform(click());
+        onView(withText("grocerypostfix")).check(doesNotExist());
+        onView(withText("grocery")).check(matches(isDisplayed()));
+
+    }
+
     private void createIngredient(String groceryTitle, int quantity, boolean newGrocery) {
         onView(withId(R.id.listad_add)).perform(click());
         onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.ingredient_list)))).perform(click());

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.google.inject.Inject;
 import com.tokko.recipesv2.R;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.Ingredient;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -189,5 +190,9 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
     public void removeItem(int i) {
         data.remove(i);
         notifyChange();
+    }
+
+    public void addItem(Integer isUpdatingPosition, T entity) {
+        data.add(isUpdatingPosition, entity);
     }
 }

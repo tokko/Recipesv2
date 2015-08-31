@@ -21,6 +21,7 @@ import com.tokko.recipesv2.masterdetail.StringifyableAdapter;
 import com.tokko.recipesv2.recipes.IngredientDetailFragment;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import roboguice.RoboGuice;
@@ -36,6 +37,8 @@ public abstract class EditableListView<T> extends LinearLayout implements Editab
     private LayoutInflater inflater;
     @Inject
     private FragmentManager fragmentManager;
+
+    protected Integer isUpdatingPosition;
 
     private ListView lv;
     private Class<? extends List> clz;
@@ -61,7 +64,7 @@ public abstract class EditableListView<T> extends LinearLayout implements Editab
             detailFragment = detailFragment.newInstance(detailFragment.getArguments());
             prepare(detailFragment);
             T entity = adapter.getItem(position);
-            adapter.removeItem(position);
+            isUpdatingPosition = position;
             Bundle b = detailFragment.getArguments();
             try {
                 b.putSerializable(ItemDetailFragment.EXTRA_ENTITY, new AndroidJsonFactory().toPrettyString(entity));

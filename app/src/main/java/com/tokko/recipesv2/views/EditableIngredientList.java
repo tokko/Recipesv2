@@ -31,7 +31,12 @@ public class EditableIngredientList extends EditableListView<Ingredient> impleme
 
     @Override
     public void ingredientAdded(Ingredient ingredient) {
-        if (ingredient.getId() == null)
+        if(isUpdatingPosition != null){
+            adapter.removeItem(isUpdatingPosition);
+            adapter.addItem(isUpdatingPosition, ingredient);
+            isUpdatingPosition = null;
+        }
+        else if (ingredient.getId() == null)
             adapter.addItem(ingredient);
         else {
             for (int i = 0; i < adapter.getCount(); i++) {
@@ -41,6 +46,7 @@ public class EditableIngredientList extends EditableListView<Ingredient> impleme
                 }
 
             }
+            if(ingredient.getId() < 0) ingredient.setId(null);
         }
     }
 
