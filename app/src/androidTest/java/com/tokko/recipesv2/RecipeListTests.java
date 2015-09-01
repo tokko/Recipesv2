@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.Espresso;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 
@@ -43,6 +44,7 @@ import roboguice.RoboGuice;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -135,7 +137,9 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
         createIngredient("grocery", 1, true);
 
         onView(withText("grocery")).perform(click());
-        onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("postfix"));
+        onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("postfix"), closeSoftKeyboard());
+        Thread.sleep(500);
+
         onView(withId(R.id.buttonbar_ok)).perform(click());
         onView(withId(R.id.buttonbar_ok)).perform(click());
         onView(withText("grocery")).check(doesNotExist());
@@ -146,8 +150,11 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
     public void testAddIngredient_Cancel_NotAdded() throws Exception {
         onView(withId(R.id.listad_add)).perform(click());
         onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.ingredient_list)))).perform(click());
-        onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("grocery"));
-        onView(withId(R.id.ingredient_quantity)).perform(typeText(String.valueOf(1)));
+        onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("grocery"), closeSoftKeyboard());
+        Thread.sleep(500);
+
+        onView(withId(R.id.ingredient_quantity)).perform(typeText(String.valueOf(1)), closeSoftKeyboard());
+        Thread.sleep(500);
 
         onView(withId(R.id.buttonbar_cancel)).perform(click());
 
@@ -159,18 +166,23 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
         createIngredient("grocery", 1, true);
 
         onView(withText("grocery")).perform(click());
-        onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("postfix"));
+        onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("postfix"), closeSoftKeyboard());
+        Thread.sleep(500);
+
         onView(withId(R.id.buttonbar_cancel)).perform(click());
         onView(withText("grocerypostfix")).check(doesNotExist());
         onView(withText("grocery")).check(matches(isDisplayed()));
 
     }
 
-    private void createIngredient(String groceryTitle, int quantity, boolean newGrocery) {
+    private void createIngredient(String groceryTitle, int quantity, boolean newGrocery) throws InterruptedException {
         onView(withId(R.id.listad_add)).perform(click());
         onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.ingredient_list)))).perform(click());
-        onView(withId(R.id.ingredientdetail_grocery)).perform(typeText(groceryTitle));
-        onView(withId(R.id.ingredient_quantity)).perform(typeText(String.valueOf(quantity)));
+        onView(withId(R.id.ingredientdetail_grocery)).perform(typeText(groceryTitle), closeSoftKeyboard());
+        Thread.sleep(500);
+        onView(withId(R.id.ingredient_quantity)).perform(typeText(String.valueOf(quantity)), closeSoftKeyboard());
+        Thread.sleep(500);
+
         onView(withId(R.id.buttonbar_ok)).perform(click());
         if(newGrocery)
             onView(withId(R.id.buttonbar_ok)).perform(click());
