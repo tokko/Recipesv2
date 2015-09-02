@@ -186,11 +186,12 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
 
     @Test
     public void testDeleteInstruction_IsDeleted() throws Exception {
-        createInstruction("instruction text");
+        String instructionText = "instruction text";
+        createInstruction(instructionText);
 
-        onView(allOf(withId(R.id.deleteImageButton), hasSibling(withText("instruction text")))).perform(click());
+        onView(allOf(withId(R.id.deleteImageButton), hasSibling(withText(instructionText)))).perform(click());
 
-        onView(withText("instruction text")).check(doesNotExist());
+        onView(withText(instructionText)).check(doesNotExist());
     }
 
     @Test
