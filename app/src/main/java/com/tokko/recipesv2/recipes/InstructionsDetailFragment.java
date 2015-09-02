@@ -7,6 +7,7 @@ import android.widget.EditText;
 import com.tokko.recipesv2.R;
 import com.tokko.recipesv2.masterdetail.ItemDetailFragment;
 
+import butterknife.OnClick;
 import roboguice.inject.InjectView;
 
 public class InstructionsDetailFragment extends ItemDetailFragment<String> {
@@ -53,6 +54,13 @@ public class InstructionsDetailFragment extends ItemDetailFragment<String> {
     @Override
     protected void onDelete() {
         callbacks.instructionDeleted();
+        dismiss();
+    }
+
+    @Override
+    @OnClick(R.id.buttonbar_cancel)
+    public void onCancelButtonClick(View v) {
+        super.onCancelButtonClick(v);
         dismiss();
     }
 
