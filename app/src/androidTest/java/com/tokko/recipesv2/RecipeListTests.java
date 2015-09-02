@@ -49,7 +49,6 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
-import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -153,8 +152,10 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
         onView(withId(R.id.listad_add)).perform(click());
         onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.ingredient_list)))).perform(click());
         onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("grocery"), closeSoftKeyboard());
+        Thread.sleep(1000);
 
         onView(withId(R.id.ingredient_quantity)).perform(typeText(String.valueOf(1)), closeSoftKeyboard());
+        Thread.sleep(1000);
 
         onView(withId(R.id.buttonbar_cancel)).perform(click());
 
@@ -167,6 +168,7 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
 
         onView(withText("grocery")).perform(click());
         onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("postfix"), closeSoftKeyboard());
+        Thread.sleep(1000);
 
         onView(withId(R.id.buttonbar_cancel)).perform(click());
         onView(withText("grocerypostfix")).check(doesNotExist());
@@ -192,47 +194,55 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
     }
 
     @Test
-    public void testAddInstruction_InstructionAdded(){
+    public void testAddInstruction_InstructionAdded() throws Exception{
         createInstruction("instruction text");
 
         onView(withText("instruction text")).check(matches(isDisplayed()));
     }
 
     @Test
-    public void testEditInstruction_IsEdited(){
+    public void testEditInstruction_IsEdited() throws Exception{
         String instructionText = "inst";
         String postfix = "post";
         createInstruction(instructionText);
         onView(withText(instructionText)).perform(click());
         onView(withId(R.id.editableStringListInput)).perform(typeText(postfix), closeSoftKeyboard());
+        Thread.sleep(1000);
+
         onView(withId(R.id.buttonbar_ok)).perform(click());
 
         onView(withText(instructionText)).check(doesNotExist());
         onView(withText(instructionText+postfix)).check(matches(isDisplayed()));
     }
-    private void createInstruction(String instructionText) {
+    private void createInstruction(String instructionText) throws Exception {
         onView(withId(R.id.listad_add)).perform(click());
         onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.instructionList)))).perform(click());
         onView(withId(R.id.editableStringListInput)).perform(typeText(instructionText), closeSoftKeyboard());
+        Thread.sleep(1000);
+
         onView(withId(R.id.buttonbar_ok)).perform(click());
     }
 
     @Test
-    public void testAddInstruction_Cancel_InstructionNotAdded(){
+    public void testAddInstruction_Cancel_InstructionNotAdded() throws Exception{
         onView(withId(R.id.listad_add)).perform(click());
         onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.instructionList)))).perform(click());
         onView(withId(R.id.editableStringListInput)).perform(typeText("instruction text"), closeSoftKeyboard());
+        Thread.sleep(1000);
+
         onView(withId(R.id.buttonbar_cancel)).perform(click());
 
         onView(withText("instruction text")).check(doesNotExist());
     }
 
     @Test
-    public void testAddIngredient_NewGroceryCancelGroceryDialog_ShouldReturnToIngredientEditDialog(){
+    public void testAddIngredient_NewGroceryCancelGroceryDialog_ShouldReturnToIngredientEditDialog() throws Exception{
         onView(withId(R.id.listad_add)).perform(click());
         onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.ingredient_list)))).perform(click());
 
         onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("grocery"), closeSoftKeyboard());
+        Thread.sleep(1000);
+
         onView(withId(R.id.buttonbar_ok)).perform(click());
         onView(withId(R.id.buttonbar_cancel)).perform(click());
 
@@ -245,9 +255,10 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
         onView(withId(R.id.listad_add)).perform(click());
         onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.ingredient_list)))).perform(click());
         onView(withId(R.id.ingredientdetail_grocery)).perform(typeText(groceryTitle), closeSoftKeyboard());
-        Thread.sleep(500);
+        Thread.sleep(1000);
+
         onView(withId(R.id.ingredient_quantity)).perform(typeText(String.valueOf(quantity)), closeSoftKeyboard());
-        Thread.sleep(500);
+        Thread.sleep(1000);
 
         onView(withId(R.id.buttonbar_ok)).perform(click());
         if(newGrocery)
