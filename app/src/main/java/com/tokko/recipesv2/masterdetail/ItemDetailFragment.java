@@ -49,6 +49,9 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                catch(IllegalArgumentException e){
+                    e.printStackTrace();
+                }
             } else
                 try {
                     entity = clz.newInstance();

@@ -22,6 +22,7 @@ import com.tokko.recipesv2.recipes.IngredientDetailFragment;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.TypeVariable;
 import java.util.List;
 
 import roboguice.RoboGuice;
@@ -41,7 +42,7 @@ public abstract class EditableListView<T> extends LinearLayout implements Editab
     protected Integer isUpdatingPosition;
 
     private ListView lv;
-    private Class<? extends List> clz;
+    private Class<?> clz;
 
     public EditableListView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -108,7 +109,8 @@ public abstract class EditableListView<T> extends LinearLayout implements Editab
     public void setData(List<T> data) {
         if (data == null) return;
         original = data;
-        clz = data.getClass();
+        if(data.size() > 0)
+            clz = data.get(0).getClass();
         detailFragment.getArguments().putSerializable(IngredientDetailFragment.EXTRA_CLASS, clz);
         adapter.replaceData(data);
     }
