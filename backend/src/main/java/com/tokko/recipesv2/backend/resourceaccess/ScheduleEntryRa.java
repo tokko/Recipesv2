@@ -11,11 +11,16 @@ import static com.tokko.recipesv2.backend.resourceaccess.OfyService.ofy;
 public class ScheduleEntryRa {
 
     public List<ScheduleEntry> getScheduleEntries(long date, RecipeUser user){
-        return ofy().load().type(ScheduleEntry.class).ancestor(Key.create(RecipeUser.class, user.getEmail())).filter("date>", date).list();
+        List<ScheduleEntry> list = ofy().load().type(ScheduleEntry.class).ancestor(Key.create(RecipeUser.class, user.getEmail())).filter("date>", date).list();
+        for (ScheduleEntry se : list) {
+            se.load();
+        }
+        return list;
     }
 
     public ScheduleEntry commitEntry(ScheduleEntry entry, RecipeUser user){
         entry.setUser(user);
+        entry.prepare();
         ofy().save().entity(entry).now();
         return entry;
     }

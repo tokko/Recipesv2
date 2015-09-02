@@ -8,6 +8,7 @@ import com.googlecode.objectify.annotation.Ignore;
 import com.googlecode.objectify.annotation.Load;
 import com.googlecode.objectify.annotation.Parent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.tokko.recipesv2.backend.util.IterableUtil.deRef;
@@ -29,6 +30,10 @@ public class ScheduleEntry extends BaseEntity<Long> implements Comparable<Schedu
     public ScheduleEntry(long date, List<Recipe> recipes) {
         this.date = date;
         setRecipes(recipes);
+    }
+
+    public ScheduleEntry() {
+        recipes = new ArrayList<>();
     }
 
     public long getDate() {
