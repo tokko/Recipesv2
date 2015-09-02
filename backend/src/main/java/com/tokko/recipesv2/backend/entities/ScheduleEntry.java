@@ -14,7 +14,7 @@ import static com.tokko.recipesv2.backend.util.IterableUtil.deRef;
 import static com.tokko.recipesv2.backend.util.IterableUtil.ref;
 
 @Entity
-public class ScheduleEntry extends BaseEntity<Long>{
+public class ScheduleEntry extends BaseEntity<Long> implements Comparable<ScheduleEntry>{
     @Id
     private long date;
     @Load
@@ -78,5 +78,10 @@ public class ScheduleEntry extends BaseEntity<Long>{
     public void prepare() {
         storedRecipes = ref(recipes);
         recipes = null;
+    }
+
+    @Override
+    public int compareTo(ScheduleEntry o) {
+        return (int) (date - o.getDate());
     }
 }
