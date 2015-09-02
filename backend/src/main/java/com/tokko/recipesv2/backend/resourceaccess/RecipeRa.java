@@ -1,4 +1,4 @@
-package com.tokko.recipesv2.backend.engines;
+package com.tokko.recipesv2.backend.resourceaccess;
 
 import com.googlecode.objectify.Key;
 import com.tokko.recipesv2.backend.entities.Recipe;
@@ -8,7 +8,7 @@ import java.util.List;
 
 import static com.tokko.recipesv2.backend.resourceaccess.OfyService.ofy;
 
-public class RecipeCrudEngine {
+public class RecipeRa {
     public List<Recipe> listRecipesForUser(RecipeUser user) {
         List<Recipe> list = ofy().load().type(Recipe.class).ancestor(user).list();
         for (Recipe r : list) {

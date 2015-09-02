@@ -1,7 +1,7 @@
 package engines;
 
 import com.googlecode.objectify.Key;
-import com.tokko.recipesv2.backend.engines.RecipeCrudEngine;
+import com.tokko.recipesv2.backend.resourceaccess.RecipeRa;
 import com.tokko.recipesv2.backend.entities.Recipe;
 import com.tokko.recipesv2.backend.entities.RecipeUser;
 
@@ -19,7 +19,7 @@ import static org.junit.Assert.assertNotNull;
 public class RecipeCrudEngineTests extends TestsWithObjectifyStorage {
 
     private RecipeUser user;
-    private RecipeCrudEngine recipeCrudEngine;
+    private RecipeRa recipeRa;
 
     @Before
     public void setUp() throws Exception {
@@ -27,14 +27,14 @@ public class RecipeCrudEngineTests extends TestsWithObjectifyStorage {
         user = new RecipeUser("email");
         ofy().save().entities(user).now();
 
-        recipeCrudEngine = new RecipeCrudEngine();
+        recipeRa = new RecipeRa();
     }
 
     @Test
     public void testListRecipesForUser() throws Exception {
         Recipe recipe = new Recipe("recipe", user);
         ofy().save().entities(recipe).now();
-        List<Recipe> recipes = recipeCrudEngine.listRecipesForUser(user);
+        List<Recipe> recipes = recipeRa.listRecipesForUser(user);
         assertNotNull(recipes);
         assertEquals(1, recipes.size());
         assertEquals(recipe.getId(), recipes.get(0).getId());
@@ -43,7 +43,7 @@ public class RecipeCrudEngineTests extends TestsWithObjectifyStorage {
     @Test
     public void testInsertRecipe_DoesNotExist_IsInserted() throws Exception {
         Recipe recipe = new Recipe("recipe");
-        Recipe saved = recipeCrudEngine.commitRecipe(recipe, user);
+        Recipe saved = recipeRa.commitRecipe(recipe, user);
         assertNotNull(saved);
         assertNotNull(saved.getId());
         saved = ofy().load().key(Key.create(Key.create(RecipeUser.class, user.getEmail()), Recipe.class, saved.getId())).now();

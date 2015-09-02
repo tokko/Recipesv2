@@ -1,10 +1,10 @@
-package com.tokko.recipesv2.backend.engines;
+package com.tokko.recipesv2.backend.resourceaccess;
 
 import com.tokko.recipesv2.backend.entities.RecipeUser;
 
 import static com.tokko.recipesv2.backend.resourceaccess.OfyService.ofy;
 
-public class RecipeUserCrudEngine {
+public class RecipeUserRa {
 
     public RecipeUser getUserByEmail(String email) {
         return ofy().load().type(RecipeUser.class).id(email).now();

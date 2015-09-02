@@ -1,7 +1,7 @@
 package engines;
 
 import com.googlecode.objectify.Key;
-import com.tokko.recipesv2.backend.engines.GroceryCrudEngine;
+import com.tokko.recipesv2.backend.resourceaccess.GroceryRa;
 import com.tokko.recipesv2.backend.entities.Grocery;
 import com.tokko.recipesv2.backend.entities.RecipeUser;
 
@@ -22,7 +22,7 @@ import static org.junit.Assert.assertTrue;
 public class GroceryCrudEngineTest extends TestsWithObjectifyStorage {
     RecipeUser user;
     List<Grocery> groceryList;
-    private GroceryCrudEngine groceryCrudEngine;
+    private GroceryRa groceryRa;
 
     @Before
     public void setUp() throws Exception {
@@ -34,12 +34,12 @@ public class GroceryCrudEngineTest extends TestsWithObjectifyStorage {
 
         RecipeUser otherUser = new RecipeUser("email1");
         ofy().save().entities(new Grocery("Grocery4", otherUser)).now();
-        groceryCrudEngine = new GroceryCrudEngine();
+        groceryRa = new GroceryRa();
     }
 
     @Test
     public void testListGroceries_OnlyUsersGroceriesReturned() {
-        List<Grocery> groceries = groceryCrudEngine.listGroceries(user);
+        List<Grocery> groceries = groceryRa.listGroceries(user);
         List<Long> groceryListIds = new ArrayList<>();
         for (Grocery g : groceryList) {
             groceryListIds.add(g.getId());
@@ -57,7 +57,7 @@ public class GroceryCrudEngineTest extends TestsWithObjectifyStorage {
     public void testSaveGrocery_newGrocery_IsPersisted() throws Exception {
         Grocery g = new Grocery("title");
 
-        groceryCrudEngine.save(g, user);
+        groceryRa.save(g, user);
 
         Grocery persisted = ofy().load().key(Key.create(Key.create(RecipeUser.class, user.getEmail()), Grocery.class, g.getId())).now();
 

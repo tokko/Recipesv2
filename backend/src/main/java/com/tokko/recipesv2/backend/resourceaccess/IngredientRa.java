@@ -1,4 +1,4 @@
-package com.tokko.recipesv2.backend.engines;
+package com.tokko.recipesv2.backend.resourceaccess;
 
 import com.tokko.recipesv2.backend.entities.Ingredient;
 import com.tokko.recipesv2.backend.entities.Recipe;
@@ -9,7 +9,7 @@ import java.util.List;
 
 import static com.tokko.recipesv2.backend.resourceaccess.OfyService.ofy;
 
-public class IngredientCrudEngine {
+public class IngredientRa {
     public Ingredient commitIngredient(Ingredient ingredient, RecipeUser user) {
         ingredient.setUser(user);
         ingredient.prepare();
