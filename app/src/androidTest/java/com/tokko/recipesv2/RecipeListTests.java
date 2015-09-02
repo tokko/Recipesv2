@@ -48,6 +48,7 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -151,10 +152,8 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
         onView(withId(R.id.listad_add)).perform(click());
         onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.ingredient_list)))).perform(click());
         onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("grocery"), closeSoftKeyboard());
-        Thread.sleep(500);
 
         onView(withId(R.id.ingredient_quantity)).perform(typeText(String.valueOf(1)), closeSoftKeyboard());
-        Thread.sleep(500);
 
         onView(withId(R.id.buttonbar_cancel)).perform(click());
 
@@ -167,12 +166,19 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
 
         onView(withText("grocery")).perform(click());
         onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("postfix"), closeSoftKeyboard());
-        Thread.sleep(500);
 
         onView(withId(R.id.buttonbar_cancel)).perform(click());
         onView(withText("grocerypostfix")).check(doesNotExist());
         onView(withText("grocery")).check(matches(isDisplayed()));
+    }
 
+    @Test
+    public void testDeleteIngredient_IsDeleted() throws Exception {
+        createIngredient("grocery", 1, true);
+
+        onView(allOf(withId(R.id.deleteImageButton), hasSibling(withText("grocery")))).perform(click());
+
+        onView(withText("grocery")).check(doesNotExist());
     }
 
     @Test
