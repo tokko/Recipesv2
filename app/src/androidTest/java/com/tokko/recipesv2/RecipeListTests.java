@@ -175,6 +175,16 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
 
     }
 
+    @Test
+    public void testAddInstruction_InstructionAdded(){
+        onView(withId(R.id.listad_add)).perform(click());
+        onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.instructionList)))).perform(click());
+        onView(withId(R.id.editableStringListInput)).perform(typeText("instruction text"), closeSoftKeyboard());
+        onView(withId(R.id.buttonbar_ok)).perform(click());
+
+        onView(withText("instruction text")).check(matches(isDisplayed()));
+    }
+
     private void createIngredient(String groceryTitle, int quantity, boolean newGrocery) throws InterruptedException {
         onView(withId(R.id.listad_add)).perform(click());
         onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.ingredient_list)))).perform(click());

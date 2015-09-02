@@ -21,12 +21,11 @@ public class EditableInstructionList extends EditableListView<String> implements
             e.printStackTrace();
         }
         detailFragment.setArguments(b);
-        ((InstructionsDetailFragment) detailFragment).setCallbacks(this);
     }
 
     @Override
     protected void prepare(ItemDetailFragment<String> detailFragment) {
-
+        ((InstructionsDetailFragment) detailFragment).setCallbacks(this);
     }
 
     @Override
