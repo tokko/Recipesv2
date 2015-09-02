@@ -1,4 +1,4 @@
-package engines;
+package unit.resourceaccess;
 
 import com.googlecode.objectify.Key;
 import com.tokko.recipesv2.backend.resourceaccess.GroceryRa;
@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import util.TestsWithObjectifyStorage;
 
 import static com.tokko.recipesv2.backend.resourceaccess.OfyService.ofy;
 import static org.junit.Assert.assertEquals;

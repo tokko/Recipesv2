@@ -1,0 +1,28 @@
+package com.tokko.recipesv2.backend.resourceaccess;
+
+import com.googlecode.objectify.Key;
+import com.tokko.recipesv2.backend.entities.RecipeUser;
+import com.tokko.recipesv2.backend.entities.ScheduleEntry;
+
+import java.util.List;
+
+import static com.tokko.recipesv2.backend.resourceaccess.OfyService.ofy;
+
+public class ScheduleEntryRa {
+
+    public List<ScheduleEntry> getScheduleEntries(long date, RecipeUser user){
+        return ofy().load().type(ScheduleEntry.class).ancestor(Key.create(RecipeUser.class, user.getEmail())).filter("date>", date).list();
+    }
+
+    public ScheduleEntry commitEntry(ScheduleEntry entry, RecipeUser user){
+        entry.setUser(user);
+        ofy().save().entity(entry).now();
+        return entry;
+    }
+
+    public void commitEntries(Iterable<ScheduleEntry> entries, RecipeUser user){
+        for (ScheduleEntry scheduleEntry : entries) {
+            commitEntry(scheduleEntry, user);
+        }
+    }
+}

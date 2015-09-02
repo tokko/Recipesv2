@@ -15,7 +15,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import util.TestsWithObjectifyStorage;
+import unit.resourceaccess.TestsWithObjectifyStorage;
 
 import static com.tokko.recipesv2.backend.resourceaccess.OfyService.ofy;
 import static org.junit.Assert.assertEquals;

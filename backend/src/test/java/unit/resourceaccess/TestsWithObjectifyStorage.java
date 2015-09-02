@@ -1,4 +1,4 @@
-package util;
+package unit.resourceaccess;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalMemcacheServiceTestConfig;
