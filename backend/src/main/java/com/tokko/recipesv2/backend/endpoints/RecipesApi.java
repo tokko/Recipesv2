@@ -12,6 +12,7 @@ import com.google.inject.Inject;
 import com.tokko.recipesv2.backend.engines.QuantityCalculatorEngine;
 import com.tokko.recipesv2.backend.entities.Grocery;
 import com.tokko.recipesv2.backend.entities.Recipe;
+import com.tokko.recipesv2.backend.entities.ScheduleEntry;
 import com.tokko.recipesv2.backend.managers.GroceryManager;
 import com.tokko.recipesv2.backend.managers.RecipeManager;
 import com.tokko.recipesv2.backend.managers.RecipeUserManager;
@@ -73,6 +74,14 @@ public class RecipesApi {
             httpMethod = ApiMethod.HttpMethod.DELETE)
     public void deleteGrocery(@Named("id") Long id) throws NotFoundException {
         throw new UnsupportedOperationException("not implemented");
+    }
+
+    @ApiMethod(
+            name = "getSchedule",
+            path = "schedule",
+            httpMethod = ApiMethod.HttpMethod.GET)
+    public CollectionResponse<ScheduleEntry> getSchedule(@Named("time") Long time, User user){
+        return null;
     }
 
     @ApiMethod(
