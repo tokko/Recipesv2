@@ -21,6 +21,7 @@ public class InstructionsDetailFragment extends ItemDetailFragment<String> {
         super.onViewCreated(view, savedInstanceState);
         if (getDialog() != null)
             getDialog().setTitle("Instructions");
+        deleteButton.setVisibility(View.GONE);
     }
 
     @Override

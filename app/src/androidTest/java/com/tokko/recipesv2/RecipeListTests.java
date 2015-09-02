@@ -182,13 +182,26 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
     }
 
     @Test
+    public void testDeleteInstruction_IsDeleted() throws Exception {
+        createInstruction("instruction text");
+
+        onView(allOf(withId(R.id.deleteImageButton), hasSibling(withText("instruction text")))).perform(click());
+
+        onView(withText("instruction text")).check(doesNotExist());
+    }
+
+    @Test
     public void testAddInstruction_InstructionAdded(){
-        onView(withId(R.id.listad_add)).perform(click());
-        onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.instructionList)))).perform(click());
-        onView(withId(R.id.editableStringListInput)).perform(typeText("instruction text"), closeSoftKeyboard());
-        onView(withId(R.id.buttonbar_ok)).perform(click());
+        createInstruction("instruction text");
 
         onView(withText("instruction text")).check(matches(isDisplayed()));
+    }
+
+    private void createInstruction(String instructionText) {
+        onView(withId(R.id.listad_add)).perform(click());
+        onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.instructionList)))).perform(click());
+        onView(withId(R.id.editableStringListInput)).perform(typeText(instructionText), closeSoftKeyboard());
+        onView(withId(R.id.buttonbar_ok)).perform(click());
     }
 
     @Test
