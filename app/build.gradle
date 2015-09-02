@@ -1,3 +1,5 @@
+import java.util.regex.Pattern
+
 buildscript {
     dependencies {
         classpath 'me.tatarka:gradle-retrolambda:3.2.0'
@@ -38,27 +40,39 @@ android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
 
-    def versionPropsFile = file('version.properties')
-    if (versionPropsFile.canRead()) {
-        def Properties versionProps = new Properties()
-        versionProps.load(new FileInputStream(versionPropsFile))
-        def value = 0
-        def runTasks = gradle.startParameter.taskNames
-        if ('assemble' in runTasks || 'publishRelease' in runTasks || 'assembleRelease' in runTasks || 'aR' in runTasks) {
-            value = 1;
-        }
-        def code = versionProps['VERSION_CODE'] != null ? versionProps['VERSION_CODE'].toInteger() + value : 2
-        def name = versionProps['VERSION_NAME'] != null ? versionProps['VERSION_NAME'].toInteger() + value : 1
-        versionProps['VERSION_CODE'] = code.toString()
-        versionProps['VERSION_NAME'] = name.toString()
-        if (value == 1)
-            versionProps.store(versionPropsFile.newWriter(), null)
-        defaultConfig {
-            versionCode code
-            versionName "0.0." + name
+    task('increaseVersionCode') << {
+        def manifestFile = file("src/main/AndroidManifest.xml")
+        def pattern = Pattern.compile("versionCode=\"(\\d+)\"")
+        def manifestText = manifestFile.getText()
+        def matcher = pattern.matcher(manifestText)
+        matcher.find()
+        def versionCode = Integer.parseInt(matcher.group(1))
+        def manifestContent = matcher.replaceAll("versionCode=\"" + ++versionCode + "\"")
+        manifestFile.write(manifestContent)
+    }
 
+    task('incrementVersionName') << {
+        def manifestFile = file("src/main/AndroidManifest.xml")
+        def patternVersionNumber = Pattern.compile("versionName=\"(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)\"")
+        def manifestText = manifestFile.getText()
+        def matcherVersionNumber = patternVersionNumber.matcher(manifestText)
+        matcherVersionNumber.find()
+        def majorVersion = Integer.parseInt(matcherVersionNumber.group(1))
+        def minorVersion = Integer.parseInt(matcherVersionNumber.group(2))
+        def pointVersion = Integer.parseInt(matcherVersionNumber.group(3))
+        def buildVersion = Integer.parseInt(matcherVersionNumber.group(4))
+        def mNextVersionName = majorVersion + "." + minorVersion + "." + pointVersion + "." + (buildVersion + 1)
+        def manifestContent = matcherVersionNumber.replaceAll("versionName=\"" + mNextVersionName + "\"")
+        manifestFile.write(manifestContent)
+    }
+
+    tasks.whenTaskAdded { task ->
+        if (task.name == 'publishRelease') {
+            task.dependsOn 'increaseVersionCode'
+            task.dependsOn 'incrementVersionName'
         }
     }
+
     play {
         serviceAccountEmail = '92588905880-fdolvkj29p3l637u5fgaa3jke0vksd17@developer.gserviceaccount.com'
         pk12File = file('key.p12')
@@ -111,11 +125,14 @@ retrolambda {
 }
 
 dependencies {
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.robolectric:robolectric:3.0'
-    testCompile 'org.mockito:mockito-all:2.0.2-beta'
+    repositories{
+        jcenter()
+    }
+
     androidTestCompile 'junit:junit:4.12'
-    // androidTestCompile 'org.mockito:mockito-all:2.0.2-beta'
+    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.0'
+    androidTestCompile 'com.google.dexmaker:dexmaker:1.0'
+   // Compile 'org.mockito:mockito-core:2.0.31-beta'
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
     androidTestCompile('com.android.support.test:runner:0.3') {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -127,6 +144,11 @@ dependencies {
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
         exclude group: 'com.android.support', module: 'support-annotations'
     }
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.robolectric:robolectric:3.0'
+    testCompile 'org.mockito:mockito-core:2.0.31-beta'
+
     //androidTestCompile 'com.android.support.test:runner:0.3'
     provided 'org.roboguice:roboblender:3.0.1'
     compile 'org.roboguice:roboguice:3.0.1'
@@ -134,7 +156,8 @@ dependencies {
     //compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.annimon:stream:1.0.1'
+    compile 'com.google.code.gson:gson:2.3.1'
     // compile 'com.android.support:support-v4:22.2.1'
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    // compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(path: ':backend', configuration: 'android-endpoints')
 }

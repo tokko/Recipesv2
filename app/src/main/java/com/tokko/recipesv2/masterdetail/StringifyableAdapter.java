@@ -5,24 +5,31 @@ import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
+import com.tokko.recipesv2.R;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.Ingredient;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T> {
+public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T>, Filterable {
 
     private final Context context;
-    private ArrayList<T> data = new ArrayList<>();
+    protected ArrayList<T> data = new ArrayList<>();
+    protected ArrayList<T> original = new ArrayList<>();
     private ArrayList<DataSetObserver> observers = new ArrayList<>();
-    private int resource = android.R.layout.simple_list_item_1;
+    private int resource = R.layout.adapterentry;
     private int textViewResourceId = android.R.id.text1;
     @Inject
     private LayoutInflater inflater;
+    private boolean delete;
 
     @Inject
     public StringifyableAdapter(Context context) {
@@ -61,6 +68,11 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
 
     protected abstract String getItemString(int position);
 
+    public void setDeleteEnabled(boolean delete) {
+        this.delete = delete;
+        notifyChange();
+    }
+
     @Override
     public boolean hasStableIds() {
         return false;
@@ -72,6 +84,13 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
             convertView = inflater.inflate(resource, null);
         TextView tv = (TextView) convertView.findViewById(textViewResourceId);
         tv.setText(getItemString(position));
+        View deleteButton = convertView.findViewById(R.id.deleteImageButton);
+        if (delete) {
+            deleteButton.setTag(position);
+            deleteButton.setOnClickListener(v -> removeItem((Integer) v.getTag()));
+            deleteButton.setVisibility(View.VISIBLE);
+        } else
+            deleteButton.setVisibility(View.GONE);
         return convertView;
     }
 
@@ -92,12 +111,19 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
 
     public void clear() {
         data.clear();
+        original.clear();
     }
 
     public void replaceData(List<T> data) {
         clear();
-        if (data != null)
+        if (data != null) {
             this.data.addAll(data);
+            original.addAll(data);
+        }
+        notifyChange();
+    }
+
+    private void notifyChange() {
         for (DataSetObserver obs : observers) {
             obs.onChanged();
         }
@@ -108,4 +134,65 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
         return data.iterator();
     }
 
+    public List<T> getItems() {
+        return data;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults res = new FilterResults();
+                List<T> filtered = new ArrayList<>();
+                if (constraint.length() == 0) {
+                    res.count = original.size();
+                    res.values = original;
+                    return res;
+                }
+                for (int i = 0; i < getCount(); i++) {
+                    if (getItemString(i).startsWith(constraint.toString()))
+                        filtered.add(getItem(i));
+                }
+                res.count = filtered.size();
+                res.values = filtered;
+                return res;
+            }
+
+            @Override
+            public CharSequence convertResultToString(Object resultValue) {
+                try {
+                    return (CharSequence) resultValue.getClass().getMethod("getTitle").invoke(resultValue);
+                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+                return super.convertResultToString(resultValue);
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                if (data != null) {
+                    data.clear();
+                    final List<T> values = (List<T>) results.values;
+                    if(values != null)
+                        data.addAll(values);
+                    notifyChange();
+                }
+            }
+        };
+    }
+
+    public void addItem(T t) {
+        data.add(t);
+        notifyChange();
+    }
+
+    public void removeItem(int i) {
+        data.remove(i);
+        notifyChange();
+    }
+
+    public void addItem(Integer isUpdatingPosition, T entity) {
+        data.add(isUpdatingPosition, entity);
+    }
 }

@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
-import com.tokko.recipesv2.backend.entities.groceryApi.GroceryApi;
-import com.tokko.recipesv2.backend.entities.groceryApi.model.Grocery;
+import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.Grocery;
 import com.tokko.recipesv2.groceries.GroceryAdapter;
 import com.tokko.recipesv2.groceries.GroceryDetailFragment;
 import com.tokko.recipesv2.groceries.MockGroceryLoader;
@@ -55,7 +55,7 @@ public class ItemListActivityTests extends ActivityInstrumentationTestCase2<Item
             protected void configure() {
                 bind(new TypeLiteral<AbstractLoader<Grocery>>() {
                 }).to(MockGroceryLoader.class);
-                bind(GroceryApi.class).toInstance((GroceryApi) ApiFactory.createApi(GroceryApi.Builder.class));
+                bind(RecipeApi.class).toInstance((RecipeApi) ApiFactory.createApi(RecipeApi.Builder.class));
                 bind(new TypeLiteral<StringifyableAdapter<Grocery>>() {
                 }).to(GroceryAdapter.class);
                 bind(new TypeLiteral<ItemDetailFragment<Grocery>>() {

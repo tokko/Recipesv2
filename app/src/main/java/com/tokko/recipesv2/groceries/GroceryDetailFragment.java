@@ -1,45 +1,54 @@
 package com.tokko.recipesv2.groceries;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.inject.Inject;
 import com.tokko.recipesv2.R;
-import com.tokko.recipesv2.backend.entities.groceryApi.GroceryApi;
-import com.tokko.recipesv2.backend.entities.groceryApi.model.Grocery;
+import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.Grocery;
 import com.tokko.recipesv2.masterdetail.ItemDetailFragment;
 import com.tokko.recipesv2.views.EditTextViewSwitchable;
 
 import java.io.IOException;
 
+import butterknife.OnClick;
 import roboguice.inject.InjectView;
 
 public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
+    public static final String ACTION_GROCERY_COMMITED = "grocery_committed";
+    public static final String EXTRA_GROCERY = "extra_grocery";
+    public static final String EXTRA_PERSIST_GROCERY = "extra_persist";
 
     @InjectView(R.id.grocery_title)
     private EditTextViewSwitchable titleTextView;
     @Inject
-    private GroceryApi api;
+    private RecipeApi api;
+
+    private boolean persist;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup parent = (ViewGroup) super.onCreateView(inflater, container, savedInstanceState);
-        if (parent == null)
-            throw new IllegalStateException("Parent must have a view");
-        View v = inflater.inflate(R.layout.grocerydetailfragment, null);
-        ViewGroup C = (ViewGroup) parent.findViewById(R.id.content);
-        C.addView(v);
-        titleTextView = (EditTextViewSwitchable) v.findViewById(R.id.grocery_title);
-        return parent;
+    protected int getLayoutResource() {
+        return R.layout.grocerydetailfragment;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         titleTextView.setHint("Title");
+        persist = getArguments().getBoolean(EXTRA_PERSIST_GROCERY, true);
+        if (getDialog() != null)
+            getDialog().setTitle("Grocery");
+    }
+
+    @Override
+    public ItemDetailFragment<Grocery> newInstance(Bundle args) {
+        GroceryDetailFragment f = new GroceryDetailFragment();
+        f.setArguments(args);
+        return f;
     }
 
     @Override
@@ -49,29 +58,41 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
 
     @Override
     protected Grocery getEntity() {
-        entity.setTitle(titleTextView.getText().toString());
+        entity.setTitle(titleTextView.getText());
         return entity;
     }
 
     @Override
-    protected void onOk() {
-        AsyncTask.execute(() -> {
-            try {
-                api.insert(entity).execute();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+    public boolean onCancel() {
+        dismiss();
+        return true;
     }
 
     @Override
-    protected void onDelete() {
+    protected boolean onOk() {
         AsyncTask.execute(() -> {
             try {
-                api.remove(entity.getId()).execute();
+                if (persist) {
+                    Grocery execute = api.commitGrocery(entity).execute();
+                    entity.setId(execute.getId());
+                }
+                getActivity().sendBroadcast(new Intent(ACTION_GROCERY_COMMITED).putExtra(EXTRA_GROCERY, new AndroidJsonFactory().toPrettyString(entity)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
+        return true;
+    }
+
+    @Override
+    protected boolean onDelete() {
+        AsyncTask.execute(() -> {
+            try {
+                api.deleteGrocery(entity.getId()).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        return true;
     }
 }

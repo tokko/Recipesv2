@@ -3,9 +3,9 @@ package com.tokko.recipesv2.groceries;
 import android.content.Context;
 
 import com.google.inject.Inject;
-import com.tokko.recipesv2.backend.entities.groceryApi.GroceryApi;
-import com.tokko.recipesv2.backend.entities.groceryApi.model.CollectionResponseGrocery;
-import com.tokko.recipesv2.backend.entities.groceryApi.model.Grocery;
+import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.CollectionResponseGrocery;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.Grocery;
 import com.tokko.recipesv2.masterdetail.AbstractLoader;
 
 import java.io.IOException;
@@ -13,10 +13,10 @@ import java.util.List;
 
 public class GroceryLoader extends AbstractLoader<Grocery> {
 
-    private final GroceryApi api;
+    private final RecipeApi api;
 
     @Inject
-    public GroceryLoader(Context context, GroceryApi api) {
+    public GroceryLoader(Context context, RecipeApi api) {
         super(context, Grocery.class);
         this.api = api;
     }
@@ -24,7 +24,7 @@ public class GroceryLoader extends AbstractLoader<Grocery> {
     @Override
     public List<Grocery> loadInBackground() {
         try {
-            GroceryApi.List list = api.list();
+            RecipeApi.ListGroceries list = api.listGroceries();
             CollectionResponseGrocery execute = list.execute();
             List<Grocery> items = execute.getItems();
             return items;

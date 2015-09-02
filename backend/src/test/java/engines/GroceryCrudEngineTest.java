@@ -8,6 +8,7 @@ import com.tokko.recipesv2.backend.entities.RecipeUser;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,18 +38,19 @@ public class GroceryCrudEngineTest extends TestsWithObjectifyStorage {
     }
 
     @Test
-    public void testListGroceries_AllUsersGroceriesReturned() throws Exception {
-        List<Grocery> groceries = groceryCrudEngine.listGroceries(user);
-        assertEquals(groceryList.size(), groceries.size());
-        assertEquals(groceryList, groceries);
-    }
-
-    @Test
     public void testListGroceries_OnlyUsersGroceriesReturned() {
         List<Grocery> groceries = groceryCrudEngine.listGroceries(user);
-        for (Grocery g : groceries) {
-            assertTrue(groceryList.contains(g));
+        List<Long> groceryListIds = new ArrayList<>();
+        for (Grocery g : groceryList) {
+            groceryListIds.add(g.getId());
         }
+
+        List<Long> groceryIds = new ArrayList<>();
+        for (Grocery g : groceries) {
+            groceryIds.add(g.getId());
+        }
+
+        assertEquals(groceryListIds, groceryIds);
     }
 
     @Test

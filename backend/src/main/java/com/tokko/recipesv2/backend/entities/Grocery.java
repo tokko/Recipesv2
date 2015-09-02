@@ -7,7 +7,7 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Parent;
 
 @Entity
-public class Grocery {
+public class Grocery extends BaseEntity<Long> {
 
     @Id
     private Long id;
@@ -40,6 +40,14 @@ public class Grocery {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public void load() {
+    }
+
+    @Override
+    public void prepare() {
     }
 
     public String getTitle() {

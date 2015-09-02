@@ -6,9 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-
-import java.io.IOException;
 import java.util.List;
 
 
@@ -96,18 +93,7 @@ public abstract class AbstractLoader<T> extends AsyncTaskLoader<List<T>> {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            String message = intent.getStringExtra("message");
-            T t = null;
-            try {
-                //noinspection unchecked
-                t = new AndroidJsonFactory().fromString(message, clz);
-            } catch (ClassCastException ignored) {
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            if (t != null) {
-                onNewData(t);
-            }
+            onNewData(null);
         }
     }
 }

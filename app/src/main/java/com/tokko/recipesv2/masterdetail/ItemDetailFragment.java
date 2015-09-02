@@ -19,20 +19,19 @@ import java.lang.reflect.InvocationTargetException;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import roboguice.fragment.provided.RoboFragment;
+import roboguice.fragment.provided.RoboDialogFragment;
 import roboguice.inject.InjectView;
 
-public abstract class ItemDetailFragment<T> extends RoboFragment {
+public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
     public static final String EXTRA_CLASS = "class";
     public static final String EXTRA_ENTITY = "entity";
     protected T entity;
+    protected Callbacks callbacks;
+    @InjectView(R.id.buttonbar_delete)
+    protected Button deleteButton;
     private Class<T> clz;
     @InjectView(R.id.buttonbar)
     private ViewGroup buttonBar;
-
-    @InjectView(R.id.buttonbar_delete)
-    private Button deleteButton;
-    private Callbacks callbacks;
 
     public ItemDetailFragment() {
     }
@@ -41,24 +40,52 @@ public abstract class ItemDetailFragment<T> extends RoboFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        clz = (Class<T>) getArguments().getSerializable(EXTRA_CLASS);
-        String json = getArguments().getString(EXTRA_ENTITY);
-        try {
-            entity = new AndroidJsonFactory().fromString(json, clz);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (getArguments() != null) {
+            clz = (Class<T>) getArguments().getSerializable(EXTRA_CLASS);
+            if (getArguments().containsKey(EXTRA_ENTITY)) {
+                String json = getArguments().getString(EXTRA_ENTITY);
+                try {
+                    entity = new AndroidJsonFactory().fromString(json, clz);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                catch(IllegalArgumentException e){
+                    e.printStackTrace();
+                }
+            } else
+                try {
+                    entity = clz.newInstance();
+                } catch (java.lang.InstantiationException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
         }
-
     }
 
+    public void clear(){
+        if(clz == null) return;
+        try {
+            entity = clz.newInstance();
+        } catch (java.lang.InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        bindView(entity);
+    }
     public void setCallbacks(Callbacks callbacks) {
         this.callbacks = callbacks;
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_item_detail, container, false);
+        ViewGroup parent = (ViewGroup) inflater.inflate(R.layout.fragment_item_detail, container, false);
+        if (parent == null)
+            throw new IllegalStateException("Parent must have a view");
+        View v = inflater.inflate(getLayoutResource(), null);
+        ViewGroup C = (ViewGroup) parent.findViewById(R.id.content);
+        C.addView(v);
+        return parent;
     }
+
+    protected abstract int getLayoutResource();
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -71,9 +98,11 @@ public abstract class ItemDetailFragment<T> extends RoboFragment {
                 enterEditMode();
             }
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            e.printStackTrace();
+            enterEditMode();
         }
     }
+
+    public abstract ItemDetailFragment<T> newInstance(Bundle args);
 
     @Override
     public void onAttach(Activity activity) {
@@ -81,8 +110,6 @@ public abstract class ItemDetailFragment<T> extends RoboFragment {
         try {
             setCallbacks((Callbacks) activity);
         } catch (ClassCastException ignored) {
-            // throw new IllegalStateException("Host activity must implement callbacks");
-            //TODO: see to this
         }
     }
 
@@ -125,30 +152,36 @@ public abstract class ItemDetailFragment<T> extends RoboFragment {
         hideButtonBar();
     }
 
-    protected abstract void onOk();
+    protected abstract boolean onOk();
 
-    protected abstract void onDelete();
+    protected abstract boolean onDelete();
 
     @OnClick(R.id.buttonbar_cancel)
     public void onCancelButtonClick(View v) {
+        if(!onCancel()) return;
         leaveEditMode(Editable::discard);
     }
 
+    public boolean onCancel(){
+        //do nothing, let children override
+        return true;
+    }
     @OnClick(R.id.buttonbar_ok)
     public void onOkButtonClick(View v) {
+        if(!onOk()) return;
         leaveEditMode(Editable::accept);
         entity = getEntity();
-        onOk();
     }
 
     @OnClick(R.id.buttonbar_delete)
     public void onDeleteButtonClick(View v) {
+        if(!onDelete()) return;
         leaveEditMode(Editable::discard);
-        onDelete();
-        callbacks.detailFinished();
+        if (callbacks != null)
+            callbacks.detailFinished();
     }
 
-    private void showButtonBar() {
+    protected void showButtonBar() {
         buttonBar.setVisibility(View.VISIBLE);
     }
 
