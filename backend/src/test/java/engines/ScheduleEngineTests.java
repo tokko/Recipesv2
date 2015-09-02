@@ -41,4 +41,22 @@ public class ScheduleEngineTests {
         }
     }
 
+    @Test
+    public void testExpandSchedule_EntriesTooFarAheadExcluded(){
+        DateTime dt = new DateTime().withDate(2015, 3, 4).withTime(0, 0, 0, 0);
+        long date = dt.getMillis();
+        Recipe recipe = new Recipe();
+        recipe.setTitle("Recipe");
+        recipe.setId(1234L);
+        List<ScheduleEntry> entries = Arrays.asList(new ScheduleEntry(date + DateTimeConstants.MILLIS_PER_DAY, Collections.singletonList(recipe)), new ScheduleEntry(date + DateTimeConstants.MILLIS_PER_DAY * (ScheduleCalculatorEngine.DAYS_AHEAD+1), Collections.singletonList(recipe)));
+
+        List<ScheduleEntry> expanded = scheduleCalculatorEngine.expandSchedule(dt, entries);
+
+        int c = 0;
+        for (ScheduleEntry se : expanded) {
+            if(!se.getRecipes().isEmpty()) c++;
+        }
+        assertEquals(1, c);
+    }
+
 }
