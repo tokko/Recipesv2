@@ -197,6 +197,18 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
         onView(withText("instruction text")).check(matches(isDisplayed()));
     }
 
+    @Test
+    public void testEditInstruction_IsEdited(){
+        String instructionText = "inst";
+        String postfix = "post";
+        createInstruction(instructionText);
+        onView(withText(instructionText)).perform(click());
+        onView(withId(R.id.editableStringListInput)).perform(typeText(postfix), closeSoftKeyboard());
+        onView(withId(R.id.buttonbar_ok)).perform(click());
+
+        onView(withText(instructionText)).check(doesNotExist());
+        onView(withText(instructionText+postfix)).check(matches(isDisplayed()));
+    }
     private void createInstruction(String instructionText) {
         onView(withId(R.id.listad_add)).perform(click());
         onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.instructionList)))).perform(click());

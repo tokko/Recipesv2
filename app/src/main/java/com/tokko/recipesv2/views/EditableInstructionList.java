@@ -30,6 +30,12 @@ public class EditableInstructionList extends EditableListView<String> implements
 
     @Override
     public void instructionAdded(String instruction) {
+        if(isUpdatingPosition != null){
+            adapter.removeItem(isUpdatingPosition);
+            adapter.addItem(isUpdatingPosition, instruction);
+            isUpdatingPosition = null;
+            return;
+        }
         adapter.addItem(instruction);
     }
 
