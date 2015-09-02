@@ -44,14 +44,9 @@ public class ScheduleEntry extends BaseEntity<Long> implements Comparable<Schedu
         this.date = date;
     }
 
-    public List<Ref<Recipe>> getStoredRecipes() {
-        return storedRecipes;
+    public void addRecipe(Recipe r){
+        recipes.add(r);
     }
-
-    public void setStoredRecipes(List<Ref<Recipe>> storedRecipes) {
-        this.storedRecipes = storedRecipes;
-    }
-
     public List<Recipe> getRecipes() {
         return recipes;
     }
