@@ -40,8 +40,9 @@ public class ScheduleEntry extends BaseEntity<Long> implements Comparable<Schedu
         return date;
     }
 
-    public void setDate(long date) {
+    public ScheduleEntry setDate(long date) {
         this.date = date;
+        return this;
     }
 
     public void addRecipe(Recipe r){
@@ -59,8 +60,9 @@ public class ScheduleEntry extends BaseEntity<Long> implements Comparable<Schedu
         this.recipes = recipes;
     }
 
-    public void setUser(RecipeUser user){
+    public ScheduleEntry setUser(RecipeUser user){
         this.user = Ref.create(user);
+        return this;
     }
 
     @Override

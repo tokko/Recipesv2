@@ -11,7 +11,7 @@ import static com.tokko.recipesv2.backend.resourceaccess.OfyService.ofy;
 public class ScheduleEntryRa {
 
     public List<ScheduleEntry> getScheduleEntries(long date, RecipeUser user){
-        List<ScheduleEntry> list = ofy().load().type(ScheduleEntry.class).ancestor(Key.create(RecipeUser.class, user.getEmail())).filter("date>", date).list();
+        List<ScheduleEntry> list = ofy().load().type(ScheduleEntry.class).ancestor(user).list(); //.filter("date>", date).list();
         for (ScheduleEntry se : list) {
             se.load();
         }
