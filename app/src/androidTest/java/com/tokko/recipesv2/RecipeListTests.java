@@ -49,6 +49,7 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
+import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -224,6 +225,20 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
         onView(withId(R.id.buttonbar_cancel)).perform(click());
 
         onView(withText("instruction text")).check(doesNotExist());
+    }
+
+    @Test
+    public void testAddIngredient_NewGroceryCancelGroceryDialog_ShouldReturnToIngredientEditDialog(){
+        onView(withId(R.id.listad_add)).perform(click());
+        onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.ingredient_list)))).perform(click());
+
+        onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("grocery"), closeSoftKeyboard());
+        onView(withId(R.id.buttonbar_ok)).perform(click());
+        onView(withId(R.id.buttonbar_cancel)).perform(click());
+
+        onView(withId(R.id.buttonbar_cancel)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonbar_ok)).check(matches(isDisplayed()));
+        onView(withId(R.id.ingredient_quantity)).check(matches(isDisplayed()));
     }
 
     private void createIngredient(String groceryTitle, int quantity, boolean newGrocery) throws InterruptedException {

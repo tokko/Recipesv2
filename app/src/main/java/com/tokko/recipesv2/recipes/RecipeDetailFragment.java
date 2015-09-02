@@ -64,7 +64,7 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
     }
 
     @Override
-    protected void onOk() {
+    protected boolean onOk() {
         AsyncTask.execute(() -> {
             try {
                 api.commitRecipe(entity).execute();
@@ -72,10 +72,11 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
                 e.printStackTrace();
             }
         });
+        return true;
     }
 
     @Override
-    protected void onDelete() {
+    protected boolean onDelete() {
         AsyncTask.execute(() -> {
             try {
                 api.deleteRecipe(entity.getId()).execute();
@@ -83,5 +84,6 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
                 e.printStackTrace();
             }
         });
+        return true;
     }
 }

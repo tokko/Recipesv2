@@ -126,6 +126,12 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        showButtonBar();
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         getActivity().getLoaderManager().destroyLoader(0);
@@ -165,7 +171,7 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
     }
 
     @Override
-    protected void onOk() {
+    protected boolean onOk() {
         Ingredient ingredient = entity;
         if (selectedGrocery != null) {
             ingredient.setGrocery(selectedGrocery);
@@ -175,6 +181,7 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
             ingredient.setQuantity(q);
             ingredientCallbacks.ingredientAdded(ingredient);
             dismiss();
+            return true;
         } else {
             br = new BroadcastReceiver() {
 
@@ -199,6 +206,7 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
             b.putString(IngredientDetailFragment.EXTRA_ENTITY, new Gson().toJson(g));
             groceryDetailFragment.setArguments(b);
             groceryDetailFragment.show(getActivity().getFragmentManager(), "tag2");
+            return false;
         }
     }
 
@@ -210,9 +218,10 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
     }
 
     @Override
-    protected void onDelete() {
+    protected boolean onDelete() {
         ingredientCallbacks.ingredientDeleted(entity);
         dismiss();
+        return true;
     }
 
     @Override

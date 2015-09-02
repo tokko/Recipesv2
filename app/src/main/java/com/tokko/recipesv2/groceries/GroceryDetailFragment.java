@@ -15,6 +15,7 @@ import com.tokko.recipesv2.views.EditTextViewSwitchable;
 
 import java.io.IOException;
 
+import butterknife.OnClick;
 import roboguice.inject.InjectView;
 
 public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
@@ -62,7 +63,13 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
     }
 
     @Override
-    protected void onOk() {
+    public boolean onCancel() {
+        dismiss();
+        return true;
+    }
+
+    @Override
+    protected boolean onOk() {
         AsyncTask.execute(() -> {
             try {
                 if (persist) {
@@ -74,10 +81,11 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
                 e.printStackTrace();
             }
         });
+        return true;
     }
 
     @Override
-    protected void onDelete() {
+    protected boolean onDelete() {
         AsyncTask.execute(() -> {
             try {
                 api.deleteGrocery(entity.getId()).execute();
@@ -85,5 +93,6 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
                 e.printStackTrace();
             }
         });
+        return true;
     }
 }

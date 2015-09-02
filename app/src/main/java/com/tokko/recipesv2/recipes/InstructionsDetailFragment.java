@@ -47,15 +47,17 @@ public class InstructionsDetailFragment extends ItemDetailFragment<String> {
     }
 
     @Override
-    protected void onOk() {
+    protected boolean onOk() {
         callbacks.instructionAdded(input.getText().toString());
         dismiss();
+        return true;
     }
 
     @Override
-    protected void onDelete() {
+    protected boolean onDelete() {
         callbacks.instructionDeleted();
         dismiss();
+        return true;
     }
 
     @Override

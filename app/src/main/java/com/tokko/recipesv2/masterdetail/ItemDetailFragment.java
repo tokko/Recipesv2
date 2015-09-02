@@ -152,31 +152,36 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
         hideButtonBar();
     }
 
-    protected abstract void onOk();
+    protected abstract boolean onOk();
 
-    protected abstract void onDelete();
+    protected abstract boolean onDelete();
 
     @OnClick(R.id.buttonbar_cancel)
     public void onCancelButtonClick(View v) {
+        if(!onCancel()) return;
         leaveEditMode(Editable::discard);
     }
 
+    public boolean onCancel(){
+        //do nothing, let children override
+        return true;
+    }
     @OnClick(R.id.buttonbar_ok)
     public void onOkButtonClick(View v) {
+        if(!onOk()) return;
         leaveEditMode(Editable::accept);
         entity = getEntity();
-        onOk();
     }
 
     @OnClick(R.id.buttonbar_delete)
     public void onDeleteButtonClick(View v) {
+        if(!onDelete()) return;
         leaveEditMode(Editable::discard);
-        onDelete();
         if (callbacks != null)
             callbacks.detailFinished();
     }
 
-    private void showButtonBar() {
+    protected void showButtonBar() {
         buttonBar.setVisibility(View.VISIBLE);
     }
 
