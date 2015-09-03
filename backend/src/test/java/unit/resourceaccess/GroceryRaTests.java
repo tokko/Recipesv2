@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-public class GroceryCrudEngineTest extends TestsWithObjectifyStorage {
+public class GroceryRaTests extends TestsWithObjectifyStorage {
     RecipeUser user;
     List<Grocery> groceryList;
     private GroceryRa groceryRa;

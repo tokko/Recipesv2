@@ -25,7 +25,7 @@ public class RecipeRa {
     }
 
     public Recipe getRecipe(RecipeUser user, Long id) {
-        Recipe recipe = ofy().load().key(Key.create(Key.create(RecipeUser.class, user.getEmail()), Recipe.class, id)).now();
+        Recipe recipe = ofy().load().type(Recipe.class).parent(user).id(id).now();
         recipe.load();
         return recipe;
     }

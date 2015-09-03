@@ -14,7 +14,7 @@ import static com.tokko.recipesv2.backend.resourceaccess.OfyService.ofy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class RecipeCrudEngineTests extends TestsWithObjectifyStorage {
+public class RecipeRaTests extends TestsWithObjectifyStorage {
 
     private RecipeUser user;
     private RecipeRa recipeRa;
@@ -36,6 +36,21 @@ public class RecipeCrudEngineTests extends TestsWithObjectifyStorage {
         assertNotNull(recipes);
         assertEquals(1, recipes.size());
         assertEquals(recipe.getId(), recipes.get(0).getId());
+    }
+
+    @Test
+    public void testGetRecipe() throws Exception {
+        Recipe r = new Recipe();
+        r.setTitle("test");
+        r.setRecipeUser(user);
+
+        ofy().save().entity(r).now();
+
+        Recipe saved = recipeRa.getRecipe(user, r.getId());
+
+        assertNotNull(saved);
+        assertEquals(r.getId(), saved.getId());
+        assertEquals(r.getTitle(), saved.getTitle());
     }
 
     @Test

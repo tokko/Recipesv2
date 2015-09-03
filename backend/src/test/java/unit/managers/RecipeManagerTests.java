@@ -1,4 +1,4 @@
-package managers;
+package unit.managers;
 
 import com.google.inject.Guice;
 import com.googlecode.objectify.Key;
@@ -81,32 +81,49 @@ public class RecipeManagerTests extends TestsWithObjectifyStorage {
     }
 
     @Test
-    @Ignore("Temporarily disabled")
+    @Ignore("Value by reference bs with localstorage. Shit is cray")
     public void testCommitRecipe_WithIngredientRemoved_IngredientRemoved() throws Exception {
+        RecipeUser user = new RecipeUser("emial");
+        ofy().save().entity(user).now();
+
         Grocery g = new Grocery("g");
+        g.setUser(user);
+        g.prepare();
+        ofy().save().entity(g).now();
+
         Ingredient i = new Ingredient();
         i.setGrocery(g);
-        RecipeUser user = new RecipeUser("emial");
+        i.setUser(user);
+        i.prepare();
+        ofy().save().entity(i).now();
+
         Recipe recipe = new Recipe();
         recipe.ingredients = new ArrayList<>();
         recipe.ingredients.add(i);
         recipe.setTitle("recipe");
-        ofy().save().entity(user).now();
-        recipeManager.commitRecipe(recipe, user.getEmail());
+        recipe.setRecipeUser(user);
+        recipe.prepare();
 
+        ofy().save().entities(recipe).now();
+
+        recipe.load();
         recipe.getIngredients().clear();
         recipeManager.commitRecipe(recipe, user.getEmail());
 
-        Recipe saved = ofy().load().key(Key.create(Key.create(RecipeUser.class, user.getEmail()), Recipe.class, recipe.getId())).now();
+        Recipe saved = ofy().load().type(Recipe.class).parent(user).id(recipe.getId()).now();
         saved.load();
+
         assertNotNull(saved);
         assertEquals(recipe.getTitle(), saved.getTitle());
+
         recipe.load();
         assertEquals(0, saved.ingredients.size());
-        Ingredient savedIngredient = ofy().load().key(Key.create(Key.create(RecipeUser.class, user.getEmail()), Ingredient.class, i.getId())).now();
+
+        Ingredient savedIngredient = ofy().load().type(Ingredient.class).parent(user).id(i.getId()).now();
         savedIngredient.load();
         assertNull(savedIngredient);
-        Grocery savedGrocery = ofy().load().key(Key.create(Key.create(RecipeUser.class, user.getEmail()), Grocery.class, g.getId())).now();
+
+        Grocery savedGrocery = ofy().load().type(Grocery.class).parent(user).id(g.getId()).now();
         savedGrocery.load();
         assertNotNull(savedGrocery);
     }

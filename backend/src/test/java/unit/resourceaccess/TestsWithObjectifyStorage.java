@@ -10,6 +10,8 @@ import org.junit.Before;
 
 import java.io.IOException;
 
+import static com.tokko.recipesv2.backend.resourceaccess.OfyService.ofy;
+
 public abstract class TestsWithObjectifyStorage {
     private final LocalServiceTestHelper helper =
             new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig(),
@@ -19,6 +21,7 @@ public abstract class TestsWithObjectifyStorage {
     public void setup() {
         helper.setUp();
         ObjectifyService.begin();
+        ofy();
     }
 
     @After

@@ -42,6 +42,7 @@ public class Recipe {
         for (Ingredient i : ingredients) {
             i.load();
         }
+        storedIngredients = null;
     }
 
     public List<String> getInstructions() {

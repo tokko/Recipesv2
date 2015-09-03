@@ -14,7 +14,7 @@ import static com.tokko.recipesv2.backend.resourceaccess.OfyService.ofy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class IngredientCrudEngineTests extends TestsWithObjectifyStorage {
+public class IngredientRaTests extends TestsWithObjectifyStorage {
 
     private RecipeUser user;
     private IngredientRa ingredientRa;
