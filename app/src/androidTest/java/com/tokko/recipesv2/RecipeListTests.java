@@ -203,8 +203,8 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
 
     @Test
     public void testEditInstruction_IsEdited() throws Exception{
-        String instructionText = "inst\n";
-        String postfix = "post\n";
+        String instructionText = "inst";
+        String postfix = "post";
         createInstruction(instructionText);
         onView(withText(instructionText)).perform(click());
         onView(withId(R.id.editableStringListInput)).perform(typeText(postfix), closeSoftKeyboard());
@@ -228,7 +228,7 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
     public void testAddInstruction_Cancel_InstructionNotAdded() throws Exception{
         onView(withId(R.id.listad_add)).perform(click());
         onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.instructionList)))).perform(click());
-        String stringToBeTyped = "instruction text\n";
+        String stringToBeTyped = "instruction text";
         onView(withId(R.id.editableStringListInput)).perform(typeText(stringToBeTyped), closeSoftKeyboard());
         Thread.sleep(1000);
 
@@ -242,7 +242,7 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
         onView(withId(R.id.listad_add)).perform(click());
         onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.ingredient_list)))).perform(click());
 
-        onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("grocery\n"), closeSoftKeyboard());
+        onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("grocery"), closeSoftKeyboard());
         Thread.sleep(1000);
 
         onView(withId(R.id.buttonbar_ok)).perform(click());
