@@ -31,7 +31,7 @@ before_script:
   - export GRADLE_OPTS="-Xmx4096m -XX:MaxPermSize=4096m"
   - chmod +x gradlew
   - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
-  - emulator -avd test -no-skin -no-audio -no-window &
+  - emulator -avd test -no-skin -no-audio -no-window -no-boot-anim -dpi-device 640 &
 
 #before_deploy:
 #  - git config --global user.email "builds@travis-ci.com"
