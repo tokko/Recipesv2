@@ -36,7 +36,7 @@ public class ScheduleRaTests extends TestsWithObjectifyStorage{
         se.setDate(date);
         ScheduleEntry saved = scheduleEntryRa.commitEntry(se, user);
         assertNotNull(saved);
-        saved = ofy().load().key(Key.create(Key.create(RecipeUser.class, user.getEmail()), ScheduleEntry.class, date)).now();
+        saved = ofy().load().key(Key.create(Key.create(RecipeUser.class, user.getEmail()), ScheduleEntry.class, saved.getId())).now();
         assertNotNull(saved);
     }
 
@@ -56,7 +56,7 @@ public class ScheduleRaTests extends TestsWithObjectifyStorage{
 
         ScheduleEntry saved = scheduleEntryRa.commitEntry(se, user);
         assertNotNull(saved);
-        saved = ofy().load().key(Key.create(Key.create(RecipeUser.class, user.getEmail()), ScheduleEntry.class, date)).now();
+        saved = ofy().load().key(Key.create(Key.create(RecipeUser.class, user.getEmail()), ScheduleEntry.class, saved.getId())).now();
         saved.load();
         assertNotNull(saved);
         assertEquals(1, saved.getRecipes().size());
@@ -67,8 +67,20 @@ public class ScheduleRaTests extends TestsWithObjectifyStorage{
     public void testGetScheduleEntryList() throws Exception {
         DateTime dt = new DateTime().withDate(2015, 5, 8);
         ofy().save().entities(new ScheduleEntry().setUser(user).setDate(dt.getMillis()), new ScheduleEntry().setUser(user).setDate(dt.withFieldAdded(DurationFieldType.days(), 3).getMillis())).now();
-        List<ScheduleEntry> scheduleEntries = scheduleEntryRa.getScheduleEntries(0, user);
+        List<ScheduleEntry> scheduleEntries = scheduleEntryRa.getScheduleEntries(dt.getMillis(), user);
         assertNotNull(scheduleEntries);
         assertEquals(2, scheduleEntries.size());
     }
+
+    @Test
+    public void testGetScheduleEntryList_ExcludesPastEntries() throws Exception {
+        DateTime dt = new DateTime().withDate(2015, 5, 8);
+        ofy().save().entities(new ScheduleEntry().setUser(user).setDate(dt.getMillis()), new ScheduleEntry().setUser(user).setDate(dt.withFieldAdded(DurationFieldType.days(), -1).getMillis())).now();
+        List<ScheduleEntry> scheduleEntries = scheduleEntryRa.getScheduleEntries(dt.getMillis(), user);
+        assertNotNull(scheduleEntries);
+        assertEquals(1, scheduleEntries.size());
+        assertEquals(dt.getMillis(), scheduleEntries.get(0).getDate());
+    }
+
+
 }

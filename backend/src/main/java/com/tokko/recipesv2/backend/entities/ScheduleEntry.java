@@ -5,6 +5,7 @@ import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Ignore;
+import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Load;
 import com.googlecode.objectify.annotation.Parent;
 
@@ -17,7 +18,9 @@ import static com.tokko.recipesv2.backend.util.IterableUtil.ref;
 @Entity
 public class ScheduleEntry extends BaseEntity<Long> implements Comparable<ScheduleEntry>{
     @Id
-    private long date;
+    public Long id;
+    @Index
+    public long date;
     @Load
     @JsonIgnore
     private List<Ref<Recipe>> storedRecipes;
@@ -67,7 +70,7 @@ public class ScheduleEntry extends BaseEntity<Long> implements Comparable<Schedu
 
     @Override
     public Long getId() {
-        return date;
+        return id;
     }
 
     @Override
