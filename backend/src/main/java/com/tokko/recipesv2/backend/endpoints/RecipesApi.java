@@ -16,6 +16,7 @@ import com.tokko.recipesv2.backend.entities.ScheduleEntry;
 import com.tokko.recipesv2.backend.managers.GroceryManager;
 import com.tokko.recipesv2.backend.managers.RecipeManager;
 import com.tokko.recipesv2.backend.managers.RecipeUserManager;
+import com.tokko.recipesv2.backend.managers.ScheduleEntryManager;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -50,6 +51,9 @@ public class RecipesApi {
     @Inject
     private QuantityCalculatorEngine quantityCalculatorEngine;
 
+    @Inject
+    private ScheduleEntryManager scheduleEntryManager;
+
     public RecipesApi() {
         inject(this);
     }
@@ -81,7 +85,7 @@ public class RecipesApi {
             path = "schedule",
             httpMethod = ApiMethod.HttpMethod.GET)
     public CollectionResponse<ScheduleEntry> getSchedule(@Named("time") Long time, User user){
-        return null;
+        return CollectionResponse.<ScheduleEntry>builder().setItems(scheduleEntryManager.getSchedule(time, user.getEmail())).build();
     }
 
     @ApiMethod(
