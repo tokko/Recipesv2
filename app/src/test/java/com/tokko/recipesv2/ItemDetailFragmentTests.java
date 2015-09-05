@@ -13,6 +13,7 @@ import com.tokko.recipesv2.backend.entities.recipeApi.model.Grocery;
 import com.tokko.recipesv2.groceries.GroceryDetailFragment;
 import com.tokko.recipesv2.masterdetail.ItemDetailActivity;
 import com.tokko.recipesv2.masterdetail.ItemDetailFragment;
+import com.tokko.recipesv2.schedule.ScheduleFragment;
 import com.tokko.recipesv2.views.EditTextViewSwitchable;
 
 import org.junit.Before;
