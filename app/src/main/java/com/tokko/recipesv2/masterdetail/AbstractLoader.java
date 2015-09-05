@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import com.tokko.recipesv2.ApiFactory;
+import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
+
 import java.util.List;
 
 
@@ -16,6 +19,7 @@ public abstract class AbstractLoader<T> extends AsyncTaskLoader<List<T>> {
     private BroadcastReceiver onChangeReceiver;
     private Context context;
     private Class<T> clz;
+    protected RecipeApi api;
 
     public AbstractLoader(Context context, Class<T> clz) {
         super(context);
@@ -24,6 +28,7 @@ public abstract class AbstractLoader<T> extends AsyncTaskLoader<List<T>> {
         onContentChanged();
         intentFilter = new IntentFilter("com.google.android.c2dm.intent.RECEIVE");
         onChangeReceiver = new OnChangeReceiver();
+        api = (RecipeApi) ApiFactory.createApi(RecipeApi.Builder.class);
     }
 
     @Override

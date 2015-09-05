@@ -144,6 +144,7 @@ dependencies {
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
         exclude group: 'com.android.support', module: 'support-annotations'
     }
+    compile 'joda-time:joda-time:2.8.2'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.robolectric:robolectric:3.0'
