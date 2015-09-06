@@ -2,6 +2,7 @@ package com.tokko.recipesv2;
 
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -86,10 +87,10 @@ public class ScheduleFragmentTests {
     public void testSchduleEntryListDisplayed() throws Exception {
         ScheduleFragment fragment = this.fragment;
         View view = fragment.getView();
-        ListView viewById = (ListView) view.findViewById(android.R.id.list);
-        ArrayAdapter<ScheduleEntry> adapter = (ArrayAdapter<ScheduleEntry>) viewById.getAdapter();
+        ExpandableListView viewById = (ExpandableListView) view.findViewById(android.R.id.list);
+        ScheduleFragment.ExpandableAdapter adapter = (ScheduleFragment.ExpandableAdapter) viewById.getExpandableListAdapter();
         assertNotNull(adapter);
-        assertEquals(2, adapter.getCount());
-        assertTrue(adapter.getItem(0).getDate() < adapter.getItem(1).getDate());
+        assertEquals(2, adapter.getGroupCount());
+        assertTrue(adapter.getGroup(0).getDate() < adapter.getGroup(1).getDate());
     }
 }
