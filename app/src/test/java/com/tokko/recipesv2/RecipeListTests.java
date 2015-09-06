@@ -1,23 +1,15 @@
 package com.tokko.recipesv2;
 
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.inject.AbstractModule;
 import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.CollectionResponseRecipe;
-import com.tokko.recipesv2.backend.entities.recipeApi.model.CollectionResponseScheduleEntry;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Recipe;
-import com.tokko.recipesv2.backend.entities.recipeApi.model.ScheduleEntry;
 import com.tokko.recipesv2.recipes.RecipeAdapter;
-import com.tokko.recipesv2.recipes.RecipeLoader;
 import com.tokko.recipesv2.schedule.RecipeListFragment;
-import com.tokko.recipesv2.schedule.ScheduleFragment;
-import com.tokko.recipesv2.util.TimeUtils;
 
-import org.joda.time.DateTime;
-import org.joda.time.DurationFieldType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,8 +19,6 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import roboguice.RoboGuice;
 
