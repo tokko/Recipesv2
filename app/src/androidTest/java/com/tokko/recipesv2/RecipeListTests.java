@@ -31,7 +31,6 @@ import com.tokko.recipesv2.recipes.RecipeDetailFragment;
 import com.tokko.recipesv2.recipes.UnitDownloader;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -185,7 +184,6 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
     }
 
     @Test
-    @Ignore("Tests fails on travis for some reason?")
     public void testDeleteInstruction_IsDeleted() throws Exception {
         String instructionText = "instruction";
         createInstruction(instructionText);
@@ -204,7 +202,6 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
     }
 
     @Test
-    @Ignore("Tests fails on travis for some reason?")
     public void testEditInstruction_IsEdited() throws Exception{
         String instructionText = "inst";
         String postfix = "post";
