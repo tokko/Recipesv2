@@ -10,6 +10,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.CollectionResponseScheduleEntry;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.Recipe;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ScheduleEntry;
 import com.tokko.recipesv2.masterdetail.StringifyableAdapter;
 import com.tokko.recipesv2.schedule.ScheduleFragment;
@@ -25,6 +26,8 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import roboguice.RoboGuice;
@@ -35,7 +38,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.robolectric.util.FragmentTestUtil.startVisibleFragment;
 
 @RunWith(RobolectricGradleTestRunner.class)
@@ -55,6 +57,16 @@ public class ScheduleFragmentTests {
         se1.setId(2L);
 
         List<ScheduleEntry> entries = Arrays.asList(se, se1);
+
+        Recipe r = new Recipe();
+        r.setId(3L);
+        r.setTitle("title");
+        Recipe r1 = new Recipe();
+        r1.setId(4L);
+        r1.setTitle("title");
+
+        se.setRecipes(Collections.singletonList(r));
+        se1.setRecipes(Collections.singletonList(r1));
 
         RecipeApi api = mock(RecipeApi.class);
         RecipeApi.GetSchedule getSchedule = mock(RecipeApi.GetSchedule.class);
@@ -92,5 +104,18 @@ public class ScheduleFragmentTests {
         assertNotNull(adapter);
         assertEquals(2, adapter.getGroupCount());
         assertTrue(adapter.getGroup(0).getDate() < adapter.getGroup(1).getDate());
+    }
+
+    @Test
+    public void testScheduleRecipesDisplayed() throws Exception {
+        ScheduleFragment fragment = this.fragment;
+        View view = fragment.getView();
+        ExpandableListView viewById = (ExpandableListView) view.findViewById(android.R.id.list);
+        ScheduleFragment.ExpandableAdapter adapter = (ScheduleFragment.ExpandableAdapter) viewById.getExpandableListAdapter();
+        assertNotNull(adapter);
+        assertEquals(1, adapter.getChildrenCount(0));
+        assertEquals(1, adapter.getChildrenCount(1));
+        assertTrue(adapter.getChildId(0, 0) < adapter.getChildId(1, 0));
+
     }
 }

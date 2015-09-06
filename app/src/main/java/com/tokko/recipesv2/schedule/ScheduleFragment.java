@@ -141,7 +141,10 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
 
         @Override
         public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-            return null;
+            if(convertView == null)
+                convertView = inflater.inflate(android.R.layout.simple_list_item_1, null);
+            ((TextView) convertView.findViewById(android.R.id.text1)).setText(getChild(groupPosition, childPosition).getTitle());
+            return convertView;
         }
 
         @Override
