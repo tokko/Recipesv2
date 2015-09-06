@@ -1,11 +1,11 @@
 package com.tokko.recipesv2.backend.managers;
 
 import com.google.inject.Inject;
-import com.tokko.recipesv2.backend.resourceaccess.GroceryRa;
 import com.tokko.recipesv2.backend.engines.MessagingEngine;
-import com.tokko.recipesv2.backend.resourceaccess.RecipeUserRa;
 import com.tokko.recipesv2.backend.entities.Grocery;
 import com.tokko.recipesv2.backend.entities.RecipeUser;
+import com.tokko.recipesv2.backend.resourceaccess.GroceryRa;
+import com.tokko.recipesv2.backend.resourceaccess.RecipeUserRa;
 
 import java.util.List;
 

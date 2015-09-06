@@ -1,10 +1,10 @@
 package unit.resourceaccess;
 
 import com.googlecode.objectify.Key;
-import com.tokko.recipesv2.backend.resourceaccess.IngredientRa;
 import com.tokko.recipesv2.backend.entities.Grocery;
 import com.tokko.recipesv2.backend.entities.Ingredient;
 import com.tokko.recipesv2.backend.entities.RecipeUser;
+import com.tokko.recipesv2.backend.resourceaccess.IngredientRa;
 import com.tokko.recipesv2.backend.units.Quantity;
 
 import org.junit.Before;
@@ -30,7 +30,7 @@ public class IngredientRaTests extends TestsWithObjectifyStorage {
     @Test
     public void testCommitIngredient_IsCommitted() throws Exception {
         Grocery g = new Grocery("g", user);
-        Quantity q = new Quantity();
+        Quantity q = new Quantity(1);
         q.setQuantity(1);
         q.setUnit("hg");
         ofy().save().entity(g).now();

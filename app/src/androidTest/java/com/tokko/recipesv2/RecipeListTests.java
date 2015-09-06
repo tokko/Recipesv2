@@ -4,14 +4,13 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.Espresso;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.suitebuilder.annotation.LargeTest;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
-import com.tokko.recipesv2.backend.entities.recipeApi.model.CollectionResponseString;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Grocery;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Ingredient;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Recipe;
@@ -36,13 +35,11 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import roboguice.RoboGuice;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -57,6 +54,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 
 @RunWith(AndroidJUnit4.class)
+@LargeTest
 public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListActivity> {
 
     private ItemListActivity activity;
@@ -75,7 +73,7 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
         RoboGuice.overrideApplicationInjector(((Application) context.getApplicationContext()), new AbstractModule() {
             @Override
             protected void configure() {
-                bind(UnitDownloader.class).toProvider(() -> new UnitDownloader(null){
+                bind(UnitDownloader.class).toProvider(() -> new UnitDownloader(null) {
                     @Override
                     protected List<String> doInBackground(Void... params) {
                         return Arrays.asList("g", "kg");
@@ -107,6 +105,7 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
         });
         setActivityIntent(startIntent);
         activity = getActivity();
+        Thread.sleep(1000);
 
     }
 
@@ -221,6 +220,8 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
     }
     private void createInstruction(String instructionText) throws Exception {
         onView(withId(R.id.listad_add)).perform(click());
+        Thread.sleep(1000);
+
         onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.instructionList)))).perform(click());
         onView(withId(R.id.editableStringListInput)).perform(typeText(instructionText), closeSoftKeyboard());
         Thread.sleep(1000);
@@ -231,6 +232,8 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
     @Test
     public void testAddInstruction_Cancel_InstructionNotAdded() throws Exception{
         onView(withId(R.id.listad_add)).perform(click());
+        Thread.sleep(1000);
+
         onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.instructionList)))).perform(click());
         String stringToBeTyped = "instruction text";
         onView(withId(R.id.editableStringListInput)).perform(typeText(stringToBeTyped), closeSoftKeyboard());

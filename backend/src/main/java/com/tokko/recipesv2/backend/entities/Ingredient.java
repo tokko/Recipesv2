@@ -40,6 +40,7 @@ public class Ingredient extends BaseEntity<Long> {
     @Override
     public void load() {
         grocery = storedGrocery.get();
+        grocery.load();
     }
 
     @Override
