@@ -6,14 +6,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
+import com.tokko.recipesv2.R;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Recipe;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ScheduleEntry;
+import com.tokko.recipesv2.recipes.RecipeLoader;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
 
     @Inject
     private ScheduleLoader scheduleLoader;
+
     private ExpandableAdapter adapter;
 
     @Override
@@ -38,9 +41,9 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ExpandableListView expandableListView = new ExpandableListView(getActivity());
-        expandableListView.setId(android.R.id.list);
-        return expandableListView;
+        ExpandableListView elv = new ExpandableListView(getActivity());
+        elv.setId(android.R.id.list);
+        return elv;
     }
 
     @Override
@@ -63,7 +66,7 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
 
     @Override
     public Loader<List<ScheduleEntry>> onCreateLoader(int id, Bundle args) {
-        return scheduleLoader;
+            return scheduleLoader;
     }
 
     @Override

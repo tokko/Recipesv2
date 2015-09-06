@@ -5,6 +5,7 @@ import android.widget.ExpandableListView;
 
 import com.google.inject.AbstractModule;
 import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.CollectionResponseRecipe;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.CollectionResponseScheduleEntry;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Recipe;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ScheduleEntry;
@@ -13,6 +14,7 @@ import com.tokko.recipesv2.util.TimeUtils;
 
 import org.joda.time.DateTime;
 import org.joda.time.DurationFieldType;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,6 +71,13 @@ public class ScheduleFragmentTests {
         doReturn(getSchedule).when(api).getSchedule(anyLong());
         doReturn(resp).when(getSchedule).execute();
 
+        RecipeApi.ListRecipes listRecipes = mock(RecipeApi.ListRecipes.class);
+        CollectionResponseRecipe recipeResp = new CollectionResponseRecipe();
+        recipeResp.setItems(Arrays.asList(r, r1));
+
+        doReturn(listRecipes).when(api).listRecipes();
+        doReturn(recipeResp).when(listRecipes).execute();
+
         RoboGuice.overrideApplicationInjector(RuntimeEnvironment.application, new AbstractModule() {
             @Override
             protected void configure() {
@@ -86,7 +95,10 @@ public class ScheduleFragmentTests {
         fragment = RoboGuice.getInjector(RuntimeEnvironment.application).getInstance(ScheduleFragment.class);
         startVisibleFragment(fragment);
     }
-
+    @After
+    public void tearDown() throws Exception {
+        RoboGuice.Util.reset();
+    }
     @Test
     public void testSchduleEntryListDisplayed() throws Exception {
         ScheduleFragment fragment = this.fragment;
@@ -108,6 +120,7 @@ public class ScheduleFragmentTests {
         assertEquals(1, adapter.getChildrenCount(0));
         assertEquals(1, adapter.getChildrenCount(1));
         assertTrue(adapter.getChildId(0, 0) < adapter.getChildId(1, 0));
-
     }
+
+
 }

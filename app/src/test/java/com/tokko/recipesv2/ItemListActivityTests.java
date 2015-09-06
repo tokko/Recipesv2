@@ -15,6 +15,7 @@ import com.tokko.recipesv2.masterdetail.AbstractLoader;
 import com.tokko.recipesv2.masterdetail.ItemListActivity;
 import com.tokko.recipesv2.masterdetail.StringifyableAdapter;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -72,7 +73,10 @@ public class ItemListActivityTests {
 
         listView = (ListView) activity.findViewById(android.R.id.list);
     }
-
+    @After
+    public void tearDown() throws Exception {
+        RoboGuice.Util.reset();
+    }
     @Test
     public void testPreconditions() throws Exception {
         assertNotNull(activity);
