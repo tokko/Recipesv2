@@ -68,8 +68,6 @@ public class ScheduleFragmentTests {
         resp.setItems(entries);
         doReturn(getSchedule).when(api).getSchedule(anyLong());
         doReturn(resp).when(getSchedule).execute();
-        //when(api.getSchedule(anyLong())).thenReturn(getSchedule);
-        //when(getSchedule.execute()).thenReturn(resp);
 
         RoboGuice.overrideApplicationInjector(RuntimeEnvironment.application, new AbstractModule() {
             @Override
