@@ -25,6 +25,7 @@ public class RecipeListFragment extends RoboListFragment implements LoaderManage
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setListAdapter(adapter);
+        adapter.setIsDraggable(true);
     }
 
     @Override

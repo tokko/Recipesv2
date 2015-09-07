@@ -1,10 +1,13 @@
 package com.tokko.recipesv2.schedule;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.tokko.recipesv2.R;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.Recipe;
+import com.tokko.recipesv2.masterdetail.ItemListActivity;
 
 import roboguice.activity.RoboActivity;
 
@@ -32,6 +35,7 @@ public class ScheduleActivity extends RoboActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, ItemListActivity.class).putExtra(ItemListActivity.EXTRA_ENTITY_CLASS, Recipe.class));
             return true;
         }
 

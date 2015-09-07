@@ -3,20 +3,20 @@ package com.tokko.recipesv2.schedule;
 import android.app.LoaderManager;
 import android.content.Loader;
 import android.os.Bundle;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.inject.Inject;
-import com.tokko.recipesv2.R;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Recipe;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ScheduleEntry;
-import com.tokko.recipesv2.recipes.RecipeLoader;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -96,7 +96,8 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
         }
 
         public void addAll(Collection<ScheduleEntry> data){
-            this.data.addAll(data);
+            if (data != null)
+                this.data.addAll(data);
         }
         @Override
         public int getGroupCount() {
@@ -120,7 +121,8 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
 
         @Override
         public long getGroupId(int groupPosition) {
-            return getGroup(groupPosition).getId();
+            ScheduleEntry group = getGroup(groupPosition);
+            return group != null ? group.getId() : -1;
         }
 
         @Override
@@ -139,6 +141,8 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
                 convertView = inflater.inflate(android.R.layout.simple_expandable_list_item_1, null);
             }
             ((TextView)convertView.findViewById(android.R.id.text1)).setText(new SimpleDateFormat("yyyy-MM-dd").format(getGroup(groupPosition).getDate()));
+            convertView.setTag(getGroup(groupPosition));
+            convertView.setOnDragListener(new MyDragListener());
             return convertView;
         }
 
@@ -154,5 +158,37 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
         public boolean isChildSelectable(int groupPosition, int childPosition) {
             return true;
         }
+
+        class MyDragListener implements View.OnDragListener {
+
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                int action = event.getAction();
+                switch (event.getAction()) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        // do nothing
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        try {
+                            Recipe r = new AndroidJsonFactory().fromString(event.getClipData().getDescription().getLabel().toString(), Recipe.class);
+                            ScheduleEntry tag = (ScheduleEntry) v.getTag();
+                            if (tag.getRecipes() == null) tag.setRecipes(new ArrayList<>());
+                            tag.getRecipes().add(r);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                    default:
+                        break;
+                }
+                return true;
+            }
+        }
+
     }
 }
