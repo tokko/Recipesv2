@@ -31,6 +31,7 @@ import com.tokko.recipesv2.recipes.RecipeDetailFragment;
 import com.tokko.recipesv2.recipes.UnitDownloader;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
