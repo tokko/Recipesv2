@@ -7,18 +7,24 @@ branches:
     - alpha
     - beta
     - prod
+env:
+  global:
+    - ANDROID_API_LEVEL=21
+    - ANDROID_BUILD_TOOLS_VERSION=21.1.2
+    - ANDROID_ABI=armeabi-v7a
+    - ADB_INSTALL_TIMEOUT=8 # minutes (2 minutes by default)
 android:
   components:
   - platform-tools
   - tools
-  - build-tools-21.1.1
-  - build-tools-22.0.1
-  - android-22
+  - android-$ANDROID_API_LEVEL
   - extra-google-google_play_services
   - extra-google-m2repository
   - extra-android-m2repository
-  - addon-google_apis-google-21
-  - sys-img-armeabi-v7a-android-21
+  - addon-google_apis-google-$ANDROID_API_LEVEL
+  - sys-img-$ANDROID_ABI-android-$ANDROID_API_LEVEL
+  - build-tools-$ANDROID_BUILD_TOOLS_VERSION
+  - android-$ANDROID_API_LEVEL
 jdk:
 - oraclejdk8
 
@@ -30,7 +36,7 @@ before_script:
   - export JAVA_OPTS=-Xmx4096m #TODO: REMOVE THESE LINES
   - export GRADLE_OPTS="-Xmx4096m -XX:MaxPermSize=4096m"
   - chmod +x gradlew
-  - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
+  - echo no | android create avd --force -n test -t android-$ANDROID_API_LEVEL --abi $ANDROID_ABI
   - emulator -avd test -no-skin -no-audio -no-window  &
 #before_deploy:
 #  - git config --global user.email "builds@travis-ci.com"
