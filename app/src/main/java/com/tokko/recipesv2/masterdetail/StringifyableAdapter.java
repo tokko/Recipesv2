@@ -215,7 +215,7 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
 
         @Override
         public boolean onTouch(View view, MotionEvent event) {
-            if (!isDraggable) return true;
+            if (!isDraggable) return false;
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 ClipData data = null;
                 try {
