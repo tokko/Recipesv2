@@ -32,6 +32,7 @@ public class ScheduleEntry extends BaseEntity<Long> implements Comparable<Schedu
 
     public ScheduleEntry(long date, List<Recipe> recipes) {
         this.date = date;
+        id = date;
         setRecipes(recipes);
     }
 

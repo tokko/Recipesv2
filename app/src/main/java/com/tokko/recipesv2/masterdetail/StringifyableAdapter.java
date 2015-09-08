@@ -225,7 +225,6 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
                 }
                 View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
                 view.startDrag(data, shadowBuilder, view, 0);
-                view.setVisibility(View.INVISIBLE);
                 return true;
             } else {
                 return false;

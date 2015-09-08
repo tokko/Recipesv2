@@ -32,6 +32,7 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
     private ScheduleLoader scheduleLoader;
 
     private ExpandableAdapter adapter;
+    private ExpandableListView elv;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,7 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ExpandableListView elv = new ExpandableListView(getActivity());
+        elv = new ExpandableListView(getActivity());
         elv.setId(android.R.id.list);
         return elv;
     }
@@ -106,7 +107,7 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
 
         @Override
         public int getChildrenCount(int groupPosition) {
-            return data.get(groupPosition).getRecipes().size();
+            return data.get(groupPosition).getRecipes() != null ? data.get(groupPosition).getRecipes().size() : 0;
         }
 
         @Override
@@ -143,6 +144,7 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
             ((TextView)convertView.findViewById(android.R.id.text1)).setText(new SimpleDateFormat("yyyy-MM-dd").format(getGroup(groupPosition).getDate()));
             convertView.setTag(getGroup(groupPosition));
             convertView.setOnDragListener(new MyDragListener());
+            elv.expandGroup(groupPosition);
             return convertView;
         }
 
@@ -178,6 +180,7 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
                             ScheduleEntry tag = (ScheduleEntry) v.getTag();
                             if (tag.getRecipes() == null) tag.setRecipes(new ArrayList<>());
                             tag.getRecipes().add(r);
+                            adapter.notifyDataSetChanged();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
