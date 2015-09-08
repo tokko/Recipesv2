@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.inject.Inject;
+import com.tokko.recipesv2.R;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Recipe;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ScheduleEntry;
 
@@ -151,8 +152,15 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
         @Override
         public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
             if(convertView == null)
-                convertView = inflater.inflate(android.R.layout.simple_list_item_1, null);
+                convertView = inflater.inflate(R.layout.adapterentry, null);
             ((TextView) convertView.findViewById(android.R.id.text1)).setText(getChild(groupPosition, childPosition).getTitle());
+            View deleteButton = convertView.findViewById(R.id.deleteImageButton);
+            deleteButton.setVisibility(View.VISIBLE);
+            deleteButton.setOnClickListener((v) -> {
+                adapter.getGroup(groupPosition).getRecipes().remove(childPosition);
+                adapter.notifyDataSetChanged();
+            });
+
             return convertView;
         }
 
@@ -165,10 +173,8 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
 
             @Override
             public boolean onDrag(View v, DragEvent event) {
-                int action = event.getAction();
                 switch (event.getAction()) {
                     case DragEvent.ACTION_DRAG_STARTED:
-                        // do nothing
                         break;
                     case DragEvent.ACTION_DRAG_ENTERED:
                         break;
