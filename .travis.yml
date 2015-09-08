@@ -11,14 +11,14 @@ android:
   components:
   - platform-tools
   - tools
-  - build-tools-21.1.1
+  - build-tools-19.0.0
   - build-tools-22.0.1
   - android-22
   - extra-google-google_play_services
   - extra-google-m2repository
   - extra-android-m2repository
-  - addon-google_apis-google-21
-  - sys-img-armeabi-v7a-android-21
+  - addon-google_apis-google-19
+  - sys-img-armeabi-v7a-android-19
 jdk:
 - oraclejdk8
 
@@ -30,7 +30,7 @@ before_script:
   - export JAVA_OPTS=-Xmx4096m #TODO: REMOVE THESE LINES
   - export GRADLE_OPTS="-Xmx4096m -XX:MaxPermSize=4096m"
   - chmod +x gradlew
-  - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
+  - echo no | android create avd --force -n test -t android-19 --abi armeabi-v7a
   - emulator -avd test -no-skin -no-audio -no-window  &
 #before_deploy:
 #  - git config --global user.email "builds@travis-ci.com"
