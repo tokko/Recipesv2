@@ -1,3 +1,6 @@
+machine:
+  java:
+    version: oraclejdk8
 dependencies:
   pre:
     - chmod +x gradlew
@@ -7,8 +10,9 @@ test:
     - emulator -avd circleci-android22 -no-audio -no-window:
         background: true
         parallel: true
+    - ./gradlew testRelease
     - circle-android wait-for-boot
-    - ./gradlew testRelease connectedAndroidTest
+    - ./gradlew connectedAndroidTest
      # copy the build outputs to artifacts
     #- cp -r my-project/build/outputs $CIRCLE_ARTIFACTS
     # copy the test results to the test results directory.
