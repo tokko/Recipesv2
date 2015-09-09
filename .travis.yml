@@ -38,17 +38,17 @@ before_script:
   - export JAVA_OPTS=-Xmx4096m #TODO: REMOVE THESE LINES
   - export GRADLE_OPTS="-Xmx4096m -XX:MaxPermSize=4096m"
   - chmod +x gradlew
-  - echo no | android create avd --force -n test -t android-$ANDROID_API_LEVEL --abi $ANDROID_ABI
-  - emulator -avd test -no-skin -no-audio -no-window  &
+  #- echo no | android create avd --force -n test -t android-$ANDROID_API_LEVEL --abi $ANDROID_ABI
+  #- emulator -avd test -no-skin -no-audio -no-window  &
 #before_deploy:
 #  - git config --global user.email "builds@travis-ci.com"
 #  - git config --global user.name "Travis CI"
 #  - ls -R
 script:
   - "./gradlew testRelease --stacktrace"
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
-  - "./gradlew connectedAndroidTest --stacktrace"
+  #- android-wait-for-emulator
+  #- adb shell input keyevent 82 &
+  #- "./gradlew connectedAndroidTest --stacktrace"
  # - if [ "$TRAVIS_BRANCH" = "alpha" ]; then ./gradlew appengineUpdate; fi
  # - if [ "$TRAVIS_BRANCH" = "alpha" ]; then ./gradlew publishRelease; fi
 #after_success:
