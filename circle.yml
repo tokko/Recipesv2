@@ -1,3 +1,6 @@
+dependencies:
+  pre:
+    - chmod +x gradlew
 test:
   override:
     - emulator -avd circleci-android22 -no-audio -no-window:
