@@ -18,6 +18,7 @@ import com.tokko.recipesv2.backend.managers.RecipeManager;
 import com.tokko.recipesv2.backend.managers.RecipeUserManager;
 import com.tokko.recipesv2.backend.managers.ScheduleEntryManager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -161,7 +162,19 @@ public class RecipesApi {
         return CollectionResponse.<Recipe>builder().setItems(recipeList).build();
     }
 
-    public class CommitScheduleContainer {
+    public static class CommitScheduleContainer {
         public List<ScheduleEntry> entries;
+
+        public CommitScheduleContainer() {
+            this.entries = new ArrayList<>();
+        }
+
+        public List<ScheduleEntry> getEntries() {
+            return entries;
+        }
+
+        public void setEntries(List<ScheduleEntry> entries) {
+            this.entries = entries;
+        }
     }
 }

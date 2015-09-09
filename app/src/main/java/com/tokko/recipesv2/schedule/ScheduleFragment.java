@@ -2,18 +2,22 @@ package com.tokko.recipesv2.schedule;
 
 import android.app.LoaderManager;
 import android.content.Loader;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.inject.Inject;
 import com.tokko.recipesv2.R;
+import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.CommitScheduleContainer;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Recipe;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ScheduleEntry;
 
@@ -25,16 +29,22 @@ import java.util.List;
 
 import roboguice.RoboGuice;
 import roboguice.fragment.provided.RoboListFragment;
+import roboguice.inject.InjectView;
 
 
-public class ScheduleFragment extends RoboListFragment implements LoaderManager.LoaderCallbacks<List<ScheduleEntry>>{
+public class ScheduleFragment extends RoboListFragment implements LoaderManager.LoaderCallbacks<List<ScheduleEntry>>, View.OnClickListener {
 
     @Inject
     private ScheduleLoader scheduleLoader;
 
     private ExpandableAdapter adapter;
+    @InjectView(android.R.id.list)
     private ExpandableListView elv;
+    @Inject
+    private RecipeApi api;
 
+    @InjectView(R.id.scheduleFragmentOk)
+    private Button okButton;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,15 +53,27 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        elv = new ExpandableListView(getActivity());
-        elv.setId(android.R.id.list);
-        return elv;
+        return inflater.inflate(R.layout.schedulefragment, null);
+    }
+
+    @Override
+    public void onClick(View v) {
+        AsyncTask.execute(() -> {
+            try {
+                CommitScheduleContainer csc = new CommitScheduleContainer();
+                csc.setEntries(adapter.data);
+                api.commitSchedule(csc).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ((ExpandableListView) getListView()).setAdapter(adapter);
+        okButton.setOnClickListener(this);
     }
 
     @Override

@@ -15,7 +15,7 @@ public class ScheduleCalculatorEngine {
     public static final int DAYS_AHEAD = 20;
 
     public List<ScheduleEntry> expandSchedule(DateTime dateTime, List<ScheduleEntry> entries) {
-        Collections.sort(entries);
+        Collections.sort(entries); //TODO: expanding is borken. Check the tests.
         Queue<ScheduleEntry> q = new ArrayDeque<>();
         q.addAll(entries);
         List<ScheduleEntry> expandedSchedule = new ArrayList<>();
