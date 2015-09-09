@@ -1,5 +1,6 @@
 test:
   override:
+    - chmod +x gradlew
     - emulator -avd circleci-android22 -no-audio -no-window:
         background: true
         parallel: true
