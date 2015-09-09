@@ -20,6 +20,7 @@ public class ScheduleEntryRa {
     public ScheduleEntry commitEntry(ScheduleEntry entry, RecipeUser user){
         entry.setUser(user);
         entry.prepare();
+
         ofy().save().entity(entry).now();
         return entry;
     }
@@ -27,6 +28,18 @@ public class ScheduleEntryRa {
     public void commitEntries(Iterable<ScheduleEntry> entries, RecipeUser user){
         for (ScheduleEntry scheduleEntry : entries) {
             commitEntry(scheduleEntry, user);
+        }
+    }
+
+    public void deleteEntry(ScheduleEntry entry, RecipeUser user) {
+        entry.setUser(user);
+        entry.prepare();
+        ofy().delete().entity(entry).now();
+    }
+
+    public void deleteEntries(Iterable<ScheduleEntry> toDelete, RecipeUser user) {
+        for (ScheduleEntry entry : toDelete) {
+            deleteEntry(entry, user);
         }
     }
 }

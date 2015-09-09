@@ -16,6 +16,7 @@ import java.util.List;
 import static com.tokko.recipesv2.backend.resourceaccess.OfyService.ofy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public class ScheduleRaTests extends TestsWithObjectifyStorage{
     private RecipeUser user;
@@ -82,5 +83,16 @@ public class ScheduleRaTests extends TestsWithObjectifyStorage{
         assertEquals(dt.getMillis(), scheduleEntries.get(0).getDate());
     }
 
+    @Test
+    public void testDeleteScheduleEntry_IsDeleted() throws Exception {
+        ScheduleEntry entry = new ScheduleEntry();
+        entry.setDate(new DateTime().getMillis());
+        entry.setUser(user);
+        entry.prepare();
+        ofy().save().entity(entry).now();
+        scheduleEntryRa.deleteEntry(entry, user);
 
+        ScheduleEntry deleted = ofy().load().type(ScheduleEntry.class).parent(user).id(entry.getId()).now();
+        assertNull(deleted);
+    }
 }

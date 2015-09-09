@@ -28,4 +28,12 @@ public class ScheduleEntryManager {
         List<ScheduleEntry> entries = scheduleEntryRa.getScheduleEntries(date, user);
         return scheduleCalculatorEngine.expandSchedule(new DateTime(date), entries);
     }
+
+    public void commitSchedule(List<ScheduleEntry> entries, String email) {
+        RecipeUser user = recipeUserRa.getUserByEmail(email);
+        Iterable<ScheduleEntry> toCommit = scheduleCalculatorEngine.getScheduleEntriesToCommit(entries);
+        Iterable<ScheduleEntry> toDelete = scheduleCalculatorEngine.getScheduleEntriesToDelete(entries);
+        scheduleEntryRa.commitEntries(toCommit, user);
+        scheduleEntryRa.deleteEntries(toDelete, user);
+    }
 }

@@ -29,4 +29,17 @@ public class ScheduleCalculatorEngine {
         }
         return expandedSchedule;
     }
+
+    public List<ScheduleEntry> getScheduleEntriesToCommit(List<ScheduleEntry> entries) {
+        List<ScheduleEntry> prunedList = new ArrayList<>();
+        for (ScheduleEntry entry : entries) {
+            if (!entry.getRecipes().isEmpty())
+                prunedList.add(entry);
+        }
+        return prunedList;
+    }
+
+    public List<ScheduleEntry> getScheduleEntriesToDelete(Iterable<ScheduleEntry> entries) {
+        return null;
+    }
 }

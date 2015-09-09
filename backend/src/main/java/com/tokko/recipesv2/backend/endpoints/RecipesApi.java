@@ -89,6 +89,14 @@ public class RecipesApi {
     }
 
     @ApiMethod(
+            name = "commitSchedule",
+            path = "schedule",
+            httpMethod = ApiMethod.HttpMethod.POST)
+    public void commitSchedule(CommitScheduleContainer entries, User user) {
+        scheduleEntryManager.commitSchedule(entries.entries, user.getEmail());
+    }
+
+    @ApiMethod(
             name = "listGroceries",
             path = "grocery",
             httpMethod = ApiMethod.HttpMethod.GET)
@@ -102,6 +110,7 @@ public class RecipesApi {
             return null;
         }
     }
+
     @ApiMethod(
             name = "registerDevice",
             path = "recipeUser",
@@ -118,6 +127,7 @@ public class RecipesApi {
     public CollectionResponse<String> listUnits() throws UnauthorizedException {
         return CollectionResponse.<String>builder().setItems(quantityCalculatorEngine.listUnits()).build();
     }
+
     @ApiMethod(
             name = "get",
             path = "recipe/{id}",
@@ -149,5 +159,9 @@ public class RecipesApi {
     public CollectionResponse<Recipe> listRecipes(User user) {
         List<Recipe> recipeList = recipeManager.listRecipesForUser(user.getEmail());
         return CollectionResponse.<Recipe>builder().setItems(recipeList).build();
+    }
+
+    public class CommitScheduleContainer {
+        public List<ScheduleEntry> entries;
     }
 }

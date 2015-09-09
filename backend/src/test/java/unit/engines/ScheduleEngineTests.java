@@ -1,4 +1,4 @@
-package engines;
+package unit.engines;
 
 import com.google.appengine.repackaged.org.joda.time.DateTime;
 import com.google.appengine.repackaged.org.joda.time.DateTimeConstants;
@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class ScheduleEngineTests {
     ScheduleCalculatorEngine scheduleCalculatorEngine;
@@ -59,4 +60,17 @@ public class ScheduleEngineTests {
         assertEquals(1, c);
     }
 
+    @Test
+    public void testGetScheduleEntriesToCommit_OnlyNonEmptyRecipesReturned() throws Exception {
+        ScheduleEntry se = new ScheduleEntry(new DateTime().getMillis(), Collections.singletonList(new Recipe()));
+        ScheduleEntry se1 = new ScheduleEntry(new DateTime().getMillis(), Collections.singletonList(new Recipe()));
+        ScheduleEntry se2 = new ScheduleEntry(new DateTime().getMillis(), Collections.<Recipe>emptyList());
+        List<ScheduleEntry> entries = Arrays.asList(se, se1, se2);
+
+        List<ScheduleEntry> toCommit = scheduleCalculatorEngine.getScheduleEntriesToCommit(entries);
+        assertNotNull(toCommit);
+        assertEquals(2, toCommit.size());
+        assertEquals(se.getId(), toCommit.get(0).getId());
+        assertEquals(se1.getId(), toCommit.get(1).getId());
+    }
 }
