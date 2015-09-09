@@ -73,4 +73,17 @@ public class ScheduleEngineTests {
         assertEquals(se.getId(), toCommit.get(0).getId());
         assertEquals(se1.getId(), toCommit.get(1).getId());
     }
+
+    @Test
+    public void testGetScheduleEntriesToDelete_OnlyEmptyRecipesReturned() throws Exception {
+        ScheduleEntry se = new ScheduleEntry(new DateTime().getMillis(), Collections.singletonList(new Recipe()));
+        ScheduleEntry se1 = new ScheduleEntry(new DateTime().getMillis(), Collections.singletonList(new Recipe()));
+        ScheduleEntry se2 = new ScheduleEntry(new DateTime().getMillis(), Collections.<Recipe>emptyList());
+        List<ScheduleEntry> entries = Arrays.asList(se, se1, se2);
+
+        List<ScheduleEntry> toDelete = scheduleCalculatorEngine.getScheduleEntriesToDelete(entries);
+        assertNotNull(toDelete);
+        assertEquals(1, toDelete.size());
+        assertEquals(se2.getId(), toDelete.get(0).getId());
+    }
 }

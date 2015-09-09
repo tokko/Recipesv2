@@ -31,15 +31,19 @@ public class ScheduleCalculatorEngine {
     }
 
     public List<ScheduleEntry> getScheduleEntriesToCommit(List<ScheduleEntry> entries) {
+        return getEmptyEntries(entries, false);
+    }
+
+    private List<ScheduleEntry> getEmptyEntries(List<ScheduleEntry> entries, boolean b) {
         List<ScheduleEntry> prunedList = new ArrayList<>();
         for (ScheduleEntry entry : entries) {
-            if (!entry.getRecipes().isEmpty())
+            if (b == entry.getRecipes().isEmpty())
                 prunedList.add(entry);
         }
         return prunedList;
     }
 
-    public List<ScheduleEntry> getScheduleEntriesToDelete(Iterable<ScheduleEntry> entries) {
-        return null;
+    public List<ScheduleEntry> getScheduleEntriesToDelete(List<ScheduleEntry> entries) {
+        return getEmptyEntries(entries, true);
     }
 }
