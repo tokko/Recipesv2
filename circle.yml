@@ -12,14 +12,20 @@ dependencies:
   #override:
   #  - (source scripts/environmentSetup.sh && getAndroidSDK)
 test:
-  override:
+  pre:
     - chmod +x gradlew
     - emulator -avd circleci-android21 -no-audio -no-window:
         background: true
         parallel: true
+    - (./gradlew assemble):
+      timeout: 1200
+    - (./gradlew assembleTest):
+      timeout: 1200
+  override:
     - ./gradlew test
     - circle-android wait-for-boot
-    - ./gradlew connectedAndroidTest
+    - (./gradlew connectedAndroidTest):
+      timeout: 1200
      # copy the build outputs to artifacts
     #- cp -r my-project/build/outputs $CIRCLE_ARTIFACTS
     # copy the test results to the test results directory.
