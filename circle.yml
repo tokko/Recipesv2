@@ -23,4 +23,4 @@ test:
     # copy the test results to the test results directory.
     - ls -Ra
     - cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS
-    - cp -r backend/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+    - cp -r backend/build/reports/tests/classes/* $CIRCLE_TEST_REPORTS
