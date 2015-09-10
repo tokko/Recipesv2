@@ -17,14 +17,14 @@ test:
     - emulator -avd circleci-android21 -no-audio -no-window:
         background: true
         parallel: true
-    - (./gradlew assemble):
+    - "(./gradlew assemble)":
       timeout: 1200
-    - (./gradlew assembleTest):
+    - "(./gradlew assembleTest)":
       timeout: 1200
   override:
     - ./gradlew test
     - circle-android wait-for-boot
-    - (./gradlew connectedAndroidTest):
+    - "(./gradlew connectedAndroidTest)":
       timeout: 1200
      # copy the build outputs to artifacts
     #- cp -r my-project/build/outputs $CIRCLE_ARTIFACTS
