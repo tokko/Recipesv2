@@ -9,6 +9,10 @@ public class Quantity {
         this.quantity = quantity;
     }
 
+    public Quantity(String unit) {
+        this.unit = unit;
+    }
+
     public String getUnit() {
         return unit;
     }
