@@ -1,9 +1,16 @@
 machine:
+  environment:
+    ANDROID_HOME: /home/ubuntu/android
   java:
     version: oraclejdk8
 dependencies:
   pre:
     - chmod +x gradlew
+  cache_directories:
+      - ~/.android
+      - ~/android
+  #override:
+  #  - (source scripts/environmentSetup.sh && getAndroidSDK)
 test:
   override:
     - chmod +x gradlew
@@ -16,4 +23,4 @@ test:
      # copy the build outputs to artifacts
     #- cp -r my-project/build/outputs $CIRCLE_ARTIFACTS
     # copy the test results to the test results directory.
-    - cp -r my-project/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+    - cp -r Recipesv2/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
