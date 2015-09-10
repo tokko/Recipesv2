@@ -42,4 +42,11 @@ public class QuantityCalculatorEngineTests {
     public void testUpUnit_UnsuppordedUnit_ThrowsException() throws Exception {
         engine.upQuantity(new Quantity("holabaloo"));
     }
+
+    @Test
+    public void testUpQuantity_Grams() throws Exception {
+        Quantity uppedQuantity = engine.upQuantity(new Quantity(Units.G, 1345));
+        assertEquals(1.345, uppedQuantity.getQuantity(), 0);
+        assertEquals(Units.KG, uppedQuantity.getUnit());
+    }
 }

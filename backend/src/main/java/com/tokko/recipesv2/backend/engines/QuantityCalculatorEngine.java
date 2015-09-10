@@ -24,8 +24,12 @@ public class QuantityCalculatorEngine {
         throw new UnsupportedOperationException("Unsupported unit");
     }
 
-    public void upQuantity(Quantity holabaloo) {
-
+    public Quantity upQuantity(Quantity q) {
+        if (q.getUnit().equals(Units.G)) {
+            Quantity q1 = new Quantity(Units.KG);
+            q1.setQuantity(q.getQuantity() / 1000);
+            return q1;
+        }
         throw new UnsupportedOperationException("Unsupported unit");
     }
 }
