@@ -15,12 +15,12 @@ test:
     #- emulator -avd circleci-android22 -no-audio -no-window:
     #    background: true
     #    parallel: true
-    - ./gradlew testRelease
+    - ./gradlew test
     #- circle-android wait-for-boot
     #- ./gradlew connectedAndroidTest
      # copy the build outputs to artifacts
     #- cp -r my-project/build/outputs $CIRCLE_ARTIFACTS
     # copy the test results to the test results directory.
     - ls -Ra
-    - cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+    - cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS
     - cp -r backend/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
