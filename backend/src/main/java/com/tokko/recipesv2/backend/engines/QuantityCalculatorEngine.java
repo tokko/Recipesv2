@@ -1,10 +1,12 @@
 package com.tokko.recipesv2.backend.engines;
 
+import com.tokko.recipesv2.backend.entities.Ingredient;
 import com.tokko.recipesv2.backend.units.Quantity;
 import com.tokko.recipesv2.backend.units.Units;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class QuantityCalculatorEngine {
 
@@ -34,5 +36,25 @@ public class QuantityCalculatorEngine {
             return q;
         }
         throw new UnsupportedOperationException("Unsupported unit");
+    }
+
+    public List<Ingredient> toBaseQuantities(List<Ingredient> ingredients) {
+        ingredients.stream().forEach(new Consumer<Ingredient>() {
+            @Override
+            public void accept(Ingredient ingredient) {
+                ingredient.setQuantity(getBaseQuantity(ingredient.getQuantity()));
+            }
+        });
+        return ingredients;
+    }
+
+    public List<Ingredient> upQuantities(List<Ingredient> ingredients) {
+        ingredients.stream().forEach(new Consumer<Ingredient>() {
+            @Override
+            public void accept(Ingredient ingredient) {
+                ingredient.setQuantity(upQuantity(ingredient.getQuantity()));
+            }
+        });
+        return ingredients;
     }
 }

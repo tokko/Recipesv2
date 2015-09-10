@@ -33,4 +33,10 @@ public class Quantity {
     public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
+
+    public void add(Quantity q) {
+        if (!unit.equals(q.getUnit()))
+            throw new UnsupportedOperationException("Units does not match");
+        quantity += q.getQuantity();
+    }
 }
