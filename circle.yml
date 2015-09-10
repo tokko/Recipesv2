@@ -12,12 +12,12 @@ dependencies:
 test:
   override:
     - chmod +x gradlew
-    #- emulator -avd circleci-android22 -no-audio -no-window:
-    #    background: true
-    #    parallel: true
+    - emulator -avd circleci-android21 -no-audio -no-window:
+        background: true
+        parallel: true
     - ./gradlew test
-    #- circle-android wait-for-boot
-    #- ./gradlew connectedAndroidTest
+    - circle-android wait-for-boot
+    - ./gradlew connectedAndroidTest
      # copy the build outputs to artifacts
     #- cp -r my-project/build/outputs $CIRCLE_ARTIFACTS
     # copy the test results to the test results directory.
