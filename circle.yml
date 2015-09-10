@@ -6,7 +6,7 @@ dependencies:
     - chmod +x gradlew
   cache_directories:
       - ~/.android
-      - ~/android
+     # - ~/android
   #override:
   #  - (source scripts/environmentSetup.sh && getAndroidSDK)
 test:
@@ -22,4 +22,5 @@ test:
     #- cp -r my-project/build/outputs $CIRCLE_ARTIFACTS
     # copy the test results to the test results directory.
     - ls -rA
-    #- cp -r Recipesv2/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+    - cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+    - cp -r backend/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
