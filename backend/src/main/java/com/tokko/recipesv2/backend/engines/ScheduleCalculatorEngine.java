@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 public class ScheduleCalculatorEngine {
     public static final int DAYS_AHEAD = 20;
@@ -19,7 +18,7 @@ public class ScheduleCalculatorEngine {
         for (int i = 0; i < DAYS_AHEAD; i++, dateTime = dateTime.plusDays(1)) {
             set.add(new ScheduleEntry(dateTime.getMillis()));
         }
-        return set.stream().collect(Collectors.<ScheduleEntry>toList());
+        return new ArrayList<>(set);
     }
 
     private void removeFutureEntries(DateTime dateTime, List<ScheduleEntry> entries) {

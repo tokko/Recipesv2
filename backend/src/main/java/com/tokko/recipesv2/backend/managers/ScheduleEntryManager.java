@@ -26,7 +26,8 @@ public class ScheduleEntryManager {
     public List<ScheduleEntry> getSchedule(long date, String email){
         RecipeUser user = recipeUserRa.getUserByEmail(email);
         List<ScheduleEntry> entries = scheduleEntryRa.getScheduleEntries(date, user);
-        return scheduleCalculatorEngine.expandSchedule(new DateTime(date), entries);
+        List<ScheduleEntry> scheduleEntries = scheduleCalculatorEngine.expandSchedule(new DateTime(date), entries);
+        return scheduleEntries;
     }
 
     public void commitSchedule(List<ScheduleEntry> entries, String email) {

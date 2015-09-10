@@ -86,7 +86,8 @@ public class RecipesApi {
             path = "schedule",
             httpMethod = ApiMethod.HttpMethod.GET)
     public CollectionResponse<ScheduleEntry> getSchedule(@Named("time") Long time, User user){
-        return CollectionResponse.<ScheduleEntry>builder().setItems(scheduleEntryManager.getSchedule(time, user.getEmail())).build();
+        List<ScheduleEntry> schedule = scheduleEntryManager.getSchedule(time, user.getEmail());
+        return CollectionResponse.<ScheduleEntry>builder().setItems(schedule).build();
     }
 
     @ApiMethod(
