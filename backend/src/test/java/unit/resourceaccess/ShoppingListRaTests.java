@@ -14,11 +14,14 @@ import org.junit.Test;
 import static com.tokko.recipesv2.backend.resourceaccess.OfyService.ofy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class ShoppingListRaTests extends TestsWithObjectifyStorage {
 
     private RecipeUser user;
     private ShoppingListRa shoppingListRastRa;
+    private Grocery g;
+    private Ingredient i;
 
     @Before
     public void setUp() throws Exception {
@@ -26,27 +29,26 @@ public class ShoppingListRaTests extends TestsWithObjectifyStorage {
         user = new RecipeUser("email");
         ofy().save().entity(user).now();
         shoppingListRastRa = new ShoppingListRa();
-    }
 
-    @Test
-    public void testCommitShoppingList_DoesNotExist_IsSaved() throws Exception {
-        Grocery g = new Grocery();
+        g = new Grocery();
         g.setUser(user);
         g.setTitle("grocery");
         g.prepare();
         ofy().save().entity(g).now();
         g.load();
 
-        Ingredient i = new Ingredient();
+        i = new Ingredient();
         i.setUser(user);
         i.setGrocery(g);
         i.prepare();
         ofy().save().entity(i).now();
         i.load();
+    }
 
+    @Test
+    public void testCommitShoppingList_DoesNotExist_IsSaved() throws Exception {
         ShoppingListItem sli = new ShoppingListItem();
         sli.ingredient = i;
-
         ShoppingList sl = new ShoppingList();
         sl.setDate(new DateTime().withDate(2015, 8, 5));
         sl.addItem(sli);
@@ -57,5 +59,23 @@ public class ShoppingListRaTests extends TestsWithObjectifyStorage {
         assertNotNull(saved);
         assertEquals(1, saved.getItems().size());
         assertEquals(i.getId(), saved.getItems().get(0).ingredient.getId());
+    }
+
+    @Test
+    public void testWithDeletedIngredient_IngredientIsDeleted() throws Exception {
+        ShoppingListItem sli = new ShoppingListItem();
+        sli.ingredient = i;
+        ShoppingList sl = new ShoppingList();
+        sl.setDate(new DateTime().withDate(2015, 8, 5));
+        sl.addItem(sli);
+        sl.prepare();
+        ofy().save().entity(sl).now();
+
+        sl.getItems().clear();
+
+        shoppingListRastRa.commitShoppingList(sl, user);
+
+        ShoppingList saved = ofy().load().type(ShoppingList.class).parent(user).id(sl.getId()).now();
+        assertTrue(saved.getItems().isEmpty());
     }
 }
