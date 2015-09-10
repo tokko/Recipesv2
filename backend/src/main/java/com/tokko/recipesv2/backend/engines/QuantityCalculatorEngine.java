@@ -23,4 +23,9 @@ public class QuantityCalculatorEngine {
         }
         throw new UnsupportedOperationException("Unsupported unit");
     }
+
+    public void upQuantity(Quantity holabaloo) {
+
+        throw new UnsupportedOperationException("Unsupported unit");
+    }
 }

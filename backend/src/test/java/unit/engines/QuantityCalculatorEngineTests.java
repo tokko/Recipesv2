@@ -37,4 +37,9 @@ public class QuantityCalculatorEngineTests {
         assertEquals(baseQuantity.getQuantity(), 500, 0);
         assertEquals(Units.G, baseQuantity.getUnit());
     }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testUpUnit_UnsuppordedUnit_ThrowsException() throws Exception {
+        engine.upQuantity(new Quantity("holabaloo"));
+    }
 }
