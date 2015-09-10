@@ -17,12 +17,12 @@ test:
     - emulator -avd circleci-android21 -no-audio -no-window:
         background: true
         parallel: true
-    - (./gradlew assemble):
-        timeout: 1200
-    - (./gradlew assembleTest):
-        timeout: 1200
+#    - (./gradlew assemble):
+#        timeout: 1200
+#    - (./gradlew assembleTest):
+#        timeout: 1200
   override:
-    - ./gradlew test
+    - ./gradlew app:testRelease backend:test
     - circle-android wait-for-boot
     - (./gradlew connectedAndroidTest):
         timeout: 1200
