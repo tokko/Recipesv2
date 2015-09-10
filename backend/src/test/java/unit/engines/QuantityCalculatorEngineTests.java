@@ -30,4 +30,11 @@ public class QuantityCalculatorEngineTests {
         assertEquals(1500, baseQuantity.getQuantity(), 0);
         assertEquals(Units.G, baseQuantity.getUnit());
     }
+
+    @Test
+    public void testGetBaseQuantity_Grams() throws Exception {
+        Quantity baseQuantity = engine.getBaseQuantity(new Quantity(Units.G, 500));
+        assertEquals(baseQuantity.getQuantity(), 500, 0);
+        assertEquals(Units.G, baseQuantity.getUnit());
+    }
 }
