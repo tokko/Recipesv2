@@ -13,6 +13,11 @@ public class Quantity {
         this.unit = unit;
     }
 
+    public Quantity(String unit, double quantity) {
+        this.unit = unit;
+        this.quantity = quantity;
+    }
+
     public String getUnit() {
         return unit;
     }

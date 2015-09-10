@@ -18,7 +18,7 @@ public class QuantityCalculatorEngine {
         }
         if (q.getUnit().equals(Units.KG)) {
             Quantity q1 = new Quantity(Units.G);
-            q1.setQuantity(q.getQuantity() / 1000);
+            q1.setQuantity(q.getQuantity() * 1000);
             return q1;
         }
         throw new UnsupportedOperationException("Unsupported unit");
