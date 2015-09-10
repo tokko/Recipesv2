@@ -14,6 +14,7 @@ import org.junit.Test;
 import static com.tokko.recipesv2.backend.resourceaccess.OfyService.ofy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class ShoppingListRaTests extends TestsWithObjectifyStorage {
@@ -69,6 +70,7 @@ public class ShoppingListRaTests extends TestsWithObjectifyStorage {
         sl.setDate(new DateTime().withDate(2015, 8, 5));
         sl.addItem(sli);
         sl.prepare();
+        sl.setUser(user);
         ofy().save().entity(sl).now();
 
         sl.getItems().clear();
@@ -77,5 +79,22 @@ public class ShoppingListRaTests extends TestsWithObjectifyStorage {
 
         ShoppingList saved = ofy().load().type(ShoppingList.class).parent(user).id(sl.getId()).now();
         assertTrue(saved.getItems().isEmpty());
+    }
+
+    @Test
+    public void testDeleteShoppingList_IsDeleted() throws Exception {
+        ShoppingListItem sli = new ShoppingListItem();
+        sli.ingredient = i;
+        ShoppingList sl = new ShoppingList();
+        sl.setDate(new DateTime().withDate(2015, 8, 5));
+        sl.addItem(sli);
+        sl.setUser(user);
+        sl.prepare();
+        ofy().save().entity(sl).now();
+
+        shoppingListRastRa.deleteShoppingList(sl);
+
+        ShoppingList saved = ofy().load().type(ShoppingList.class).parent(user).id(sl.getId()).now();
+        assertNull(saved);
     }
 }

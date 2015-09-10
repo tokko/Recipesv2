@@ -16,4 +16,8 @@ public class ShoppingListRa {
         ShoppingList safe = key.safe();
         return safe;
     }
+
+    public void deleteShoppingList(ShoppingList list) {
+        ofy().delete().entity(list).now();
+    }
 }
