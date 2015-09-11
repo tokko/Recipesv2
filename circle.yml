@@ -22,7 +22,7 @@ test:
 #    - (./gradlew assembleTest):
 #        timeout: 1200
   override:
-    - ./gradlew app:testRelease backend:test
+    - ./gradlew app:testRelease backend:test:
         parallel: true
     - circle-android wait-for-boot:
         parallel: true
