@@ -23,7 +23,9 @@ test:
 #        timeout: 1200
   override:
     - ./gradlew app:testRelease backend:test
-    - circle-android wait-for-boot
+        parallel: true
+    - circle-android wait-for-boot:
+        parallel: true
     - (./gradlew connectedAndroidTestDebug -PdisablePreDex):
         timeout: 1200
         parallel: true
