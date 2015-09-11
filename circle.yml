@@ -22,7 +22,7 @@ test:
 #    - (./gradlew assembleTest):
 #        timeout: 1200
   override:
-    - ./gradlew app:testRelease backend:test:
+    - ./gradlew app:testRelease backend:test -PdisablePreDex):
         parallel: true
     - circle-android wait-for-boot:
         parallel: true
@@ -32,7 +32,6 @@ test:
      # copy the build outputs to artifacts
     #- cp -r my-project/build/outputs $CIRCLE_ARTIFACTS
     # copy the test results to the test results directory.
-    - ls -Ra
     - cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS
     - cp -r app/build/reports/androidTests/connected/* $CIRCLE_TEST_REPORTS
     - cp -r backend/build/reports/tests/classes/* $CIRCLE_TEST_REPORTS
