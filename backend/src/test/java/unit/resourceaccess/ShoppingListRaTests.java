@@ -97,4 +97,22 @@ public class ShoppingListRaTests extends TestsWithObjectifyStorage {
         ShoppingList saved = ofy().load().type(ShoppingList.class).parent(user).id(sl.getId()).now();
         assertNull(saved);
     }
+
+    @Test
+    public void testGetLatestShoppingList_ReturnsLatest() throws Exception {
+        ShoppingList sl = new ShoppingList();
+        sl.setDate(new DateTime().withDate(2015, 8, 5));
+        sl.setUser(user);
+
+        ShoppingList sl1 = new ShoppingList();
+        sl1.setDate(new DateTime().withDate(2015, 8, 6));
+        sl1.setUser(user);
+
+        ofy().save().entities(sl, sl1).now();
+
+        ShoppingList latest = shoppingListRastRa.getLatestShoppingList(user);
+
+        assertNotNull(latest);
+        assertEquals(sl1.getId(), latest.getId());
+    }
 }
