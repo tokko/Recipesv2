@@ -13,8 +13,7 @@ import static com.tokko.recipesv2.backend.resourceaccess.OfyService.ofy;
 
 public class ShoppingListRa {
 
-    public ShoppingList commitShoppingList(ShoppingList sl, RecipeUser user) {
-        sl.setUser(user);
+    public ShoppingList commitShoppingList(ShoppingList sl) {
         Key<ShoppingList> now = ofy().save().entity(sl).now();
         LoadResult<ShoppingList> key = ofy().load().key(now);
         ShoppingList safe = key.safe();

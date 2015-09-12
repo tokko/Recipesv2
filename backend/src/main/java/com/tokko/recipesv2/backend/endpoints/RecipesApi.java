@@ -13,10 +13,12 @@ import com.tokko.recipesv2.backend.engines.QuantityCalculatorEngine;
 import com.tokko.recipesv2.backend.entities.Grocery;
 import com.tokko.recipesv2.backend.entities.Recipe;
 import com.tokko.recipesv2.backend.entities.ScheduleEntry;
+import com.tokko.recipesv2.backend.entities.ShoppingList;
 import com.tokko.recipesv2.backend.managers.GroceryManager;
 import com.tokko.recipesv2.backend.managers.RecipeManager;
 import com.tokko.recipesv2.backend.managers.RecipeUserManager;
 import com.tokko.recipesv2.backend.managers.ScheduleEntryManager;
+import com.tokko.recipesv2.backend.managers.ShoppingListManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +56,9 @@ public class RecipesApi {
 
     @Inject
     private ScheduleEntryManager scheduleEntryManager;
+
+    @Inject
+    private ShoppingListManager shoppingListManager;
 
     public RecipesApi() {
         inject(this);
@@ -120,6 +125,14 @@ public class RecipesApi {
     public void registerDevice(@com.google.api.server.spi.config.Named("regid") String regid, User user) throws UnauthorizedException {
         if (user == null) throw new UnauthorizedException("You shall not pass!");
         recipeUserManager.addRegistrationIdToRecipeUser(user.getEmail(), regid);
+    }
+
+    @ApiMethod(
+            name = "getShoppinhList",
+            path = "shoppingList",
+            httpMethod = ApiMethod.HttpMethod.GET)
+    public ShoppingList getShoppingList(User user) {
+        return shoppingListManager.getGeneralList(user.getEmail());
     }
 
     @ApiMethod(

@@ -23,7 +23,8 @@ public class RecipeUserManager {
             user = recipeUserRa.createUser(email);
             ShoppingList sl = new ShoppingList();
             sl.setId(Constants.GENERAL_LIST_ID);
-            shoppingListRa.commitShoppingList(sl, user);
+            sl.setUser(user);
+            shoppingListRa.commitShoppingList(sl);
         }
         user.getRegistrationIds().add(registrationId);
         recipeUserRa.persistUser(user);

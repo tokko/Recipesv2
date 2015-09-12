@@ -54,8 +54,8 @@ public class ShoppingListRaTests extends TestsWithObjectifyStorage {
         ShoppingList sl = new ShoppingList();
         sl.setDate(new DateTime().withDate(2015, 8, 5));
         sl.addItem(sli);
-
-        shoppingListRastRa.commitShoppingList(sl, user);
+        sl.setUser(user);
+        shoppingListRastRa.commitShoppingList(sl);
 
         ShoppingList saved = ofy().load().type(ShoppingList.class).parent(user).id(sl.getId()).now();
         assertNotNull(saved);
@@ -76,7 +76,7 @@ public class ShoppingListRaTests extends TestsWithObjectifyStorage {
 
         sl.getItems().clear();
 
-        shoppingListRastRa.commitShoppingList(sl, user);
+        shoppingListRastRa.commitShoppingList(sl);
 
         ShoppingList saved = ofy().load().type(ShoppingList.class).parent(user).id(sl.getId()).now();
         assertTrue(saved.getItems().isEmpty());

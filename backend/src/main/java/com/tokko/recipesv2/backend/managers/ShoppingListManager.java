@@ -1,6 +1,9 @@
 package com.tokko.recipesv2.backend.managers;
 
 import com.google.inject.Inject;
+import com.tokko.recipesv2.backend.endpoints.Constants;
+import com.tokko.recipesv2.backend.entities.RecipeUser;
+import com.tokko.recipesv2.backend.entities.ShoppingList;
 import com.tokko.recipesv2.backend.resourceaccess.RecipeUserRa;
 import com.tokko.recipesv2.backend.resourceaccess.ShoppingListRa;
 
@@ -13,5 +16,16 @@ public class ShoppingListManager {
     public ShoppingListManager(ShoppingListRa shoppingListRa, RecipeUserRa recipeUserRa) {
         this.shoppingListRa = shoppingListRa;
         this.recipeUserRa = recipeUserRa;
+    }
+
+    public ShoppingList getGeneralList(String email) {
+        RecipeUser user = recipeUserRa.getUserByEmail(email);
+        return shoppingListRa.getShoppingList(user, Constants.GENERAL_LIST_ID);
+    }
+
+    public void commitShoppingList(ShoppingList shoppingList, String email) {
+        RecipeUser user = recipeUserRa.getUserByEmail(email);
+        shoppingList.setUser(user);
+        shoppingListRa.commitShoppingList(shoppingList);
     }
 }
