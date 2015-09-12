@@ -34,4 +34,8 @@ public class ShoppingListRa {
             return list.get(0);
         return null;
     }
+
+    public ShoppingList getShoppingList(RecipeUser user, Long id) {
+        return ofy().load().type(ShoppingList.class).parent(user).id(id).now();
+    }
 }

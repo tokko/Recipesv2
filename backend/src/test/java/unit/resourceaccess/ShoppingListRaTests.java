@@ -135,5 +135,16 @@ public class ShoppingListRaTests extends TestsWithObjectifyStorage {
         assertEquals(sl.getId(), latest.getId());
     }
 
+    @Test
+    public void testGetShoppingList_ReturnsList() throws Exception {
+        ShoppingList ls = new ShoppingList();
+        ls.setUser(user);
 
+        ofy().save().entity(ls).now();
+
+        ShoppingList saved = shoppingListRastRa.getShoppingList(user, ls.getId());
+
+        assertNotNull(saved);
+        assertEquals(ls.getId(), saved.getId());
+    }
 }
