@@ -1,6 +1,7 @@
 package unit.resourceaccess;
 
 import com.google.appengine.repackaged.org.joda.time.DateTime;
+import com.tokko.recipesv2.backend.endpoints.Constants;
 import com.tokko.recipesv2.backend.entities.Grocery;
 import com.tokko.recipesv2.backend.entities.Ingredient;
 import com.tokko.recipesv2.backend.entities.RecipeUser;
@@ -115,4 +116,24 @@ public class ShoppingListRaTests extends TestsWithObjectifyStorage {
         assertNotNull(latest);
         assertEquals(sl1.getId(), latest.getId());
     }
+
+    @Test
+    public void testGetLatestShoppingList_DoesNotReturnGeneralList() throws Exception {
+        ShoppingList sl = new ShoppingList();
+        sl.setDate(new DateTime().withDate(2015, 8, 5));
+        sl.setUser(user);
+        ShoppingList sl1 = new ShoppingList();
+        sl1.setDate(new DateTime().withDate(2015, 8, 6));
+        sl1.setUser(user);
+        sl1.setId(Constants.GENERAL_LIST_ID);
+
+        ofy().save().entities(sl, sl1).now();
+
+        ShoppingList latest = shoppingListRastRa.getLatestShoppingList(user);
+
+        assertNotNull(latest);
+        assertEquals(sl.getId(), latest.getId());
+    }
+
+
 }

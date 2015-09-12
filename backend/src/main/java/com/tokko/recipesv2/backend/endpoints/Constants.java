@@ -6,5 +6,5 @@ public class Constants {
     public static final String WEB_CLIENT_ID = "826803278070-0gs94ct68qhnn9b2tpi1mnuptu5al77n.apps.googleusercontent.com";
     public static final String ANDROID_AUDIENCE = WEB_CLIENT_ID;
     public static final String EMAIL_SCOPE = "https://www.googleapis.com/auth/userinfo.email";
-    public static Long GeneralListId = 1L;
+    public static Long GENERAL_LIST_ID = 1L;
 }

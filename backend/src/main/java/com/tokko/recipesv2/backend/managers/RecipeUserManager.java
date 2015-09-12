@@ -22,7 +22,7 @@ public class RecipeUserManager {
         if (user == null) {
             user = recipeUserRa.createUser(email);
             ShoppingList sl = new ShoppingList();
-            sl.setId(Constants.GeneralListId);
+            sl.setId(Constants.GENERAL_LIST_ID);
             shoppingListRa.commitShoppingList(sl, user);
         }
         user.getRegistrationIds().add(registrationId);
