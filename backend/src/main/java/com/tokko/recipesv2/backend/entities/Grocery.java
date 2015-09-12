@@ -34,6 +34,11 @@ public class Grocery extends BaseEntity<Long> {
         this(null, title, null);
     }
 
+    public Grocery(long id, String title) {
+        this.id = id;
+        this.title = title;
+    }
+
     public Long getId() {
         return id;
     }

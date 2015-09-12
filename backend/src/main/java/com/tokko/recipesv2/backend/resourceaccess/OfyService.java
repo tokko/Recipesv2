@@ -8,6 +8,8 @@ import com.tokko.recipesv2.backend.entities.Ingredient;
 import com.tokko.recipesv2.backend.entities.Recipe;
 import com.tokko.recipesv2.backend.entities.RecipeUser;
 import com.tokko.recipesv2.backend.entities.RegistrationRecord;
+import com.tokko.recipesv2.backend.entities.ScheduleEntry;
+import com.tokko.recipesv2.backend.entities.ShoppingList;
 
 /**
  * Objectify service wrapper so we can statically register our persistence classes
@@ -21,6 +23,8 @@ public class OfyService {
         ObjectifyService.register(Grocery.class);
         ObjectifyService.register(Recipe.class);
         ObjectifyService.register(Ingredient.class);
+        ObjectifyService.register(ScheduleEntry.class);
+        ObjectifyService.register(ShoppingList.class);
     }
 
     public static Objectify ofy() {

@@ -7,41 +7,48 @@ branches:
     - alpha
     - beta
     - prod
+env:
+  global:
+    - ANDROID_API_LEVEL=21
+    - ANDROID_BUILD_TOOLS_VERSION=21.1.1
+    - ANDROID_ABI=armeabi-v7a
+    - ADB_INSTALL_TIMEOUT=8 # minutes (2 minutes by default)
 android:
   components:
   - platform-tools
   - tools
-  - build-tools-21.1.1
-  - build-tools-22.0.1
+  - build-tools-22.0.2
   - android-22
+  - android-$ANDROID_API_LEVEL
   - extra-google-google_play_services
   - extra-google-m2repository
   - extra-android-m2repository
-  - addon-google_apis-google-21
-  - sys-img-armeabi-v7a-android-21
+  - addon-google_apis-google-$ANDROID_API_LEVEL
+  - sys-img-$ANDROID_ABI-android-$ANDROID_API_LEVEL
+  - build-tools-$ANDROID_BUILD_TOOLS_VERSION
+  - android-$ANDROID_API_LEVEL
 jdk:
 - oraclejdk8
 
-cache:
-  directories:
-    - $HOME/.gradle
+cache: false
+  #directories:
+  #  - $HOME/.gradle
 
 before_script:
   - export JAVA_OPTS=-Xmx4096m #TODO: REMOVE THESE LINES
   - export GRADLE_OPTS="-Xmx4096m -XX:MaxPermSize=4096m"
   - chmod +x gradlew
-  - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
-  - emulator -avd test -no-skin -no-audio -no-window &
-
+  #- echo no | android create avd --force -n test -t android-$ANDROID_API_LEVEL --abi $ANDROID_ABI
+  #- emulator -avd test -no-skin -no-audio -no-window  &
 #before_deploy:
 #  - git config --global user.email "builds@travis-ci.com"
 #  - git config --global user.name "Travis CI"
 #  - ls -R
 script:
-  - "./gradlew testRelease --stacktrace"
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
-  - "./gradlew connectedAndroidTest --stacktrace"
+  - "./gradlew test --stacktrace"
+  #- android-wait-for-emulator
+  #- adb shell input keyevent 82 &
+  #- "./gradlew connectedAndroidTest --stacktrace"
  # - if [ "$TRAVIS_BRANCH" = "alpha" ]; then ./gradlew appengineUpdate; fi
  # - if [ "$TRAVIS_BRANCH" = "alpha" ]; then ./gradlew publishRelease; fi
 #after_success:

@@ -1,11 +1,11 @@
 package com.tokko.recipesv2.backend.managers;
 
 import com.google.inject.Inject;
-import com.tokko.recipesv2.backend.engines.IngredientCrudEngine;
+import com.tokko.recipesv2.backend.resourceaccess.IngredientRa;
 import com.tokko.recipesv2.backend.engines.IngredientEngine;
 import com.tokko.recipesv2.backend.engines.MessagingEngine;
-import com.tokko.recipesv2.backend.engines.RecipeCrudEngine;
-import com.tokko.recipesv2.backend.engines.RecipeUserCrudEngine;
+import com.tokko.recipesv2.backend.resourceaccess.RecipeRa;
+import com.tokko.recipesv2.backend.resourceaccess.RecipeUserRa;
 import com.tokko.recipesv2.backend.entities.Grocery;
 import com.tokko.recipesv2.backend.entities.Ingredient;
 import com.tokko.recipesv2.backend.entities.Recipe;
@@ -14,44 +14,44 @@ import com.tokko.recipesv2.backend.entities.RecipeUser;
 import java.util.List;
 
 public class RecipeManager {
-    private RecipeUserCrudEngine recipeUserCrudEngine;
-    private RecipeCrudEngine recipeCrudEngine;
+    private RecipeUserRa recipeUserRa;
+    private RecipeRa recipeRa;
     private MessagingEngine messagingEngine;
-    private IngredientCrudEngine ingredientCrudEngine;
+    private IngredientRa ingredientRa;
     private IngredientEngine ingredientEngine;
     private GroceryManager groceryManager;
 
     @Inject
-    public RecipeManager(RecipeUserCrudEngine recipeUserCrudEngine,
-                         RecipeCrudEngine recipeCrudEngine,
+    public RecipeManager(RecipeUserRa recipeUserRa,
+                         RecipeRa recipeRa,
                          MessagingEngine messagingEngine,
-                         IngredientCrudEngine ingredientCrudEngine,
+                         IngredientRa ingredientRa,
                          IngredientEngine ingredientEngine,
                          GroceryManager groceryManager) {
-        this.recipeUserCrudEngine = recipeUserCrudEngine;
-        this.recipeCrudEngine = recipeCrudEngine;
+        this.recipeUserRa = recipeUserRa;
+        this.recipeRa = recipeRa;
         this.messagingEngine = messagingEngine;
-        this.ingredientCrudEngine = ingredientCrudEngine;
+        this.ingredientRa = ingredientRa;
         this.ingredientEngine = ingredientEngine;
         this.groceryManager = groceryManager;
     }
 
     public List<Recipe> listRecipesForUser(String email) {
-        RecipeUser user = recipeUserCrudEngine.getUserByEmail(email);
-        return recipeCrudEngine.listRecipesForUser(user);
+        RecipeUser user = recipeUserRa.getUserByEmail(email);
+        return recipeRa.listRecipesForUser(user);
     }
 
     public Recipe commitRecipe(Recipe recipe, String email) {
-        RecipeUser user = recipeUserCrudEngine.getUserByEmail(email);
+        RecipeUser user = recipeUserRa.getUserByEmail(email);
         List<Grocery> groceries = ingredientEngine.getGroceries(recipe.getIngredients());
         groceryManager.commitGroceries(groceries, user.getEmail());
-        ingredientCrudEngine.commitIngredients(recipe.getIngredients(), user);
+        ingredientRa.commitIngredients(recipe.getIngredients(), user);
         if(recipe.getId() != null){
-            Recipe existing = recipeCrudEngine.getRecipe(user, recipe.getId());
-            List<Ingredient> toDelete = ingredientCrudEngine.getIngredientsToDelete(recipe, existing);
-            ingredientCrudEngine.deleteIngredients(toDelete);
+            Recipe existing = recipeRa.getRecipe(user, recipe.getId());
+            List<Ingredient> toDelete = ingredientRa.getIngredientsToDelete(recipe, existing);
+            ingredientRa.deleteIngredients(toDelete);
         }
-        Recipe save = recipeCrudEngine.commitRecipe(recipe, user);
+        Recipe save = recipeRa.commitRecipe(recipe, user);
         if (save != null)
             messagingEngine.sendMessage(save, user);
         return save;

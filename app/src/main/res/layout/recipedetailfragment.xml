@@ -15,11 +15,24 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <com.tokko.recipesv2.views.EditTextViewSwitchable
-            android:id="@+id/recipe_title"
-            style="@android:style/TextAppearance.DeviceDefault.Medium"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.tokko.recipesv2.views.EditTextViewSwitchable
+                android:id="@+id/recipe_title"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <com.tokko.recipesv2.views.EditableIntegerTextViewSwitchable
+                android:id="@+id/recipe_helpings"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
         <com.tokko.recipesv2.views.EditableInstructionList
             android:id="@+id/instructionList"

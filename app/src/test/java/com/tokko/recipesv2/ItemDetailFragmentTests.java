@@ -13,8 +13,10 @@ import com.tokko.recipesv2.backend.entities.recipeApi.model.Grocery;
 import com.tokko.recipesv2.groceries.GroceryDetailFragment;
 import com.tokko.recipesv2.masterdetail.ItemDetailActivity;
 import com.tokko.recipesv2.masterdetail.ItemDetailFragment;
+import com.tokko.recipesv2.schedule.ScheduleFragment;
 import com.tokko.recipesv2.views.EditTextViewSwitchable;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -71,7 +73,10 @@ public class ItemDetailFragmentTests {
         startVisibleFragment(fragment);
         fragment.enterEditMode();
     }
-
+    @After
+    public void tearDown() throws Exception {
+        RoboGuice.Util.reset();
+    }
     @Test
     public void testEdit_IsEditing_DeleteButtonIsEnabled() throws Exception {
         ItemDetailFragment<Grocery> fragment = new GroceryDetailFragment();

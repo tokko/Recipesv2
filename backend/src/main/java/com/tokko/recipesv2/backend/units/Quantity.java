@@ -5,7 +5,17 @@ public class Quantity {
     private double quantity;
     private String unit;
 
-    public Quantity() {
+    public Quantity(double quantity) {
+        this.quantity = quantity;
+    }
+
+    public Quantity(String unit) {
+        this.unit = unit;
+    }
+
+    public Quantity(String unit, double quantity) {
+        this.unit = unit;
+        this.quantity = quantity;
     }
 
     public String getUnit() {
@@ -22,5 +32,11 @@ public class Quantity {
 
     public void setQuantity(double quantity) {
         this.quantity = quantity;
+    }
+
+    public void add(Quantity q) {
+        if (!unit.equals(q.getUnit()))
+            throw new UnsupportedOperationException("Units does not match");
+        quantity += q.getQuantity();
     }
 }

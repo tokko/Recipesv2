@@ -7,9 +7,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.tokko.recipesv2.ApiFactory;
-import com.tokko.recipesv2.backend.entities.recipeApi.model.Recipe;
 import com.tokko.recipesv2.gcm.GcmRegistrationService;
-import com.tokko.recipesv2.masterdetail.ItemListActivity;
+import com.tokko.recipesv2.schedule.ScheduleActivity;
 
 public class LoginActivity extends Activity {
     static final int REQUEST_ACCOUNT_PICKER = 2;
@@ -66,7 +65,8 @@ public class LoginActivity extends Activity {
 
     private void continueToNextActivity() {
         startService(new Intent(this, GcmRegistrationService.class));
-        startActivity(new Intent(this, ItemListActivity.class).putExtra(ItemListActivity.EXTRA_ENTITY_CLASS, Recipe.class));
+        //startActivity(new Intent(this, ItemListActivity.class).putExtra(ItemListActivity.EXTRA_ENTITY_CLASS, Recipe.class));
+        startActivity(new Intent(this, ScheduleActivity.class));
         finish();
     }
 }

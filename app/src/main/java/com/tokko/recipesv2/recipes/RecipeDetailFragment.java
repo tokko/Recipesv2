@@ -11,6 +11,7 @@ import com.tokko.recipesv2.backend.entities.recipeApi.model.Ingredient;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Recipe;
 import com.tokko.recipesv2.masterdetail.ItemDetailFragment;
 import com.tokko.recipesv2.views.EditTextViewSwitchable;
+import com.tokko.recipesv2.views.EditableIntegerTextViewSwitchable;
 import com.tokko.recipesv2.views.EditableListView;
 
 import java.io.IOException;
@@ -28,6 +29,9 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
     @InjectView(R.id.instructionList)
     private EditableListView<String> instructions;
 
+    @InjectView(R.id.recipe_helpings)
+    private EditableIntegerTextViewSwitchable helpings;
+
     @Inject
     private RecipeApi api;
     @Override
@@ -39,6 +43,7 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         title.setHint("Title");
+        helpings.setHint("Helpings");
     }
 
     @Override
@@ -53,6 +58,7 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
         title.setData(entity.getTitle());
         list.setData(entity.getIngredients());
         instructions.setData(entity.getInstructions());
+        helpings.setData(entity.getHelpings());
     }
 
     @Override
@@ -60,6 +66,7 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
         entity.setTitle(title.getData());
         entity.setIngredients(list.getData());
         entity.setInstructions(instructions.getData());
+        entity.setHelpings(helpings.getData());
         return entity;
     }
 

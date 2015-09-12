@@ -12,10 +12,15 @@ import com.google.inject.Inject;
 import com.tokko.recipesv2.backend.engines.QuantityCalculatorEngine;
 import com.tokko.recipesv2.backend.entities.Grocery;
 import com.tokko.recipesv2.backend.entities.Recipe;
+import com.tokko.recipesv2.backend.entities.ScheduleEntry;
+import com.tokko.recipesv2.backend.entities.ShoppingList;
 import com.tokko.recipesv2.backend.managers.GroceryManager;
 import com.tokko.recipesv2.backend.managers.RecipeManager;
 import com.tokko.recipesv2.backend.managers.RecipeUserManager;
+import com.tokko.recipesv2.backend.managers.ScheduleEntryManager;
+import com.tokko.recipesv2.backend.managers.ShoppingListManager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -49,6 +54,12 @@ public class RecipesApi {
     @Inject
     private QuantityCalculatorEngine quantityCalculatorEngine;
 
+    @Inject
+    private ScheduleEntryManager scheduleEntryManager;
+
+    @Inject
+    private ShoppingListManager shoppingListManager;
+
     public RecipesApi() {
         inject(this);
     }
@@ -76,6 +87,23 @@ public class RecipesApi {
     }
 
     @ApiMethod(
+            name = "getSchedule",
+            path = "schedule",
+            httpMethod = ApiMethod.HttpMethod.GET)
+    public CollectionResponse<ScheduleEntry> getSchedule(@Named("time") Long time, User user){
+        List<ScheduleEntry> schedule = scheduleEntryManager.getSchedule(time, user.getEmail());
+        return CollectionResponse.<ScheduleEntry>builder().setItems(schedule).build();
+    }
+
+    @ApiMethod(
+            name = "commitSchedule",
+            path = "schedule",
+            httpMethod = ApiMethod.HttpMethod.POST)
+    public void commitSchedule(CommitScheduleContainer entries, User user) {
+        scheduleEntryManager.commitSchedule(entries.entries, user.getEmail());
+    }
+
+    @ApiMethod(
             name = "listGroceries",
             path = "grocery",
             httpMethod = ApiMethod.HttpMethod.GET)
@@ -89,6 +117,7 @@ public class RecipesApi {
             return null;
         }
     }
+
     @ApiMethod(
             name = "registerDevice",
             path = "recipeUser",
@@ -99,12 +128,21 @@ public class RecipesApi {
     }
 
     @ApiMethod(
+            name = "getShoppinhList",
+            path = "shoppingList",
+            httpMethod = ApiMethod.HttpMethod.GET)
+    public ShoppingList getShoppingList(User user) {
+        return shoppingListManager.getGeneralList(user.getEmail());
+    }
+
+    @ApiMethod(
             name = "listUnits",
             path = "quantity",
             httpMethod = ApiMethod.HttpMethod.GET)
     public CollectionResponse<String> listUnits() throws UnauthorizedException {
         return CollectionResponse.<String>builder().setItems(quantityCalculatorEngine.listUnits()).build();
     }
+
     @ApiMethod(
             name = "get",
             path = "recipe/{id}",
@@ -136,5 +174,21 @@ public class RecipesApi {
     public CollectionResponse<Recipe> listRecipes(User user) {
         List<Recipe> recipeList = recipeManager.listRecipesForUser(user.getEmail());
         return CollectionResponse.<Recipe>builder().setItems(recipeList).build();
+    }
+
+    public static class CommitScheduleContainer {
+        public List<ScheduleEntry> entries;
+
+        public CommitScheduleContainer() {
+            this.entries = new ArrayList<>();
+        }
+
+        public List<ScheduleEntry> getEntries() {
+            return entries;
+        }
+
+        public void setEntries(List<ScheduleEntry> entries) {
+            this.entries = entries;
+        }
     }
 }

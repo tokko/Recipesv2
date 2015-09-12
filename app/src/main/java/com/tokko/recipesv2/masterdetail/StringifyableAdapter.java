@@ -1,8 +1,10 @@
 package com.tokko.recipesv2.masterdetail;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
@@ -10,10 +12,11 @@ import android.widget.Filterable;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.inject.Inject;
 import com.tokko.recipesv2.R;
-import com.tokko.recipesv2.backend.entities.recipeApi.model.Ingredient;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,11 +34,21 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
     private LayoutInflater inflater;
     private boolean delete;
 
+
+    private boolean isDraggable;
+
     @Inject
     public StringifyableAdapter(Context context) {
         this.context = context;
     }
 
+    public boolean isDraggable() {
+        return isDraggable;
+    }
+
+    public void setIsDraggable(boolean isDraggable) {
+        this.isDraggable = isDraggable;
+    }
     @Override
     public boolean areAllItemsEnabled() {
         return true;
@@ -85,6 +98,8 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
         TextView tv = (TextView) convertView.findViewById(textViewResourceId);
         tv.setText(getItemString(position));
         View deleteButton = convertView.findViewById(R.id.deleteImageButton);
+        convertView.setTag(getItem(position));
+        convertView.setOnTouchListener(new MyThouchListener());
         if (delete) {
             deleteButton.setTag(position);
             deleteButton.setOnClickListener(v -> removeItem((Integer) v.getTag()));
@@ -194,5 +209,26 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
 
     public void addItem(Integer isUpdatingPosition, T entity) {
         data.add(isUpdatingPosition, entity);
+    }
+
+    private final class MyThouchListener implements View.OnTouchListener {
+
+        @Override
+        public boolean onTouch(View view, MotionEvent event) {
+            if (!isDraggable) return false;
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                ClipData data = null;
+                try {
+                    data = ClipData.newPlainText(new AndroidJsonFactory().toPrettyString(view.getTag()), "");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+                view.startDrag(data, shadowBuilder, view, 0);
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 }
