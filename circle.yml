@@ -6,6 +6,9 @@ machine:
 dependencies:
   pre:
     - chmod +x gradlew
+      - curl -o $HOME/google_appengine_1.9.13.zip https://storage.googleapis.com/appengine-sdks/featured/appengine-java-sdk-1.9.26.zip
+        - unzip -q -d $HOME $HOME/google_appengine_1.9.13.zip
+
   cache_directories:
       - ~/.android
      # - ~/android
@@ -17,12 +20,14 @@ test:
     - emulator -avd circleci-android21 -no-audio -no-window:
         background: true
         parallel: true
-#    - (./gradlew assemble):
-#        timeout: 1200
-#    - (./gradlew assembleTest):
-#        timeout: 1200
+    - ./gradlew increaseVersionCode incrementVersionName
+    - ./gradlew incrementVersionNumber
+    - (./gradlew assemble -PdisablePreDex):
+        timeout: 1200
+    - (./gradlew assembleTest -PdisablePreDex):
+        timeout: 1200
   override:
-    - (./gradlew app:testRelease backend:test -PdisablePreDex):
+    - (./gradlew app:testRelease backend:test):
         parallel: true
     - circle-android wait-for-boot:
         parallel: true
@@ -30,8 +35,18 @@ test:
         timeout: 1200
         parallel: true
      # copy the build outputs to artifacts
-    #- cp -r my-project/build/outputs $CIRCLE_ARTIFACTS
+#- cp -r my-project/build/outputs $CIRCLE_ARTIFACTS
     # copy the test results to the test results directory.
     - cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS
     - cp -r app/build/reports/androidTests/connected/* $CIRCLE_TEST_REPORTS
     - cp -r backend/build/reports/tests/classes/* $CIRCLE_TEST_REPORTS
+
+deployment:
+  appengine:
+    branch: alpha
+    commands:
+      - echo APPENGINE_TOKEN | $HOME/appengine-java-sdk/bin/appcfg.sh update --passin .
+      - git config --global user.email "builds@circleci.com"
+      - git config --global user.name "Circle CI"
+      - git commit -am "Update version number and codes for automatic deploy."
+      - then git push https://$GIT_CREDS@github.com/tokko/Recipesv2.git HEAD:master; fi
