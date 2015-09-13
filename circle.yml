@@ -22,7 +22,7 @@ test:
     - emulator -avd circleci-android21 -no-audio -no-window:
         background: true
         parallel: true
-    - ./gradlew increaseVersionCode incrementVersionName
+    - ./gradlew increaseVersionCode
     - ./gradlew incrementVersionNumber
     - (./gradlew assembleRelease -PdisablePreDex):
         timeout: 1200
