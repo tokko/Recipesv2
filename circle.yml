@@ -3,6 +3,8 @@ machine:
     version: oraclejdk8
   environment:
     JAVA_OPTS: "-Xms256m -Xmx2048m"
+    GRADLE_OPTS: "-Xmx2048m -XX:MaxPermSize=2048m"
+
 dependencies:
   pre:
     - chmod +x gradlew
@@ -22,21 +24,15 @@ test:
         parallel: true
     - ./gradlew increaseVersionCode incrementVersionName
     - ./gradlew incrementVersionNumber
-    - (./gradlew assemble -PdisablePreDex):
+    - (./gradlew assembleRelease -PdisablePreDex):
         timeout: 1200
     - (./gradlew assembleTest -PdisablePreDex):
         timeout: 1200
   override:
     - (./gradlew app:testRelease backend:test):
-        parallel: true
     - circle-android wait-for-boot:
-        parallel: true
     - (./gradlew connectedAndroidTestDebug -PdisablePreDex):
         timeout: 1200
-        parallel: true
-     # copy the build outputs to artifacts
-#- cp -r my-project/build/outputs $CIRCLE_ARTIFACTS
-    # copy the test results to the test results directory.
     - cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS
     - cp -r app/build/reports/androidTests/connected/* $CIRCLE_TEST_REPORTS
     - cp -r backend/build/reports/tests/classes/* $CIRCLE_TEST_REPORTS
