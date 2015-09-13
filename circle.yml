@@ -24,8 +24,8 @@ test:
         parallel: true
     - ./gradlew increaseVersionCode
     - ./gradlew incrementVersionNumber
-    - (./gradlew assembleRelease -PdisablePreDex):
-        timeout: 1200
+    #- (./gradlew assembleRelease -PdisablePreDex):
+    #    timeout: 1200
    # - (./gradlew assembleDebug -PdisablePreDex):
     #   timeout: 1200
   override:
@@ -34,9 +34,9 @@ test:
     #- circle-android wait-for-boot
     #- (./gradlew connectedAndroidTestDebug -PdisablePreDex):
     #    timeout: 1200
-    - cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS
-    - cp -r app/build/reports/androidTests/connected/* $CIRCLE_TEST_REPORTS
-    - cp -r backend/build/reports/tests/classes/* $CIRCLE_TEST_REPORTS
+    #- cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS
+    #- cp -r app/build/reports/androidTests/connected/* $CIRCLE_TEST_REPORTS
+    #- cp -r backend/build/reports/tests/classes/* $CIRCLE_TEST_REPORTS
 
 deployment:
   appengine:
