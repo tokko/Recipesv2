@@ -28,10 +28,8 @@ test:
         timeout: 1200
     - (./gradlew assembleDebug -PdisablePreDex):
        timeout: 1200
-    - (./gradlew assembleTest -PdisablePreDex):
-        timeout: 1200
   override:
-    - (./gradlew app:testRelease backend:test):
+    - (./gradlew app:testRelease backend:test -PdisablePreDex):
         timeout: 1200
     - circle-android wait-for-boot
     - (./gradlew connectedAndroidTestDebug -PdisablePreDex):
