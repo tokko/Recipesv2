@@ -62,13 +62,14 @@ android {
         manifestFile.write(manifestContent)
     }
 
+    /* dont do this automaticall no more
     tasks.whenTaskAdded { task ->
         if (task.name == 'publishRelease') {
             task.dependsOn 'increaseVersionCode'
             task.dependsOn 'incrementVersionName'
         }
     }
-
+*/
     play {
         serviceAccountEmail = '92588905880-fdolvkj29p3l637u5fgaa3jke0vksd17@developer.gserviceaccount.com'
         pk12File = file('key.p12')
