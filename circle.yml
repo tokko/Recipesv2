@@ -26,14 +26,14 @@ test:
     - ./gradlew incrementVersionNumber
     - (./gradlew assembleRelease -PdisablePreDex):
         timeout: 1200
-    - (./gradlew assembleDebug -PdisablePreDex):
-       timeout: 1200
+   # - (./gradlew assembleDebug -PdisablePreDex):
+    #   timeout: 1200
   override:
     - (./gradlew app:testRelease backend:test -PdisablePreDex):
         timeout: 1200
-    - circle-android wait-for-boot
-    - (./gradlew connectedAndroidTestDebug -PdisablePreDex):
-        timeout: 1200
+    #- circle-android wait-for-boot
+    #- (./gradlew connectedAndroidTestDebug -PdisablePreDex):
+    #    timeout: 1200
     - cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS
     - cp -r app/build/reports/androidTests/connected/* $CIRCLE_TEST_REPORTS
     - cp -r backend/build/reports/tests/classes/* $CIRCLE_TEST_REPORTS
@@ -42,7 +42,7 @@ deployment:
   appengine:
     branch: alpha
     commands:
-      - echo APPENGINE_TOKEN | $HOME/appengine-java-sdk-1.9.26/bin/appcfg.sh update --passin .
+      - echo APPENGINE_TOKEN | $HOME/appengine-java-sdk-1.9.26/bin/appcfg.sh --passin update  .
       - git config --global user.email "builds@circleci.com"
       - git config --global user.name "Circle CI"
       - git commit -am "Update version number and codes for automatic deploy."
