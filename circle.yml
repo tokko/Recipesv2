@@ -26,6 +26,8 @@ test:
     - ./gradlew incrementVersionNumber
     - (./gradlew assembleRelease -PdisablePreDex):
         timeout: 1200
+     - (./gradlew assembleDebug -PdisablePreDex):
+        timeout: 1200
     - (./gradlew assembleTest -PdisablePreDex):
         timeout: 1200
   override:
