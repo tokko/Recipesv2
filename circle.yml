@@ -2,7 +2,7 @@ machine:
   java:
     version: oraclejdk8
   environment:
-    JAVA_OPTS: "-Xms256m -Xmx2048m"
+    JAVA_OPTS: "-Xms256m -Xmx4096m"
 
 dependencies:
   pre:
@@ -13,11 +13,9 @@ dependencies:
 test:
   pre:
     - chmod +x gradlew
-    - case $CIRCLE_NODE_INDEX in 2) emulator -avd circleci-android21 -no-audio -no-window ;; esac:
+    - case emulator -avd circleci-android21 -no-audio -no-window:
         background: true
-        parallel: true
-    - ./gradlew increaseVersionCode incrementVersionNumber:
-        parallel: true
+    - ./gradlew increaseVersionCode incrementVersionNumber
     #- (./gradlew assembleRelease -PdisablePreDex):
     #    parallel: true
     #    timeout: 1200
@@ -25,18 +23,13 @@ test:
     #   parallel: true
     #   timeout: 1200
   override:
-    - case $CIRCLE_NODE_INDEX in 0) ./gradlew app:testRelease ;; 1) ./gradlew backend:test -PdisablePreDex ;; esac:
-        parallel: true
-    - case $CIRCLE_NODE_INDEX in 2) circle-android wait-for-boot ;; esac:
-        parallel: true
-    - case $CIRCLE_NODE_INDEX in 2) ./gradlew connectedAndroidTestDebug -PdisablePreDex ;; esac:
-        parallel: true
-    - case $CIRCLE_NODE_INDEX in 0) cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS ;; esac:
-        parallel: true
-    - case $CIRCLE_NODE_INDEX in 2) cp -r app/build/reports/androidTests/connected/* $CIRCLE_TEST_REPORTS ;; esac:
-        parallel: true
-    - case $CIRCLE_NODE_INDEX in 1) cp -r backend/build/reports/tests/classes/* $CIRCLE_TEST_REPORTS ;; esac:
-        parallel: true
+    - ./gradlew app:testRelease backend:test -PdisablePreDex
+    - circle-android wait-for-boot
+    - ./gradlew connectedAndroidTestDebug -PdisablePreDex
+        timeout: 1200
+    - cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS
+    - cp -r app/build/reports/androidTests/connected/* $CIRCLE_TEST_REPORTS
+    - cp -r backend/build/reports/tests/classes/* $CIRCLE_TEST_REPORTS
 
 deployment:
   appengine:
