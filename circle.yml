@@ -3,7 +3,6 @@ machine:
     version: oraclejdk8
   environment:
     JAVA_OPTS: "-Xms256m -Xmx2048m"
-    GRADLE_OPTS: "-Xmx2048m -XX:MaxPermSize=2048m"
 
 dependencies:
   pre:
@@ -13,9 +12,6 @@ dependencies:
 
   cache_directories:
       - ~/.android
-     # - ~/android
-  #override:
-  #  - (source scripts/environmentSetup.sh && getAndroidSDK)
 test:
   pre:
     - chmod +x gradlew
@@ -24,29 +20,31 @@ test:
         parallel: true
     - ./gradlew increaseVersionCode
     - ./gradlew incrementVersionNumber
-    #- (./gradlew assembleRelease -PdisablePreDex):
-    #    timeout: 1200
-   # - (./gradlew assembleDebug -PdisablePreDex):
-    #   timeout: 1200
+    - (./gradlew assembleRelease -PdisablePreDex):
+        timeout: 1200
+    - (./gradlew assembleDebug -PdisablePreDex):
+       timeout: 1200
   override:
     - (./gradlew app:testRelease backend:test -PdisablePreDex):
         timeout: 1200
-    #- circle-android wait-for-boot
-    #- (./gradlew connectedAndroidTestDebug -PdisablePreDex):
-    #    timeout: 1200
-    #- cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS
-    #- cp -r app/build/reports/androidTests/connected/* $CIRCLE_TEST_REPORTS
-    #- cp -r backend/build/reports/tests/classes/* $CIRCLE_TEST_REPORTS
+    - circle-android wait-for-boot
+    - (./gradlew connectedAndroidTestDebug -PdisablePreDex):
+        timeout: 1200
+    - cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS
+    - cp -r app/build/reports/androidTests/connected/* $CIRCLE_TEST_REPORTS
+    - cp -r backend/build/reports/tests/classes/* $CIRCLE_TEST_REPORTS
 
 deployment:
   appengine:
     branch: alpha
     commands:
-      #- echo $APPENGINE_OUTH_FILE > ~/.appcfg_oauth2_tokens_java
       - erb .appcfg_oauth2_tokens_java.json > ~/.appcfg_oauth2_tokens_java # requires ENV in circle ci
       - ./gradlew appengineUpdate
-      #- echo $APPENGINE_TOKEN | $HOME/appengine-java-sdk-1.9.26/bin/appcfg.sh update  .
+      - ./gradlew publishRelease
       - git config --global user.email "builds@circleci.com"
       - git config --global user.name "Circle CI"
       - git commit -am "Update version number and codes for automatic deploy."
+      - git checkout -b master
+      - git pull
+      - git merge alpha
       - git push https://$GIT_CREDS@github.com/tokko/Recipesv2.git HEAD:master
