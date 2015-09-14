@@ -7,32 +7,36 @@ machine:
 dependencies:
   pre:
     - chmod +x gradlew
-    - curl -o $HOME/google_appengine_1.9.13.zip https://storage.googleapis.com/appengine-sdks/featured/appengine-java-sdk-1.9.26.zip
-    - unzip -q -d $HOME $HOME/google_appengine_1.9.13.zip
 
   cache_directories:
       - ~/.android
 test:
   pre:
     - chmod +x gradlew
-    - emulator -avd circleci-android21 -no-audio -no-window:
+    - case $CIRCLE_NODE_INDEX in 2) emulator -avd circleci-android21 -no-audio -no-window ;; esac:
         background: true
         parallel: true
-    - ./gradlew increaseVersionCode
-    - ./gradlew incrementVersionNumber
-    - (./gradlew assembleRelease -PdisablePreDex):
-        timeout: 1200
-    - (./gradlew assembleDebug -PdisablePreDex):
-       timeout: 1200
+    - ./gradlew increaseVersionCode incrementVersionNumber:
+        parallel: true
+    #- (./gradlew assembleRelease -PdisablePreDex):
+    #    parallel: true
+    #    timeout: 1200
+    #- (./gradlew assembleDebug -PdisablePreDex):
+    #   parallel: true
+    #   timeout: 1200
   override:
-    - (./gradlew app:testRelease backend:test -PdisablePreDex):
-        timeout: 1200
-    - circle-android wait-for-boot
-    - (./gradlew connectedAndroidTestDebug -PdisablePreDex):
-        timeout: 1200
-    - cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS
-    - cp -r app/build/reports/androidTests/connected/* $CIRCLE_TEST_REPORTS
-    - cp -r backend/build/reports/tests/classes/* $CIRCLE_TEST_REPORTS
+    - case $CIRCLE_NODE_INDEX in 0) ./gradlew app:testRelease ;; 1) backend:test -PdisablePreDex ;; esac:
+        parallel: true
+    - case $CIRCLE_NODE_INDEX in 2) circle-android wait-for-boot ;; esac:
+        parallel: true
+    - case $CIRCLE_NODE_INDEX in 2) ./gradlew connectedAndroidTestDebug -PdisablePreDex ;; esac:
+        parallel: true
+    - case $CIRCLE_NODE_INDEX in 0) cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS ;; esac:
+        parallel: true
+    - case $CIRCLE_NODE_INDEX in 2) cp -r app/build/reports/androidTests/connected/* $CIRCLE_TEST_REPORTS ;; esac:
+        parallel: true
+    - case $CIRCLE_NODE_INDEX in 1) cp -r backend/build/reports/tests/classes/* $CIRCLE_TEST_REPORTS ;; esac:
+        parallel: true
 
 deployment:
   appengine:
