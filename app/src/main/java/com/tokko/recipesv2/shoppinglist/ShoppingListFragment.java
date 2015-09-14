@@ -8,11 +8,10 @@ import android.view.ViewGroup;
 import com.google.inject.Inject;
 import com.tokko.recipesv2.R;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ShoppingList;
-import com.tokko.recipesv2.masterdetail.ItemDetailFragment;
 
 import butterknife.OnClick;
 import roboguice.RoboGuice;
-import roboguice.fragment.RoboListFragment;
+import roboguice.fragment.provided.RoboListFragment;
 
 public class ShoppingListFragment extends RoboListFragment implements ShoppingListDownloader.ShoppingListDownloadedCallbacks {
 
@@ -23,6 +22,20 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.shoppinglistfragment, null);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setListAdapter(adapter);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        ShoppingListDownloader listDownloader = RoboGuice.getInjector(getActivity()).getInstance(ShoppingListDownloader.class);
+        listDownloader.setCallbacks(this);
+        listDownloader.execute();
     }
 
     @OnClick(R.id.shoppingListAddbutton)
