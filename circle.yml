@@ -42,10 +42,10 @@ deployment:
   appengine:
     branch: alpha
     commands:
-      - echo $APPENGINE_OUTH_FILE > ~/.appcfg_oauth2_tokens_java
-      - (./gradlew appengineUpdate):
-          timeout: 1200
-      #- echo $APPENGINE_TOKEN | $HOME/appengine-java-sdk-1.9.26/bin/appcfg.sh --passin update  .
+      #- echo $APPENGINE_OUTH_FILE > ~/.appcfg_oauth2_tokens_java
+      #- (./gradlew appengineUpdate):
+      #    timeout: 1200
+      - echo $APPENGINE_PASSWORD | $HOME/appengine-java-sdk-1.9.26/bin/appcfg.sh --passin --email=$APPENGINE_EMAIL update  .
       - git config --global user.email "builds@circleci.com"
       - git config --global user.name "Circle CI"
       - git commit -am "Update version number and codes for automatic deploy."
