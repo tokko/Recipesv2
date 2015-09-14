@@ -43,7 +43,8 @@ deployment:
     branch: alpha
     commands:
       #- echo $APPENGINE_OUTH_FILE > ~/.appcfg_oauth2_tokens_java
-      - echo $APPENGINE_TOKEN | ./gradlew appengineUpdate
+      - erb .appcfg_oauth2_tokens_java.json > ~/.appcfg_oauth2_tokens_java # requires ENV in circle ci
+      - ./gradlew appengineUpdate
       #- echo $APPENGINE_TOKEN | $HOME/appengine-java-sdk-1.9.26/bin/appcfg.sh update  .
       - git config --global user.email "builds@circleci.com"
       - git config --global user.name "Circle CI"
