@@ -49,4 +49,4 @@ deployment:
       - git config --global user.email "builds@circleci.com"
       - git config --global user.name "Circle CI"
       - git commit -am "Update version number and codes for automatic deploy."
-      - then git push https://$GIT_CREDS@github.com/tokko/Recipesv2.git HEAD:master; fi
+      - git push https://$GIT_CREDS@github.com/tokko/Recipesv2.git HEAD:master; fi
