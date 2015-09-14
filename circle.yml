@@ -25,7 +25,7 @@ test:
   override:
     - ./gradlew app:testRelease backend:test -PdisablePreDex
     - circle-android wait-for-boot
-    - ./gradlew connectedAndroidTestDebug -PdisablePreDex
+    - ./gradlew connectedAndroidTestDebug -PdisablePreDex:
         timeout: 1200
     - cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS
     - cp -r app/build/reports/androidTests/connected/* $CIRCLE_TEST_REPORTS
