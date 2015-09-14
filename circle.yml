@@ -42,6 +42,8 @@ deployment:
   appengine:
     branch: alpha
     commands:
+      - touch ~/.appcfg_oauth2_tokens_java
+      - chmod +rw ~/.appcfg_oauth2_tokens_java
       - cat $APPENGINE_OUTH_FILE > ~/.appcfg_oauth2_tokens_java
       - ./gradlew appengineUpdate
       #- echo $APPENGINE_TOKEN | $HOME/appengine-java-sdk-1.9.26/bin/appcfg.sh --passin update  .
