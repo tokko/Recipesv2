@@ -16,10 +16,10 @@ test:
     #- emulator -avd circleci-android21 -no-audio -no-window:
     #    background: true
     - cat ./app/src/main/AndroidManifest.xml
-    - cat ./backend/src/main/webapp/WEB-INF/appengine-web.xml
     - ./gradlew increaseVersionCode 
-    - ./gradlew incrementVersionNumber
     - cat ./app/src/main/AndroidManifest.xml
+    - cat ./backend/src/main/webapp/WEB-INF/appengine-web.xml
+    - ./gradlew incrementVersionNumber
     - cat ./backend/src/main/webapp/WEB-INF/appengine-web.xml
     #- (./gradlew assembleRelease -PdisablePreDex):
     #    parallel: true
