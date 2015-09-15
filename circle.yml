@@ -3,9 +3,14 @@ machine:
     version: oraclejdk8
   environment:
     JAVA_OPTS: "-Xms256m -Xmx2048m"
+    GRADLE_OPTS: "-Xmx2048m -XX:MaxPermSize=2048m"
+
 dependencies:
   pre:
     - chmod +x gradlew
+    - curl -o $HOME/google_appengine_1.9.13.zip https://storage.googleapis.com/appengine-sdks/featured/appengine-java-sdk-1.9.26.zip
+    - unzip -q -d $HOME $HOME/google_appengine_1.9.13.zip
+
   cache_directories:
       - ~/.android
      # - ~/android
@@ -17,21 +22,31 @@ test:
     - emulator -avd circleci-android21 -no-audio -no-window:
         background: true
         parallel: true
-#    - (./gradlew assemble):
-#        timeout: 1200
-#    - (./gradlew assembleTest):
-#        timeout: 1200
+    - ./gradlew increaseVersionCode
+    - ./gradlew incrementVersionNumber
+    #- (./gradlew assembleRelease -PdisablePreDex):
+    #    timeout: 1200
+   # - (./gradlew assembleDebug -PdisablePreDex):
+    #   timeout: 1200
   override:
     - (./gradlew app:testRelease backend:test -PdisablePreDex):
-        parallel: true
-    - circle-android wait-for-boot:
-        parallel: true
-    - (./gradlew connectedAndroidTestDebug -PdisablePreDex):
         timeout: 1200
-        parallel: true
-     # copy the build outputs to artifacts
-    #- cp -r my-project/build/outputs $CIRCLE_ARTIFACTS
-    # copy the test results to the test results directory.
-    - cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS
-    - cp -r app/build/reports/androidTests/connected/* $CIRCLE_TEST_REPORTS
-    - cp -r backend/build/reports/tests/classes/* $CIRCLE_TEST_REPORTS
+    #- circle-android wait-for-boot
+    #- (./gradlew connectedAndroidTestDebug -PdisablePreDex):
+    #    timeout: 1200
+    #- cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS
+    #- cp -r app/build/reports/androidTests/connected/* $CIRCLE_TEST_REPORTS
+    #- cp -r backend/build/reports/tests/classes/* $CIRCLE_TEST_REPORTS
+
+deployment:
+  appengine:
+    branch: alpha
+    commands:
+      #- echo $APPENGINE_OUTH_FILE > ~/.appcfg_oauth2_tokens_java
+      - erb .appcfg_oauth2_tokens_java.json > ~/.appcfg_oauth2_tokens_java # requires ENV in circle ci
+      - ./gradlew appengineUpdate
+      #- echo $APPENGINE_TOKEN | $HOME/appengine-java-sdk-1.9.26/bin/appcfg.sh update  .
+      - git config --global user.email "builds@circleci.com"
+      - git config --global user.name "Circle CI"
+      - git commit -am "Update version number and codes for automatic deploy."
+      - git push https://$GIT_CREDS@github.com/tokko/Recipesv2.git HEAD:master
