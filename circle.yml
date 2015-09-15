@@ -15,7 +15,9 @@ test:
     - chmod +x gradlew
     #- emulator -avd circleci-android21 -no-audio -no-window:
     #    background: true
+    -cat ./app/src/main/AndroidManifest.xml
     - ./gradlew increaseVersionCode incrementVersionNumber
+    -cat ./app/src/main/AndroidManifest.xml
     #- (./gradlew assembleRelease -PdisablePreDex):
     #    parallel: true
     #    timeout: 1200
