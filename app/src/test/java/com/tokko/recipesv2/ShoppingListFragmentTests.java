@@ -1,5 +1,7 @@
 package com.tokko.recipesv2;
 
+import android.view.View;
+
 import com.google.inject.AbstractModule;
 import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Grocery;
@@ -21,6 +23,7 @@ import java.util.Collections;
 import roboguice.RoboGuice;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.robolectric.util.FragmentTestUtil.startVisibleFragment;
@@ -62,5 +65,15 @@ public class ShoppingListFragmentTests {
     public void testListView_DisplayItems() throws Exception {
         int count = fragment.getListView().getAdapter().getCount();
         assertEquals(1, count);
+    }
+
+    @Test
+    public void testListView_OnDeleteClicked_IsDeleted() throws Exception {
+        View view = fragment.getListView().getAdapter().getView(0, null, fragment.getListView()).findViewById(R.id.deleteImageButton);
+        assertNotNull(view);
+        assertEquals(View.VISIBLE, view.getVisibility());
+        view.performClick();
+        int count = fragment.getListView().getAdapter().getCount();
+        assertEquals(0, count);
     }
 }

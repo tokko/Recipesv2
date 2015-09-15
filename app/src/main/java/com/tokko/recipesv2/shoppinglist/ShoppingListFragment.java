@@ -27,6 +27,7 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        adapter.setDeleteEnabled(true);
         setListAdapter(adapter);
     }
 
