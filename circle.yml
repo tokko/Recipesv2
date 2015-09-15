@@ -13,6 +13,8 @@ dependencies:
 test:
   pre:
     - chmod +x gradlew
+    - chmod +rw ./backend/src/main/webapp/WEB-INF/appengine-web.xml
+    - chmod +rw ./app/src/main/AndroidManifest.xml
     #- emulator -avd circleci-android21 -no-audio -no-window:
     #    background: true
     - cat ./app/src/main/AndroidManifest.xml
