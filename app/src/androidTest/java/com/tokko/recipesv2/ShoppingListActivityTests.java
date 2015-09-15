@@ -26,14 +26,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import roboguice.RoboGuice;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
@@ -69,6 +73,7 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
 
         RecipeApi.ListUnits listUnits = mock(RecipeApi.ListUnits.class);
         CollectionResponseString units = new CollectionResponseString();
+        units.setItems(Collections.singletonList("g"));
         doReturn(listUnits).when(api).listUnits();
         doReturn(units).when(listUnits).execute();
 
@@ -92,6 +97,16 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
         onView(withId(R.id.shoppingListAddbutton)).perform(click());
 
         onView(withId(R.id.ingredientdetail_grocery)).check(matches(isDisplayed()));
+    }
 
+    @Test
+    public void testAddButtonClick_AddIngredient_IsAddedToList() throws Exception {
+        onView(withId(R.id.shoppingListAddbutton)).perform(click());
+
+        onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("grocery"), closeSoftKeyboard());
+        onView(withId(R.id.buttonbar_ok)).perform(click());
+        onView(withId(R.id.buttonbar_ok)).perform(click());
+
+        onView(withText("grocery")).check(matches(isDisplayed()));
     }
 }

@@ -10,6 +10,7 @@ import com.google.inject.Inject;
 import com.tokko.recipesv2.R;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Ingredient;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ShoppingList;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.ShoppingListItem;
 import com.tokko.recipesv2.masterdetail.ItemDetailFragment;
 import com.tokko.recipesv2.recipes.IngredientDetailFragment;
 
@@ -18,7 +19,7 @@ import butterknife.OnClick;
 import roboguice.RoboGuice;
 import roboguice.fragment.provided.RoboListFragment;
 
-public class ShoppingListFragment extends RoboListFragment implements ShoppingListDownloader.ShoppingListDownloadedCallbacks {
+public class ShoppingListFragment extends RoboListFragment implements ShoppingListDownloader.ShoppingListDownloadedCallbacks, IngredientDetailFragment.IngredientDetailFragmentCallbacks {
 
     @Inject
     private ShoppingListAdapter adapter;
@@ -58,6 +59,7 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
         Bundle b = new Bundle();
         b.putSerializable(ItemDetailFragment.EXTRA_CLASS, Ingredient.class);
         ingredientDetailFragment.setArguments(b);
+        ingredientDetailFragment.setIngredientDetailFragmentCallbacks(this);
         ingredientDetailFragment.show(getFragmentManager(), "tag");
     }
 
@@ -65,5 +67,17 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
     public void onShoppingListDownloaded(ShoppingList list) {
         this.list = list;
         adapter.replaceData(list.getItems());
+    }
+
+    @Override
+    public void ingredientAdded(Ingredient ingredient) {
+        ShoppingListItem sli = new ShoppingListItem();
+        sli.setIngredient(ingredient);
+        adapter.addItem(sli);
+    }
+
+    @Override
+    public void ingredientDeleted(Ingredient entity) {
+
     }
 }
