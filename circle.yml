@@ -12,6 +12,7 @@ dependencies:
       - ~/.android
 test:
   pre:
+    - ls -Ra
     - chmod +x gradlew
     - chmod +rw ./backend/src/main/webapp/WEB-INF/appengine-web.xml
     - chmod +rw ./app/src/main/AndroidManifest.xml
