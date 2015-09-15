@@ -44,4 +44,4 @@ deployment:
       - git commit -am "Update version number and codes for automatic deploy."
       - git checkout testmaster
       - git merge -m "Circle CI merge after deploy" alpha
-      - git push https://$GIT_CREDS@github.com/tokko/Recipesv2.git HEAD:testmastermaster
+      - git push https://$GIT_CREDS@github.com/tokko/Recipesv2.git HEAD:testmaster
