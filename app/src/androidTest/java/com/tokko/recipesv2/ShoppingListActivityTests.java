@@ -13,7 +13,9 @@ import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.CollectionResponseGrocery;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.CollectionResponseString;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Grocery;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.Ingredient;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ShoppingList;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.ShoppingListItem;
 import com.tokko.recipesv2.groceries.GroceryAdapter;
 import com.tokko.recipesv2.groceries.GroceryLoader;
 import com.tokko.recipesv2.masterdetail.AbstractLoader;
@@ -34,10 +36,13 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
@@ -46,6 +51,7 @@ import static org.mockito.Mockito.mock;
 public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<ShoppingListActivity> {
 
     private ShoppingListActivity activity;
+    private Grocery grocery;
 
     public ShoppingListActivityTests() {
         super(ShoppingListActivity.class);
@@ -57,17 +63,30 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
         Context context = getInstrumentation().getTargetContext().getApplicationContext();
 
+        grocery = new Grocery();
+        grocery.setId(1L);
+        grocery.setTitle("MockedGrocery");
+
+        Ingredient ingredient = new Ingredient();
+        ingredient.setId(2L);
+        ingredient.setGrocery(grocery);
+
+        ShoppingListItem sli = new ShoppingListItem();
+        sli.setIngredient(ingredient);
+
         RecipeApi api = mock(RecipeApi.class);
 
         RecipeApi.GetShoppinhList getShoppinhList = mock(RecipeApi.GetShoppinhList.class);
         ShoppingList sl = new ShoppingList();
         sl.setItems(new ArrayList<>());
+        sl.getItems().add(sli);
         sl.setId(1L);
         doReturn(getShoppinhList).when(api).getShoppinhList();
         doReturn(sl).when(getShoppinhList).execute();
 
         RecipeApi.ListGroceries listGroceries = mock(RecipeApi.ListGroceries.class);
         CollectionResponseGrocery collectionResponseGrocery = new CollectionResponseGrocery();
+        collectionResponseGrocery.setItems(Collections.singletonList(grocery));
         doReturn(listGroceries).when(api).listGroceries();
         doReturn(collectionResponseGrocery).when(listGroceries).execute();
 
@@ -108,5 +127,12 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
         onView(withId(R.id.buttonbar_ok)).perform(click());
 
         onView(withText("grocery")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testAddButtonClick_DeleteIngredient_IsDeletedFromList() throws Exception {
+        onView(allOf(hasSibling(withText(grocery.getTitle())), withId(R.id.deleteImageButton))).perform(click());
+
+        onView(withText(grocery.getTitle())).check(doesNotExist());
     }
 }
