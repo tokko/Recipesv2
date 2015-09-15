@@ -41,8 +41,8 @@ deployment:
       #- ./gradlew publishRelease
       - git config --global user.email "builds@circleci.com"
       - git config --global user.name "Circle CI"
-      - git pull
       - git commit -am "Update version number and codes for automatic deploy."
-      #- git branch master
-      #- git merge alpha
+      - git branch master
+      - git pull master
+      - git merge alpha
       - git push https://$GIT_CREDS@github.com/tokko/Recipesv2.git HEAD:master
