@@ -17,12 +17,7 @@ test:
     - chmod +rw ./app/src/main/AndroidManifest.xml
     - emulator -avd circleci-android21 -no-audio -no-window:
         background: true
-    - cat ./app/src/main/AndroidManifest.xml
-    - ./gradlew increaseVersionCode 
-    - cat ./app/src/main/AndroidManifest.xml
-    - cat ./backend/src/main/webapp/WEB-INF/appengine-web.xml
-    - ./gradlew incrementVersionNumber
-    - cat ./backend/src/main/webapp/WEB-INF/appengine-web.xml
+    - ./gradlew increaseVersionCode incrementVersionNumber
     #- (./gradlew assembleRelease -PdisablePreDex):
     #    parallel: true
     #    timeout: 1200
