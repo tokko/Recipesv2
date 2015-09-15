@@ -32,6 +32,7 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
     private Class<T> clz;
     @InjectView(R.id.buttonbar)
     private ViewGroup buttonBar;
+    private boolean deletable;
 
     public ItemDetailFragment() {
     }
@@ -100,6 +101,7 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             enterEditMode();
         }
+        deleteButton.setVisibility(deletable ? View.VISIBLE : View.GONE);
     }
 
     public abstract ItemDetailFragment<T> newInstance(Bundle args);
@@ -166,6 +168,11 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
         //do nothing, let children override
         return true;
     }
+
+    public void setDeletable(boolean deletable) {
+        this.deletable = deletable;
+    }
+
     @OnClick(R.id.buttonbar_ok)
     public void onOkButtonClick(View v) {
         if(!onOk()) return;

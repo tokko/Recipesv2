@@ -43,6 +43,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.not;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
@@ -112,10 +113,12 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
     }
 
     @Test
-    public void testAddButtonClick_OpensIngredientFragment() throws Exception {
+    public void testAddButtonClick_OpensIngredientFragmentWithDeleteButtonHidden() throws Exception {
         onView(withId(R.id.shoppingListAddbutton)).perform(click());
 
         onView(withId(R.id.ingredientdetail_grocery)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.buttonbar_delete)).check(matches(not(isDisplayed())));
     }
 
     @Test

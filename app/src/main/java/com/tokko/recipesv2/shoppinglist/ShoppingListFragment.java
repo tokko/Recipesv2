@@ -60,6 +60,7 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
         b.putSerializable(ItemDetailFragment.EXTRA_CLASS, Ingredient.class);
         ingredientDetailFragment.setArguments(b);
         ingredientDetailFragment.setIngredientDetailFragmentCallbacks(this);
+        ingredientDetailFragment.setDeletable(false);
         ingredientDetailFragment.show(getFragmentManager(), "tag");
     }
 
