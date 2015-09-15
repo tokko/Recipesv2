@@ -13,8 +13,8 @@ dependencies:
 test:
   pre:
     - chmod +x gradlew
-    - emulator -avd circleci-android21 -no-audio -no-window:
-        background: true
+    #- emulator -avd circleci-android21 -no-audio -no-window:
+    #    background: true
     - ./gradlew increaseVersionCode incrementVersionNumber
     #- (./gradlew assembleRelease -PdisablePreDex):
     #    parallel: true
@@ -23,21 +23,21 @@ test:
     #   parallel: true
     #   timeout: 1200
   override:
-    - ./gradlew app:testRelease backend:test -PdisablePreDex
-    - circle-android wait-for-boot
-    - ./gradlew connectedAndroidTestDebug -PdisablePreDex:
-        timeout: 1200
-    - cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS
-    - cp -r app/build/reports/androidTests/connected/* $CIRCLE_TEST_REPORTS
-    - cp -r backend/build/reports/tests/classes/* $CIRCLE_TEST_REPORTS
+    #- ./gradlew app:testRelease backend:test -PdisablePreDex
+    #- circle-android wait-for-boot
+    #- ./gradlew connectedAndroidTestDebug -PdisablePreDex:
+    #    timeout: 1200
+    #- cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS
+    #- cp -r app/build/reports/androidTests/connected/* $CIRCLE_TEST_REPORTS
+    #- cp -r backend/build/reports/tests/classes/* $CIRCLE_TEST_REPORTS
 
 deployment:
   appengine:
     branch: alpha
     commands:
-      - erb .appcfg_oauth2_tokens_java.json > ~/.appcfg_oauth2_tokens_java # requires ENV in circle ci
-      - ./gradlew appengineUpdate
-      - ./gradlew publishRelease
+      #- erb .appcfg_oauth2_tokens_java.json > ~/.appcfg_oauth2_tokens_java # requires ENV in circle ci
+      #- ./gradlew appengineUpdate
+      #- ./gradlew publishRelease
       - git config --global user.email "builds@circleci.com"
       - git config --global user.name "Circle CI"
       - git commit -am "Update version number and codes for automatic deploy."
