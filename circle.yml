@@ -43,5 +43,5 @@ deployment:
       - git config --global user.name "Circle CI"
       - git commit -am "Update version number and codes for automatic deploy."
       - git checkout testmaster
-      - git merge alpha
+      - git merge alpha -"Circle CI merge after deploy"
       - git push https://$GIT_CREDS@github.com/tokko/Recipesv2.git HEAD:testmastermaster
