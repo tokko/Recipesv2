@@ -54,7 +54,7 @@ task('incrementVersionNumber') << {
     def newVersion = currentVersion.toInteger() + 1
     xml = matcher.replaceAll('<version>v' + newVersion)
     appenginewebxml.write(xml);
-    def constantsFile = file('/src/main/java/com/tokko/recipesv2/backend/endpoints/Constants.java')
+    def constantsFile = file(getRootDir().getAbsolutePath() + '/backend/src/main/java/com/tokko/recipesv2/backend/endpoints/Constants.java')
     def code = constantsFile.getText()
     def m2 = Pattern.compile('API_VERSION = "v\\d+"').matcher(code)
     m2.find()
