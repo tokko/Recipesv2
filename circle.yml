@@ -12,12 +12,11 @@ dependencies:
       - ~/.android
 test:
   pre:
-    - ls -Ra
     - chmod +x gradlew
     - chmod +rw ./backend/src/main/webapp/WEB-INF/appengine-web.xml
     - chmod +rw ./app/src/main/AndroidManifest.xml
-    #- emulator -avd circleci-android21 -no-audio -no-window:
-    #    background: true
+    - emulator -avd circleci-android21 -no-audio -no-window:
+        background: true
     - cat ./app/src/main/AndroidManifest.xml
     - ./gradlew increaseVersionCode 
     - cat ./app/src/main/AndroidManifest.xml
@@ -31,25 +30,24 @@ test:
     #   parallel: true
     #   timeout: 1200
   override:
-    - ./gradlew tasks #placeholder or something?
-    #- ./gradlew app:testRelease backend:test -PdisablePreDex
-    #- circle-android wait-for-boot
-    #- ./gradlew connectedAndroidTestDebug -PdisablePreDex:
-    #    timeout: 1200
-    #- cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS
-    #- cp -r app/build/reports/androidTests/connected/* $CIRCLE_TEST_REPORTS
-    #- cp -r backend/build/reports/tests/classes/* $CIRCLE_TEST_REPORTS
+    - ./gradlew app:testRelease backend:test -PdisablePreDex
+    - circle-android wait-for-boot
+    - ./gradlew connectedAndroidTestDebug -PdisablePreDex:
+        timeout: 1200
+    - cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS
+    - cp -r app/build/reports/androidTests/connected/* $CIRCLE_TEST_REPORTS
+    - cp -r backend/build/reports/tests/classes/* $CIRCLE_TEST_REPORTS
 
 deployment:
   appengine:
     branch: alpha
     commands:
-      #- erb .appcfg_oauth2_tokens_java.json > ~/.appcfg_oauth2_tokens_java # requires ENV in circle ci
-      #- ./gradlew appengineUpdate
-      #- ./gradlew publishRelease
+      - erb .appcfg_oauth2_tokens_java.json > ~/.appcfg_oauth2_tokens_java
+      - ./gradlew appengineUpdate
+      - ./gradlew publishRelease
       - git config --global user.email "builds@circleci.com"
       - git config --global user.name "Circle CI"
       - git commit -am "Update version number and codes for automatic deploy."
-      - git checkout testmaster
+      - git checkout master
       - git merge -m "Circle CI merge after deploy" alpha
-      - git push https://$GIT_CREDS@github.com/tokko/Recipesv2.git HEAD:testmaster
+      - git push https://$GIT_CREDS@github.com/tokko/Recipesv2.git HEAD:master
