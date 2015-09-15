@@ -23,6 +23,7 @@ test:
     #   parallel: true
     #   timeout: 1200
   override:
+    ./gradlew tasks #placeholder
     #- ./gradlew app:testRelease backend:test -PdisablePreDex
     #- circle-android wait-for-boot
     #- ./gradlew connectedAndroidTestDebug -PdisablePreDex:
@@ -41,7 +42,7 @@ deployment:
       - git config --global user.email "builds@circleci.com"
       - git config --global user.name "Circle CI"
       - git commit -am "Update version number and codes for automatic deploy."
-      - git checkout -b master
+      - git branch master
       - git pull
       - git merge alpha
       - git push https://$GIT_CREDS@github.com/tokko/Recipesv2.git HEAD:master
