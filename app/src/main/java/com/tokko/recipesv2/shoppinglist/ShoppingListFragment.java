@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import com.google.inject.Inject;
 import com.tokko.recipesv2.R;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ShoppingList;
+import com.tokko.recipesv2.recipes.IngredientDetailFragment;
 
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import roboguice.RoboGuice;
 import roboguice.fragment.provided.RoboListFragment;
@@ -27,6 +29,7 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ButterKnife.inject(this, getActivity());
         adapter.setDeleteEnabled(true);
         setListAdapter(adapter);
     }
@@ -41,7 +44,8 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
 
     @OnClick(R.id.shoppingListAddbutton)
     public void onAdd(){
-
+        IngredientDetailFragment ingredientDetailFragment = RoboGuice.getInjector(getActivity()).getInstance(IngredientDetailFragment.class);
+        ingredientDetailFragment.show(getFragmentManager(), "tag");
     }
 
     @Override

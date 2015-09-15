@@ -1,13 +1,20 @@
 package com.tokko.recipesv2;
 
+import android.app.FragmentManager;
 import android.view.View;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.TypeLiteral;
 import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Grocery;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Ingredient;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ShoppingList;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ShoppingListItem;
+import com.tokko.recipesv2.groceries.GroceryAdapter;
+import com.tokko.recipesv2.groceries.GroceryLoader;
+import com.tokko.recipesv2.masterdetail.AbstractLoader;
+import com.tokko.recipesv2.masterdetail.StringifyableAdapter;
+import com.tokko.recipesv2.recipes.IngredientDetailFragment;
 import com.tokko.recipesv2.shoppinglist.ShoppingListFragment;
 
 import org.junit.Before;
@@ -24,13 +31,17 @@ import roboguice.RoboGuice;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.robolectric.util.FragmentTestUtil.startVisibleFragment;
 
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21, manifest = "/app/src/main/AndroidManifest.xml")
 public class ShoppingListFragmentTests {
+    private IngredientDetailFragment ingredientDetailFragment;
 
     private ShoppingListFragment fragment;
 
@@ -52,9 +63,15 @@ public class ShoppingListFragmentTests {
         doReturn(getShoppinhList).when(api).getShoppinhList();
         doReturn(sl).when(getShoppinhList).execute();
         RoboGuice.overrideApplicationInjector(RuntimeEnvironment.application, new AbstractModule() {
+
+
             @Override
             protected void configure() {
                 bind(RecipeApi.class).toInstance(api);
+                ingredientDetailFragment = mock(IngredientDetailFragment.class);
+                bind(new TypeLiteral<StringifyableAdapter<Grocery>>(){}).to(GroceryAdapter.class);
+                bind(new TypeLiteral<AbstractLoader<Grocery>>(){}).to(GroceryLoader.class);
+                bind(IngredientDetailFragment.class).toInstance(ingredientDetailFragment);
             }
         });
         fragment = RoboGuice.getInjector(RuntimeEnvironment.application).getInstance(ShoppingListFragment.class);
@@ -75,5 +92,11 @@ public class ShoppingListFragmentTests {
         view.performClick();
         int count = fragment.getListView().getAdapter().getCount();
         assertEquals(0, count);
+    }
+
+    @Test
+    public void testAddButtonClick_ShowsDetailFragment() throws Exception {
+        fragment.getView().findViewById(R.id.shoppingListAddbutton).performClick();
+        verify(ingredientDetailFragment).show(any(FragmentManager.class), anyString());
     }
 }
