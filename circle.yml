@@ -17,7 +17,8 @@ test:
     #    background: true
     - cat ./app/src/main/AndroidManifest.xml
     - cat ./backend/src/main/webapp/WEB-INF/appengine-web.xml
-    - ./gradlew increaseVersionCode backend:incrementVersionNumber
+    - ./gradlew increaseVersionCode 
+    - ./gradlew incrementVersionNumber
     - cat ./app/src/main/AndroidManifest.xml
     - cat ./backend/src/main/webapp/WEB-INF/appengine-web.xml
     #- (./gradlew assembleRelease -PdisablePreDex):
