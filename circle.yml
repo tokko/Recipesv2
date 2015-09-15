@@ -23,7 +23,7 @@ test:
     #   parallel: true
     #   timeout: 1200
   override:
-    ./gradlew tasks #placeholder
+    ./gradlew tasks #placeholder or something?
     #- ./gradlew app:testRelease backend:test -PdisablePreDex
     #- circle-android wait-for-boot
     #- ./gradlew connectedAndroidTestDebug -PdisablePreDex:
