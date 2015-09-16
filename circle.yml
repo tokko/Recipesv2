@@ -24,7 +24,7 @@ test:
     #   parallel: true
     #   timeout: 1200
   override:
-    - case $CIRCLE_NODE_INDEX in 0) ./gradlew app:testRelease backend:test -PdisablePreDex ;; 2) circle-android wait-for-boot && ./gradlew connectedAndroidTestDebug -PdisablePreDex ;; esac:
+    - case $CIRCLE_NODE_INDEX in 0) ./gradlew app:testRelease backend:test -PdisablePreDex ;; 1) circle-android wait-for-boot && ./gradlew connectedAndroidTestDebug -PdisablePreDex ;; esac:
         timeout: 1200
         parallel: true
     #- case $CIRCLE_NODE_INDEX in 1) circle-android wait-for-boot ;; esac:
