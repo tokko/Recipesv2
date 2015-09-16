@@ -13,10 +13,9 @@ dependencies:
 test:
   pre:
     - chmod +x gradlew
-    - chmod +rw ./backend/src/main/webapp/WEB-INF/appengine-web.xml
-    - chmod +rw ./app/src/main/AndroidManifest.xml
     - case $CIRCLE_NODE_INDEX in 1) emulator -avd circleci-android21 -no-audio -no-window ;; esac:
         background: true
+        parallel: true
     - ./gradlew increaseVersionCode incrementVersionNumber
     #- (./gradlew assembleRelease -PdisablePreDex):
     #    parallel: true
@@ -25,13 +24,19 @@ test:
     #   parallel: true
     #   timeout: 1200
   override:
-    - case $CIRCLE_NODE_INDEX in 0) ./gradlew app:testRelease backend:test -PdisablePreDex ;; esac
-    - case $CIRCLE_NODE_INDEX in 1) circle-android wait-for-boot ;; esac
+    - case $CIRCLE_NODE_INDEX in 0) ./gradlew app:testRelease backend:test -PdisablePreDex ;; esac:
+        parallel: true
+    - case $CIRCLE_NODE_INDEX in 1) circle-android wait-for-boot ;; esac:
+        parallel: true
     - case $CIRCLE_NODE_INDEX in 1) ./gradlew connectedAndroidTestDebug -PdisablePreDex ;; esac:
         timeout: 1200
-    - case $CIRCLE_NODE_INDEX in 0) cp -r backend/build/reports/tests/classes/* $CIRCLE_TEST_REPORTS ;; esac
-    - case $CIRCLE_NODE_INDEX in 0) cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS ;; esac
-    - case $CIRCLE_NODE_INDEX in 1) cp -r app/build/reports/androidTests/connected/* $CIRCLE_TEST_REPORTS ;; esac
+        parallel: true
+    - case $CIRCLE_NODE_INDEX in 0) cp -r backend/build/reports/tests/classes/* $CIRCLE_TEST_REPORTS ;; esac:
+        parallel: true
+    - case $CIRCLE_NODE_INDEX in 0) cp -r app/build/reports/tests/release/classes/* $CIRCLE_TEST_REPORTS ;; esac:
+        parallel: true
+    - case $CIRCLE_NODE_INDEX in 1) cp -r app/build/reports/androidTests/connected/* $CIRCLE_TEST_REPORTS ;; esac:
+        parallel: true
 
 deployment:
   appengine:
