@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.inject.Inject;
 import com.tokko.recipesv2.R;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Ingredient;
@@ -13,6 +14,8 @@ import com.tokko.recipesv2.backend.entities.recipeApi.model.ShoppingList;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ShoppingListItem;
 import com.tokko.recipesv2.masterdetail.ItemDetailFragment;
 import com.tokko.recipesv2.recipes.IngredientDetailFragment;
+
+import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -24,6 +27,7 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
     @Inject
     private ShoppingListAdapter adapter;
     private ShoppingList list;
+    private ShoppingListItem editing;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,6 +46,16 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         IngredientDetailFragment ingredientDetailFragment = RoboGuice.getInjector(getActivity()).getInstance(IngredientDetailFragment.class);
+        try {
+            ShoppingListItem item = adapter.getItem(position);
+            Bundle b = new Bundle();
+            b.putSerializable(ItemDetailFragment.EXTRA_CLASS, item.getIngredient().getClass());
+            editing = item;
+            b.putString(ItemDetailFragment.EXTRA_ENTITY, new AndroidJsonFactory().toPrettyString(item.getIngredient()));
+            ingredientDetailFragment.setArguments(b);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         ingredientDetailFragment.show(getFragmentManager(), "tag");
     }
 
@@ -72,6 +86,11 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
 
     @Override
     public void ingredientAdded(Ingredient ingredient) {
+        if (editing != null) {
+            editing.setIngredient(ingredient);
+            editing = null;
+            return;
+        }
         ShoppingListItem sli = new ShoppingListItem();
         sli.setIngredient(ingredient);
         adapter.addItem(sli);

@@ -95,7 +95,7 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
         setDeleteButtonEnabledState();
         bindView(entity);
         try {
-            if (entity.getClass().getMethod("getId").invoke(entity) == null) {
+            if (entity != null && entity.getClass().getMethod("getId").invoke(entity) == null) {
                 enterEditMode();
             }
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
@@ -116,6 +116,7 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
     }
 
     private void setDeleteButtonEnabledState() {
+        if (entity == null) return;
         try {
             Object getId = entity.getClass().getMethod("getId").invoke(entity);
             deleteButton.setEnabled(getId != null);

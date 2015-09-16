@@ -14,6 +14,7 @@ import com.tokko.recipesv2.backend.entities.recipeApi.model.CollectionResponseGr
 import com.tokko.recipesv2.backend.entities.recipeApi.model.CollectionResponseString;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Grocery;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Ingredient;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.Quantity;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ShoppingList;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ShoppingListItem;
 import com.tokko.recipesv2.groceries.GroceryAdapter;
@@ -24,6 +25,7 @@ import com.tokko.recipesv2.recipes.IngredientDetailFragment;
 import com.tokko.recipesv2.shoppinglist.ShoppingListActivity;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -53,6 +55,7 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
 
     private ShoppingListActivity activity;
     private Grocery grocery;
+    private Ingredient ingredient;
 
     public ShoppingListActivityTests() {
         super(ShoppingListActivity.class);
@@ -68,9 +71,13 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
         grocery.setId(1L);
         grocery.setTitle("MockedGrocery");
 
-        Ingredient ingredient = new Ingredient();
+        ingredient = new Ingredient();
         ingredient.setId(2L);
         ingredient.setGrocery(grocery);
+        Quantity quantity = new Quantity();
+        quantity.setUnit("g");
+        quantity.setQuantity(2.0);
+        ingredient.setQuantity(quantity);
 
         ShoppingListItem sli = new ShoppingListItem();
         sli.setIngredient(ingredient);
@@ -137,5 +144,37 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
         onView(allOf(hasSibling(withText(grocery.getTitle())), withId(R.id.deleteImageButton))).perform(click());
 
         onView(withText(grocery.getTitle())).check(doesNotExist());
+    }
+
+    @Test
+    public void testListItemClick_OpensIngredientFragmentWithDeleteButtonHidden() throws Exception {
+        onView(withText(grocery.getTitle())).perform(click());
+
+        onView(withId(R.id.ingredientdetail_grocery)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.buttonbar_delete)).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void testListItemClick_EditedIngredient_IsEditing() throws Exception {
+        String title = grocery.getTitle();
+        onView(withText(title)).perform(click());
+
+        onView(withText(grocery.getTitle())).check(matches(isDisplayed()));
+        onView(withText(String.valueOf(ingredient.getQuantity().getQuantity()))).check(matches(isDisplayed()));
+    }
+
+    @Test
+    @Ignore
+    public void testListItemClick_EditedIngredient_IsEdited() throws Exception {
+        String title = grocery.getTitle();
+        onView(withText(title)).perform(click());
+
+        onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("grocery"), closeSoftKeyboard());
+        onView(withId(R.id.buttonbar_ok)).perform(click());
+        onView(withId(R.id.buttonbar_ok)).perform(click());
+
+        onView(withText(title)).check(doesNotExist());
+        onView(withText("grocery")).check(matches(isDisplayed()));
     }
 }
