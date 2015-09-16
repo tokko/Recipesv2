@@ -32,7 +32,7 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
     private Class<T> clz;
     @InjectView(R.id.buttonbar)
     private ViewGroup buttonBar;
-    private boolean deletable;
+    private boolean deletable = true;
 
     public ItemDetailFragment() {
     }
