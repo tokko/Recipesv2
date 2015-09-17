@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -21,6 +22,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import roboguice.RoboGuice;
 import roboguice.fragment.provided.RoboListFragment;
+import roboguice.inject.InjectView;
 
 public class ShoppingListFragment extends RoboListFragment implements ShoppingListDownloader.ShoppingListDownloadedCallbacks, IngredientDetailFragment.IngredientDetailFragmentCallbacks {
 
@@ -28,7 +30,8 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
     private ShoppingListAdapter adapter;
     private ShoppingList list;
     private Integer editing;
-
+    @InjectView(R.id.buttonbar)
+    private LinearLayout buttonBar;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.shoppinglistfragment, null);
@@ -40,6 +43,7 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
         ButterKnife.inject(this, getActivity());
         adapter.setDeleteEnabled(true);
         setListAdapter(adapter);
+        buttonBar.setVisibility(View.VISIBLE);
     }
 
     @Override

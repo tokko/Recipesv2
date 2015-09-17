@@ -24,7 +24,6 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
-import java.util.Collection;
 import java.util.Collections;
 
 import roboguice.RoboGuice;
@@ -76,6 +75,12 @@ public class ShoppingListFragmentTests {
         });
         fragment = RoboGuice.getInjector(RuntimeEnvironment.application).getInstance(ShoppingListFragment.class);
         startVisibleFragment(fragment);
+    }
+
+    @Test
+    public void testButtonBarVisibility_IsVisible() throws Exception {
+        View viewById = fragment.getView().findViewById(R.id.buttonbar);
+        assertEquals(View.VISIBLE, viewById.getVisibility());
     }
 
     @Test
