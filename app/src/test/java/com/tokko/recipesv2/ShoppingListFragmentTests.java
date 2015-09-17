@@ -78,6 +78,12 @@ public class ShoppingListFragmentTests {
     }
 
     @Test
+    public void testButtonBar_DeleteButtonHidden() throws Exception {
+        View viewById = fragment.getView().findViewById(R.id.buttonbar_delete);
+        assertEquals(View.GONE, viewById.getVisibility());
+    }
+
+    @Test
     public void testButtonBarVisibility_IsVisible() throws Exception {
         View viewById = fragment.getView().findViewById(R.id.buttonbar);
         assertEquals(View.VISIBLE, viewById.getVisibility());

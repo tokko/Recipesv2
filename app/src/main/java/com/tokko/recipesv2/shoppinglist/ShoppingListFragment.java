@@ -44,6 +44,7 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
         adapter.setDeleteEnabled(true);
         setListAdapter(adapter);
         buttonBar.setVisibility(View.VISIBLE);
+        view.findViewById(R.id.buttonbar_delete).setVisibility(View.GONE);
     }
 
     @Override
