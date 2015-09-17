@@ -25,7 +25,6 @@ import com.tokko.recipesv2.recipes.IngredientDetailFragment;
 import com.tokko.recipesv2.shoppinglist.ShoppingListActivity;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -35,6 +34,7 @@ import java.util.Collections;
 import roboguice.RoboGuice;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
@@ -165,16 +165,17 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
     }
 
     @Test
-    @Ignore
     public void testListItemClick_EditedIngredient_IsEdited() throws Exception {
         String title = grocery.getTitle();
         onView(withText(title)).perform(click());
 
-        onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("grocery"), closeSoftKeyboard());
+        onView(withId(R.id.ingredientdetail_grocery)).perform(clearText(), typeText("grocery"), closeSoftKeyboard());
         onView(withId(R.id.buttonbar_ok)).perform(click());
         onView(withId(R.id.buttonbar_ok)).perform(click());
 
         onView(withText(title)).check(doesNotExist());
         onView(withText("grocery")).check(matches(isDisplayed()));
     }
+
+
 }

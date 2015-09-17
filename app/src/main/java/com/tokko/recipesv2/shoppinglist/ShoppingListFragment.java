@@ -27,7 +27,7 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
     @Inject
     private ShoppingListAdapter adapter;
     private ShoppingList list;
-    private ShoppingListItem editing;
+    private Integer editing;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,8 +50,9 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
             ShoppingListItem item = adapter.getItem(position);
             Bundle b = new Bundle();
             b.putSerializable(ItemDetailFragment.EXTRA_CLASS, item.getIngredient().getClass());
-            editing = item;
+            editing = position;
             b.putString(ItemDetailFragment.EXTRA_ENTITY, new AndroidJsonFactory().toPrettyString(item.getIngredient()));
+            ingredientDetailFragment.setIngredientDetailFragmentCallbacks(this);
             ingredientDetailFragment.setArguments(b);
         } catch (IOException e) {
             e.printStackTrace();
@@ -87,7 +88,8 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
     @Override
     public void ingredientAdded(Ingredient ingredient) {
         if (editing != null) {
-            editing.setIngredient(ingredient);
+            adapter.getItem(editing).setIngredient(ingredient);
+            adapter.notifyChange();
             editing = null;
             return;
         }
