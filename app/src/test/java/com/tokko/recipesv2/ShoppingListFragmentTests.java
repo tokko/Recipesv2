@@ -58,9 +58,9 @@ public class ShoppingListFragmentTests {
         sl.setItems(Collections.singletonList(sli));
 
         RecipeApi api = mock(RecipeApi.class);
-        RecipeApi.GetShoppinhList getShoppinhList = mock(RecipeApi.GetShoppinhList.class);
-        doReturn(getShoppinhList).when(api).getShoppinhList();
-        doReturn(sl).when(getShoppinhList).execute();
+        RecipeApi.GetShoppingList shoppingList = mock(RecipeApi.GetShoppingList.class);
+        doReturn(shoppingList).when(api).getShoppingList();
+        doReturn(sl).when(shoppingList).execute();
         RoboGuice.overrideApplicationInjector(RuntimeEnvironment.application, new AbstractModule() {
 
 

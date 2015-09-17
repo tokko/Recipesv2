@@ -22,8 +22,8 @@ public class ShoppingListDownloader extends AsyncTask<Void, Void, ShoppingList> 
     @Override
     protected ShoppingList doInBackground(Void... params) {
         try {
-            RecipeApi.GetShoppinhList shoppinhList = api.getShoppinhList();
-            return shoppinhList.execute();
+            RecipeApi.GetShoppingList shoppingList = api.getShoppingList();
+            return shoppingList.execute();
         } catch (IOException e) {
             e.printStackTrace();
         }

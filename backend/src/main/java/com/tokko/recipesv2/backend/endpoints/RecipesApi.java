@@ -128,7 +128,7 @@ public class RecipesApi {
     }
 
     @ApiMethod(
-            name = "getShoppinhList",
+            name = "getShoppingList",
             path = "shoppingList",
             httpMethod = ApiMethod.HttpMethod.GET)
     public ShoppingList getShoppingList(User user) {
