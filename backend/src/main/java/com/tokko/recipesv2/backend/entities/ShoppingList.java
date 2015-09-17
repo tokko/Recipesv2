@@ -1,12 +1,13 @@
 package com.tokko.recipesv2.backend.entities;
 
 import com.google.appengine.repackaged.org.codehaus.jackson.annotate.JsonIgnore;
-import com.google.appengine.repackaged.org.joda.time.DateTime;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Parent;
+
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -20,7 +20,8 @@ public class ShoppingListManager {
 
     public ShoppingList getGeneralList(String email) {
         RecipeUser user = recipeUserRa.getUserByEmail(email);
-        return shoppingListRa.getShoppingList(user, Constants.GENERAL_LIST_ID);
+        ShoppingList shoppingList = shoppingListRa.getShoppingList(user, Constants.GENERAL_LIST_ID);
+        return shoppingList;
     }
 
     public void commitShoppingList(ShoppingList shoppingList, String email) {
