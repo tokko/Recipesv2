@@ -83,6 +83,10 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
         ingredientDetailFragment.show(getFragmentManager(), "tag");
     }
 
+    @OnClick(R.id.buttonbar_cancel)
+    public void onCancel() {
+        getActivity().finish();
+    }
     @Override
     public void onShoppingListDownloaded(ShoppingList list) {
         this.list = list;
