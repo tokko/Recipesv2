@@ -1,6 +1,5 @@
 package unit.resourceaccess;
 
-import com.google.appengine.repackaged.org.joda.time.DateTime;
 import com.tokko.recipesv2.backend.endpoints.Constants;
 import com.tokko.recipesv2.backend.entities.Grocery;
 import com.tokko.recipesv2.backend.entities.Ingredient;
@@ -9,6 +8,7 @@ import com.tokko.recipesv2.backend.entities.ShoppingList;
 import com.tokko.recipesv2.backend.entities.ShoppingListItem;
 import com.tokko.recipesv2.backend.resourceaccess.ShoppingListRa;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 

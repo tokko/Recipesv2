@@ -63,4 +63,8 @@ public class ShoppingList extends BaseEntity<Long> {
     public List<ShoppingListItem> getItems() {
         return items;
     }
+
+    public void setItems(List<ShoppingListItem> items) {
+        this.items = items;
+    }
 }
