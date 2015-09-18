@@ -81,6 +81,10 @@
             android:name=".schedule.ScheduleActivity"
             android:label="@string/title_activity_schedule" >
         </activity>
+        <activity
+            android:name=".shoppinglist.ShoppingListActivity"
+            android:label="@string/title_activity_shopping_list"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

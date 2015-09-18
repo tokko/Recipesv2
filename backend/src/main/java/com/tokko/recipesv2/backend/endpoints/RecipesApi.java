@@ -128,13 +128,20 @@ public class RecipesApi {
     }
 
     @ApiMethod(
-            name = "getShoppinhList",
+            name = "getShoppingList",
             path = "shoppingList",
             httpMethod = ApiMethod.HttpMethod.GET)
     public ShoppingList getShoppingList(User user) {
         return shoppingListManager.getGeneralList(user.getEmail());
     }
 
+    @ApiMethod(
+            name = "commitShoppingList",
+            path = "shoppingListrwq",
+            httpMethod = ApiMethod.HttpMethod.POST)
+    public void commitShoppingList(ShoppingList shoppingList, User user) {
+        shoppingListManager.commitShoppingList(shoppingList, user.getEmail());
+    }
     @ApiMethod(
             name = "listUnits",
             path = "quantity",

@@ -1,7 +1,6 @@
 package com.tokko.recipesv2.backend.entities;
 
 import com.google.appengine.repackaged.org.codehaus.jackson.annotate.JsonIgnore;
-import com.google.appengine.repackaged.org.joda.time.DateTime;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
@@ -30,14 +29,15 @@ public class ShoppingList extends BaseEntity<Long> {
         parent = Ref.create(user);
     }
 
-    public DateTime getDate() {
-        return new DateTime(date);
+    public void setDate(long date) {
+        this.date = date;
     }
 
-    public void setDate(DateTime date) {
-        this.date = date.withTime(0, 0, 0, 0).getMillis();
-    }
-
+    /*
+        public void setDate(DateTime date) {
+            this.date = date.withTime(0, 0, 0, 0).getMillis();
+        }
+    */
     public void addItem(ShoppingListItem item) {
         items.add(item);
     }
@@ -61,5 +61,9 @@ public class ShoppingList extends BaseEntity<Long> {
 
     public List<ShoppingListItem> getItems() {
         return items;
+    }
+
+    public void setItems(List<ShoppingListItem> items) {
+        this.items = items;
     }
 }

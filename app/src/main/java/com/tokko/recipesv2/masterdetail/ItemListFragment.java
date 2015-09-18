@@ -75,6 +75,7 @@ public class ItemListFragment<T> extends RoboListFragment implements LoaderManag
                 i.putExtra(ItemListActivity.EXTRA_ENTITY_CLASS, Grocery.class);
                 startActivity(i);
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
 
