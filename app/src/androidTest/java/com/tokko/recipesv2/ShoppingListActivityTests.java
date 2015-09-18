@@ -84,13 +84,13 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
 
         RecipeApi api = mock(RecipeApi.class);
 
-        RecipeApi.GetShoppinhList getShoppinhList = mock(RecipeApi.GetShoppinhList.class);
+        RecipeApi.GetShoppingList shoppingList = mock(RecipeApi.GetShoppingList.class);
         ShoppingList sl = new ShoppingList();
         sl.setItems(new ArrayList<>());
         sl.getItems().add(sli);
         sl.setId(1L);
-        doReturn(getShoppinhList).when(api).getShoppinhList();
-        doReturn(sl).when(getShoppinhList).execute();
+        doReturn(shoppingList).when(api).getShoppingList();
+        doReturn(sl).when(shoppingList).execute();
 
         RecipeApi.ListGroceries listGroceries = mock(RecipeApi.ListGroceries.class);
         CollectionResponseGrocery collectionResponseGrocery = new CollectionResponseGrocery();
