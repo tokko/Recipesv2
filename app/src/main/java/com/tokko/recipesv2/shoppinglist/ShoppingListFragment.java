@@ -1,5 +1,6 @@
 package com.tokko.recipesv2.shoppinglist;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ListView;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.inject.Inject;
 import com.tokko.recipesv2.R;
+import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Ingredient;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ShoppingList;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ShoppingListItem;
@@ -17,6 +19,7 @@ import com.tokko.recipesv2.masterdetail.ItemDetailFragment;
 import com.tokko.recipesv2.recipes.IngredientDetailFragment;
 
 import java.io.IOException;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -25,6 +28,8 @@ import roboguice.fragment.provided.RoboListFragment;
 import roboguice.inject.InjectView;
 
 public class ShoppingListFragment extends RoboListFragment implements ShoppingListDownloader.ShoppingListDownloadedCallbacks, IngredientDetailFragment.IngredientDetailFragmentCallbacks {
+    @Inject
+    private RecipeApi api;
 
     @Inject
     private ShoppingListAdapter adapter;
@@ -88,6 +93,20 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
     public void onCancel() {
         getActivity().finish();
     }
+
+    @OnClick(R.id.buttonbar_ok)
+    public void onOk() {
+        List<ShoppingListItem> items = adapter.getItems();
+        list.setItems(items);
+        AsyncTask.execute(() -> {
+            try {
+                api.commitShoppingList(list).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
     @Override
     public void onShoppingListDownloaded(ShoppingList list) {
         this.list = list;

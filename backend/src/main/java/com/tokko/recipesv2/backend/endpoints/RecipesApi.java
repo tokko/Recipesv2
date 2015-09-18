@@ -137,7 +137,7 @@ public class RecipesApi {
 
     @ApiMethod(
             name = "commitShoppingList",
-            path = "shoppingList",
+            path = "shoppingListrwq",
             httpMethod = ApiMethod.HttpMethod.POST)
     public void commitShoppingList(ShoppingList shoppingList, User user) {
         shoppingListManager.commitShoppingList(shoppingList, user.getEmail());

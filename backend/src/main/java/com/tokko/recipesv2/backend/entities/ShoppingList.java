@@ -7,8 +7,6 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Parent;
 
-import org.joda.time.DateTime;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,14 +29,15 @@ public class ShoppingList extends BaseEntity<Long> {
         parent = Ref.create(user);
     }
 
-    public DateTime getDate() {
-        return new DateTime(date);
+    public void setDate(long date) {
+        this.date = date;
     }
 
-    public void setDate(DateTime date) {
-        this.date = date.withTime(0, 0, 0, 0).getMillis();
-    }
-
+    /*
+        public void setDate(DateTime date) {
+            this.date = date.withTime(0, 0, 0, 0).getMillis();
+        }
+    */
     public void addItem(ShoppingListItem item) {
         items.add(item);
     }

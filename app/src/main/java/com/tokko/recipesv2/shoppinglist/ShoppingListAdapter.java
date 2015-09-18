@@ -16,7 +16,11 @@ public class ShoppingListAdapter extends StringifyableAdapter<ShoppingListItem> 
 
     @Override
     protected String getItemString(int position) {
-        return getItem(position).getIngredient().getGrocery().getTitle();
+        ShoppingListItem item = getItem(position);
+        Ingredient ingredient = item.getIngredient();
+        Grocery grocery = ingredient.getGrocery();
+        String title = grocery.getTitle();
+        return title;
     }
 
     @Override
