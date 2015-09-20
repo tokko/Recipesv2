@@ -87,7 +87,16 @@ public class ItemListActivity extends RoboActivity
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (getFragmentManager().getBackStackEntryCount() <= 1)
+            finish();
+        else
+            getFragmentManager().popBackStack();
+    }
+
+    @Override
     public void detailFinished() {
-        getFragmentManager().popBackStack();
+        onBackPressed();
     }
 }
