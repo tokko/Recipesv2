@@ -157,11 +157,13 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
 
     @Test
     public void testListItemClick_EditedIngredient_IsEditing() throws Exception {
-        String title = grocery.getTitle();
+        String title = ingredient.getGrocery().getTitle();
+        Double quantity = ingredient.getQuantity().getQuantity();
+
         onView(withText(title)).perform(click());
 
-        onView(withText(grocery.getTitle())).check(matches(isDisplayed()));
-        onView(withText(String.valueOf(ingredient.getQuantity().getQuantity()))).check(matches(isDisplayed()));
+        onView(withText(title)).check(matches(isDisplayed()));
+        onView(withText(String.valueOf(quantity))).check(matches(isDisplayed()));
     }
 
     @Test
