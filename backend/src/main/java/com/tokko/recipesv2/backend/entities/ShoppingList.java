@@ -53,10 +53,16 @@ public class ShoppingList extends BaseEntity<Long> {
 
     @Override
     public void load() {
+        for (ShoppingListItem item : items) {
+            item.load();
+        }
     }
 
     @Override
     public void prepare() {
+        for (ShoppingListItem item : items) {
+            item.prepare();
+        }
     }
 
     public List<ShoppingListItem> getItems() {
