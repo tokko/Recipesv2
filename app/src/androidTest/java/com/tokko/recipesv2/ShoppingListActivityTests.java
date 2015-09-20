@@ -171,12 +171,13 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
         String title = grocery.getTitle();
         onView(withText(title)).perform(click());
 
-        onView(withId(R.id.ingredientdetail_grocery)).perform(clearText(), typeText("grocery"), closeSoftKeyboard());
+        String grocery = "blaha";
+        onView(withId(R.id.ingredientdetail_grocery)).perform(clearText(), typeText(grocery), closeSoftKeyboard());
         onView(withId(R.id.buttonbar_ok)).perform(click());
         onView(withId(R.id.buttonbar_ok)).perform(click());
 
         onView(withText(title)).check(doesNotExist());
-        onView(withText("grocery")).check(matches(isDisplayed()));
+        onView(withText(grocery)).check(matches(isDisplayed()));
     }
 
 
