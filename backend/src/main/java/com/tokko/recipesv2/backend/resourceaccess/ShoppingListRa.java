@@ -14,6 +14,7 @@ import static com.tokko.recipesv2.backend.resourceaccess.OfyService.ofy;
 public class ShoppingListRa {
 
     public ShoppingList commitShoppingList(ShoppingList sl) {
+        sl.prepare();
         Key<ShoppingList> now = ofy().save().entity(sl).now();
         LoadResult<ShoppingList> key = ofy().load().key(now);
         ShoppingList safe = key.safe();
@@ -29,12 +30,17 @@ public class ShoppingListRa {
         List<ShoppingList> list = ofy().load().type(ShoppingList.class).ancestor(user).order("-date").list();
         if (list.size() > 0)
             if (Objects.equals(list.get(0).getId(), Constants.GENERAL_LIST_ID)) list.remove(0);
-        if (!list.isEmpty())
-            return list.get(0);
+        if (!list.isEmpty()) {
+            ShoppingList shoppingList = list.get(0);
+            shoppingList.load();
+            return shoppingList;
+        }
         return null;
     }
 
     public ShoppingList getShoppingList(RecipeUser user, Long id) {
-        return ofy().load().type(ShoppingList.class).parent(user).id(id).now();
+        ShoppingList now = ofy().load().type(ShoppingList.class).parent(user).id(id).now();
+        now.load();
+        return now;
     }
 }

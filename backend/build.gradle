@@ -30,7 +30,7 @@ dependencies {
     compile 'com.google.appengine:appengine-endpoints:1.9.24'
     compile 'com.google.appengine:appengine-endpoints-deps:1.9.24'
     compile 'javax.servlet:servlet-api:2.5'
- //   compile 'joda-time:joda-time:2.8.2'
+    compile 'joda-time:joda-time:2.8.2'
     compile 'com.googlecode.objectify:objectify:5+'
     compile 'com.ganyo:gcm-server:1.0.2'
     testCompile 'junit:junit:4.12'
@@ -44,31 +44,32 @@ dependencies {
     compile 'org.mockito:mockito-all:2.0.2-beta'
 }
 
-
 task('incrementVersionNumber') << {
-    def appenginewebxml = file('/src/main/webapp/WEB-INF/appengine-web.xml')
-    if (appenginewebxml.canRead()) {
-        def xml = appenginewebxml.getText()
-        def matcher = Pattern.compile('<version>v(\\d+)').matcher(xml)
-        matcher.find()
-        def currentVersion = matcher.group(1)
-        def newVersion = currentVersion.toInteger() + 1
-        xml = matcher.replaceAll('<version>v' + newVersion)
-        appenginewebxml.write(xml);
-        def constantsFile = file('/src/main/java/com/tokko/recipesv2/backend/endpoints/Constants.java')
-        def code = constantsFile.getText()
-        def m2 = Pattern.compile('API_VERSION = "v\\d+"').matcher(code)
-        m2.find()
-        code = m2.replaceAll('API_VERSION = "v' + newVersion + '"')
-        constantsFile.write(code)
-    }
+    def appenginewebxml = file(getRootDir().getAbsolutePath() + '/backend/src/main/webapp/WEB-INF/appengine-web.xml')
+    //  if (appenginewebxml.canRead()) {
+    def xml = appenginewebxml.getText()
+    def matcher = Pattern.compile('<version>v(\\d+)').matcher(xml)
+    matcher.find()
+    def currentVersion = matcher.group(1)
+    def newVersion = currentVersion.toInteger() + 1
+    xml = matcher.replaceAll('<version>v' + newVersion)
+    appenginewebxml.write(xml);
+    def constantsFile = file(getRootDir().getAbsolutePath() + '/backend/src/main/java/com/tokko/recipesv2/backend/endpoints/Constants.java')
+    def code = constantsFile.getText()
+    def m2 = Pattern.compile('API_VERSION = "v\\d+"').matcher(code)
+    m2.find()
+    code = m2.replaceAll('API_VERSION = "v' + newVersion + '"')
+    constantsFile.write(code)
+    //  }
 }
+
+/*
 tasks.whenTaskAdded { task ->
     if (task.name == 'appengineUpdate') {
         task.dependsOn 'increaseVersionNumber'
     }
 }
-
+*/
 
 appengine {
     downloadSdk = true

@@ -1,6 +1,5 @@
 package unit.resourceaccess;
 
-import com.google.appengine.repackaged.org.joda.time.DateTime;
 import com.tokko.recipesv2.backend.endpoints.Constants;
 import com.tokko.recipesv2.backend.entities.Grocery;
 import com.tokko.recipesv2.backend.entities.Ingredient;
@@ -9,6 +8,7 @@ import com.tokko.recipesv2.backend.entities.ShoppingList;
 import com.tokko.recipesv2.backend.entities.ShoppingListItem;
 import com.tokko.recipesv2.backend.resourceaccess.ShoppingListRa;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -52,7 +52,7 @@ public class ShoppingListRaTests extends TestsWithObjectifyStorage {
         ShoppingListItem sli = new ShoppingListItem();
         sli.ingredient = i;
         ShoppingList sl = new ShoppingList();
-        sl.setDate(new DateTime().withDate(2015, 8, 5));
+        sl.setDate(new DateTime().withDate(2015, 8, 5).getMillis());
         sl.addItem(sli);
         sl.setUser(user);
         shoppingListRastRa.commitShoppingList(sl);
@@ -68,7 +68,7 @@ public class ShoppingListRaTests extends TestsWithObjectifyStorage {
         ShoppingListItem sli = new ShoppingListItem();
         sli.ingredient = i;
         ShoppingList sl = new ShoppingList();
-        sl.setDate(new DateTime().withDate(2015, 8, 5));
+        sl.setDate(new DateTime().withDate(2015, 8, 5).getMillis());
         sl.addItem(sli);
         sl.prepare();
         sl.setUser(user);
@@ -87,7 +87,7 @@ public class ShoppingListRaTests extends TestsWithObjectifyStorage {
         ShoppingListItem sli = new ShoppingListItem();
         sli.ingredient = i;
         ShoppingList sl = new ShoppingList();
-        sl.setDate(new DateTime().withDate(2015, 8, 5));
+        sl.setDate(new DateTime().withDate(2015, 8, 5).getMillis());
         sl.addItem(sli);
         sl.setUser(user);
         sl.prepare();
@@ -102,11 +102,11 @@ public class ShoppingListRaTests extends TestsWithObjectifyStorage {
     @Test
     public void testGetLatestShoppingList_ReturnsLatest() throws Exception {
         ShoppingList sl = new ShoppingList();
-        sl.setDate(new DateTime().withDate(2015, 8, 5));
+        sl.setDate(new DateTime().withDate(2015, 8, 5).getMillis());
         sl.setUser(user);
 
         ShoppingList sl1 = new ShoppingList();
-        sl1.setDate(new DateTime().withDate(2015, 8, 6));
+        sl1.setDate(new DateTime().withDate(2015, 8, 6).getMillis());
         sl1.setUser(user);
 
         ofy().save().entities(sl, sl1).now();
@@ -120,10 +120,10 @@ public class ShoppingListRaTests extends TestsWithObjectifyStorage {
     @Test
     public void testGetLatestShoppingList_DoesNotReturnGeneralList() throws Exception {
         ShoppingList sl = new ShoppingList();
-        sl.setDate(new DateTime().withDate(2015, 8, 5));
+        sl.setDate(new DateTime().withDate(2015, 8, 5).getMillis());
         sl.setUser(user);
         ShoppingList sl1 = new ShoppingList();
-        sl1.setDate(new DateTime().withDate(2015, 8, 6));
+        sl1.setDate(new DateTime().withDate(2015, 8, 6).getMillis());
         sl1.setUser(user);
         sl1.setId(Constants.GENERAL_LIST_ID);
 

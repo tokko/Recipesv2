@@ -138,7 +138,7 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
         notifyChange();
     }
 
-    private void notifyChange() {
+    public void notifyChange() {
         for (DataSetObserver obs : observers) {
             obs.onChanged();
         }

@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import com.tokko.recipesv2.R;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Recipe;
 import com.tokko.recipesv2.masterdetail.ItemListActivity;
+import com.tokko.recipesv2.shoppinglist.ShoppingListActivity;
 
 import roboguice.activity.RoboActivity;
 
@@ -38,7 +39,10 @@ public class ScheduleActivity extends RoboActivity {
             startActivity(new Intent(this, ItemListActivity.class).putExtra(ItemListActivity.EXTRA_ENTITY_CLASS, Recipe.class));
             return true;
         }
-
+        if (id == R.id.manage_shoppinglist) {
+            startActivity(new Intent(this, ShoppingListActivity.class));
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 }
