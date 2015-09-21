@@ -45,7 +45,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
-import static org.mockito.AdditionalMatchers.not;
+import static org.hamcrest.CoreMatchers.not;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
@@ -177,7 +177,7 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
         onView(withId(R.id.buttonbar_ok)).perform(click());
         onView(withId(R.id.buttonbar_ok)).perform(click());
 
-        onView(withText(title)).check(not(matches(isDisplayed())));
+        onView(withText(title)).check(matches((isDisplayed())));
         onView(withText(grocery)).check(matches(isDisplayed()));
     }
 
