@@ -30,6 +30,7 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.UUID;
 
 import roboguice.RoboGuice;
 
@@ -132,7 +133,7 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
     public void testAddButtonClick_AddIngredient_IsAddedToList() throws Exception {
         onView(withId(R.id.shoppingListAddbutton)).perform(click());
 
-        String grocery = "aegeha";
+        String grocery = UUID.randomUUID().toString();
         onView(withId(R.id.ingredientdetail_grocery)).perform(typeText(grocery), closeSoftKeyboard());
         onView(withId(R.id.buttonbar_ok)).perform(click());
         onView(withId(R.id.buttonbar_ok)).perform(click());
@@ -172,7 +173,7 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
         String title = grocery.getTitle();
         onView(withText(title)).perform(click());
 
-        String grocery = "blaha";
+        String grocery = UUID.randomUUID().toString();
         onView(withId(R.id.ingredientdetail_grocery)).perform(clearText(), typeText(grocery), closeSoftKeyboard());
         onView(withId(R.id.buttonbar_ok)).perform(click());
         onView(withId(R.id.buttonbar_ok)).perform(click());
