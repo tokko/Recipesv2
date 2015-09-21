@@ -10,7 +10,7 @@ dependencies:
     - chmod +x gradlew
     - curl -o $HOME/google_appengine_1.9.13.zip https://storage.googleapis.com/appengine-sdks/featured/appengine-java-sdk-1.9.26.zip
     - unzip -q -d $HOME $HOME/google_appengine_1.9.13.zip
-    - ./gradlew assembleRelease assembleTest assembleBackend assembleAndroidTest -PdisablePreDex
+    - ./gradlew assembleRelease backend:assemble assembleDebugAndroidTest -PdisablePreDex
   cache_directories:
       - ~/.android
      # - ~/android
