@@ -177,10 +177,8 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
         onView(withId(R.id.ingredientdetail_grocery)).perform(clearText(), typeText(grocery), closeSoftKeyboard());
         onView(withId(R.id.buttonbar_ok)).perform(click());
         onView(withId(R.id.buttonbar_ok)).perform(click());
-
+        Thread.sleep(200);
         onView(withText(title)).check(doesNotExist());
         onView(withText(grocery)).check(matches(isDisplayed()));
     }
-
-
 }
