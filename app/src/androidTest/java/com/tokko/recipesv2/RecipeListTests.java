@@ -136,14 +136,23 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
     @Test
     public void testEditIngredient_IsUpdated_NotAddingNew() throws Exception{
         createIngredient("grocery", 1, true);
+        Thread.sleep(500);
 
         onView(withText("grocery")).perform(click());
+        Thread.sleep(500);
+
         onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("postfix"), closeSoftKeyboard());
         Thread.sleep(500);
 
         onView(withId(R.id.buttonbar_ok)).perform(click());
+        Thread.sleep(500);
+
         onView(withId(R.id.buttonbar_ok)).perform(click());
+        Thread.sleep(500);
+
         onView(withText("grocery")).check(doesNotExist());
+        Thread.sleep(500);
+
         onView(withText("grocerypostfix")).check(matches(isDisplayed()));
     }
 
@@ -262,15 +271,23 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
 
     private void createIngredient(String groceryTitle, int quantity, boolean newGrocery) throws InterruptedException {
         onView(withId(R.id.listad_add)).perform(click());
+        Thread.sleep(500);
+
         onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.ingredient_list)))).perform(click());
+        Thread.sleep(500);
+
         onView(withId(R.id.ingredientdetail_grocery)).perform(typeText(groceryTitle), closeSoftKeyboard());
-        Thread.sleep(1000);
+
+        Thread.sleep(500);
 
         onView(withId(R.id.ingredient_quantity)).perform(typeText(String.valueOf(quantity)), closeSoftKeyboard());
-        Thread.sleep(1000);
+        Thread.sleep(500);
 
         onView(withId(R.id.buttonbar_ok)).perform(click());
+        Thread.sleep(500);
+
         if(newGrocery)
             onView(withId(R.id.buttonbar_ok)).perform(click());
+        Thread.sleep(500);
     }
 }
