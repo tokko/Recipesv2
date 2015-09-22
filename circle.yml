@@ -7,7 +7,7 @@ machine:
 dependencies:
   pre:
     - chmod +x gradlew
-
+    - ./gradlew assembleRelease assembleDebug backend:assemble -PdisablePreDex
   cache_directories:
       - ~/.android
 test:
