@@ -173,13 +173,17 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
     public void testListItemClick_EditedIngredient_IsEdited() throws Exception {
         String title = grocery.getTitle();
         onView(withText(title)).perform(click());
-
+        Thread.sleep(500);
         String grocery = UUID.randomUUID().toString();
+        Thread.sleep(500);
         onView(withId(R.id.ingredientdetail_grocery)).perform(clearText(), typeText(grocery), closeSoftKeyboard());
+        Thread.sleep(500);
         onView(withId(R.id.buttonbar_ok)).perform(click());
+        Thread.sleep(500);
         onView(withId(R.id.buttonbar_ok)).perform(click());
         Thread.sleep(500);
         onView(withText(title)).check(doesNotExist());
+        Thread.sleep(500);
         onView(withText(grocery)).check(matches(isDisplayed()));
     }
 }
