@@ -31,7 +31,7 @@ public class EditableIntegerTextViewSwitchable extends EditableViewSwitchable<Te
 
     @Override
     public Integer getData() {
-        return Integer.valueOf(label.getText().toString());
+        return Integer.valueOf(edit.getText().toString());
     }
 
     @Override
@@ -40,5 +40,13 @@ public class EditableIntegerTextViewSwitchable extends EditableViewSwitchable<Te
             edit.setText(data.toString());
             label.setText(data.toString());
         }
+    }
+
+    public void setOnFocusChangeListener(OnFocusChangeListener listener) {
+        edit.setOnFocusChangeListener(listener);
+    }
+
+    public void setOnEditorActionListener(TextView.OnEditorActionListener listener) {
+        edit.setOnEditorActionListener(listener);
     }
 }
