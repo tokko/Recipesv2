@@ -6,7 +6,7 @@ import com.tokko.recipesv2.backend.units.Quantity;
 
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -15,12 +15,8 @@ import static org.junit.Assert.assertNotNull;
 public class RecipeRescaleEngineTests {
 
     @Test
-    public void testRescaleIngredientsToNumberOfHelpings() throws Exception {
-        Ingredient i1 = new Ingredient();
-        i1.setQuantity(new Quantity(2.2));
-        Ingredient i2 = new Ingredient();
-        i2.setQuantity(new Quantity(1.3));
-        List<Ingredient> ingredients = Arrays.asList(i1, i2);
+    public void testRescaleIngredients_toDouble() throws Exception {
+        List<Ingredient> ingredients = getIngredientList(2.2, 1.3);
 
         RecipeRescaleEngine engine = new RecipeRescaleEngine();
 
@@ -32,13 +28,20 @@ public class RecipeRescaleEngineTests {
         assertEquals(2.6, rescaledIngredients.get(1).getQuantity().getQuantity(), 0);
     }
 
+    private List<Ingredient> getIngredientList(double... quantities) {
+        List<Ingredient> ret = new ArrayList<>();
+        for (int i = 0; i < quantities.length; i++) {
+            double q = quantities[i];
+            Ingredient i1 = new Ingredient();
+            i1.setQuantity(new Quantity(q));
+            ret.add(i1);
+        }
+        return ret;
+    }
+
     @Test
     public void testRescaleIngredients_toThirds() throws Exception {
-        Ingredient i1 = new Ingredient();
-        i1.setQuantity(new Quantity(3));
-        Ingredient i2 = new Ingredient();
-        i2.setQuantity(new Quantity(6));
-        List<Ingredient> ingredients = Arrays.asList(i1, i2);
+        List<Ingredient> ingredients = getIngredientList(3, 6);
 
         RecipeRescaleEngine engine = new RecipeRescaleEngine();
 
@@ -49,4 +52,5 @@ public class RecipeRescaleEngineTests {
         assertEquals(1, rescaledIngredients.get(0).getQuantity().getQuantity(), 0);
         assertEquals(2, rescaledIngredients.get(1).getQuantity().getQuantity(), 0);
     }
+
 }
