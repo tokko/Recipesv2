@@ -163,6 +163,10 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
 
     @Override
     protected Ingredient getEntity() {
+        Quantity q = new Quantity();
+        q.setQuantity(Double.valueOf(quantityEditText.getText().toString()));
+        q.setUnit((String) unitSpinner.getSelectedItem());
+        entity.setQuantity(q);
         return entity;
     }
 
@@ -172,7 +176,7 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
 
     @Override
     protected boolean onOk() {
-        Ingredient ingredient = entity;
+        Ingredient ingredient = getEntity();
         if (selectedGrocery != null) {
             ingredient.setGrocery(selectedGrocery);
             Quantity q = new Quantity();

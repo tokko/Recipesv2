@@ -5,6 +5,9 @@ public class Quantity {
     private double quantity;
     private String unit;
 
+    public Quantity() {
+    }
+
     public Quantity(double quantity) {
         this.quantity = quantity;
     }

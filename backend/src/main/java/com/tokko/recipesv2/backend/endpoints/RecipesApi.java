@@ -128,6 +128,15 @@ public class RecipesApi {
     }
 
     @ApiMethod(
+            name = "rescaleRecipe",
+            path = "rescaleRecipe",
+            httpMethod = ApiMethod.HttpMethod.POST
+    )
+    public Recipe rescaleRecipe(Recipe recipe, User user) {
+        return recipeManager.rescaleRecipe(recipe, user.getEmail());
+    }
+
+    @ApiMethod(
             name = "getShoppingList",
             path = "shoppingList",
             httpMethod = ApiMethod.HttpMethod.GET)
