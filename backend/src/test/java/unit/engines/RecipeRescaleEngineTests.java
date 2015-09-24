@@ -53,10 +53,7 @@ public class RecipeRescaleEngineTests {
 
         List<Ingredient> rescaledIngredients = engine.rescaleIngredientsToNumberOfHelpings(ingredients, 3, 1);
 
-        assertNotNull(rescaledIngredients);
-        assertEquals(ingredients.size(), rescaledIngredients.size());
-        assertEquals(1, rescaledIngredients.get(0).getQuantity().getQuantity(), 0);
-        assertEquals(2, rescaledIngredients.get(1).getQuantity().getQuantity(), 0);
+        assertIngredientQuantity(rescaledIngredients, 1, 2);
     }
 
 }
