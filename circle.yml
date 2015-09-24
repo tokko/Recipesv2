@@ -50,4 +50,4 @@ deployment:
   #    - git checkout master
   #    - git merge -m "Circle CI merge after deploy" alpha
       - git push https://$GIT_CREDS@github.com/tokko/Recipesv2.git HEAD:alpha-circleci
-      - git request-pull alpha-circleci https://$GIT_CREDS@github.com/tokko/Recipesv2.git master
+      - git request-pull master https://$GIT_CREDS@github.com/tokko/Recipesv2.git alpha-circleci
