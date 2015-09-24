@@ -44,6 +44,13 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
         super.onViewCreated(view, savedInstanceState);
         title.setHint("Title");
         helpings.setHint("Helpings");
+        helpings.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                if (entity.getId() == null) return;
+                new ResscaleRecipeTask().execute();
+            }
+        });
+        helpings.setFocusable(true);
     }
 
     @Override
@@ -92,5 +99,26 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
             }
         });
         return true;
+    }
+
+    private class ResscaleRecipeTask extends AsyncTask<Void, Void, Recipe> {
+
+        @Override
+        protected Recipe doInBackground(Void... params) {
+            try {
+                return api.rescaleRecipe(getEntity()).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Recipe recipe) {
+            if (recipe != null) {
+                entity = recipe;
+                bindView(recipe);
+            }
+        }
     }
 }

@@ -6,7 +6,6 @@ import com.tokko.recipesv2.backend.units.Units;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class QuantityCalculatorEngine {
 
@@ -28,8 +27,10 @@ public class QuantityCalculatorEngine {
 
     public Quantity upQuantity(Quantity q) {
         if (q.getUnit().equals(Units.G)) {
+            double newQuantity = q.getQuantity() / 1000;
+            if (newQuantity < 1) return q;
             Quantity q1 = new Quantity(Units.KG);
-            q1.setQuantity(q.getQuantity() / 1000);
+            q1.setQuantity(newQuantity);
             return upQuantity(q1);
         }
         if (q.getUnit().equals(Units.KG)) {
@@ -39,22 +40,16 @@ public class QuantityCalculatorEngine {
     }
 
     public List<Ingredient> toBaseQuantities(List<Ingredient> ingredients) {
-        ingredients.stream().forEach(new Consumer<Ingredient>() {
-            @Override
-            public void accept(Ingredient ingredient) {
-                ingredient.setQuantity(getBaseQuantity(ingredient.getQuantity()));
-            }
-        });
+        for (Ingredient ingredient : ingredients) {
+            ingredient.setQuantity(getBaseQuantity(ingredient.getQuantity()));
+        }
         return ingredients;
     }
 
     public List<Ingredient> upQuantities(List<Ingredient> ingredients) {
-        ingredients.stream().forEach(new Consumer<Ingredient>() {
-            @Override
-            public void accept(Ingredient ingredient) {
-                ingredient.setQuantity(upQuantity(ingredient.getQuantity()));
-            }
-        });
+        for (Ingredient ingredient : ingredients) {
+            ingredient.setQuantity(upQuantity(ingredient.getQuantity()));
+        }
         return ingredients;
     }
 }

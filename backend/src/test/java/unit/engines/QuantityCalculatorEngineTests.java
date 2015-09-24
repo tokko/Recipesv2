@@ -56,4 +56,11 @@ public class QuantityCalculatorEngineTests {
         assertEquals(1.234, uppedQuantity.getQuantity(), 0);
         assertEquals(Units.KG, uppedQuantity.getUnit());
     }
+
+    @Test
+    public void testUpQuantity_GramsLessThanOneKilo_IsStillGrams() throws Exception {
+        Quantity uppedQuantity = engine.upQuantity(new Quantity(Units.G, 22));
+        assertEquals(22, uppedQuantity.getQuantity(), 0);
+        assertEquals(Units.G, uppedQuantity.getUnit());
+    }
 }
