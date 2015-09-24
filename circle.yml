@@ -16,6 +16,8 @@ test:
     - case $CIRCLE_NODE_INDEX in 1) emulator -avd circleci-android21 -no-audio -no-window ;; esac:
         background: true
         parallel: true
+    - git branch alpha alpha-circleci
+    - git checkout alpha-circleci
     - ./gradlew increaseVersionCode incrementVersionNumber
     #- (./gradlew assembleRelease -PdisablePreDex):
     #    parallel: true
@@ -40,12 +42,13 @@ deployment:
   appengine:
     branch: alpha
     commands:
-      - erb .appcfg_oauth2_tokens_java.json > ~/.appcfg_oauth2_tokens_java
-      - ./gradlew appengineUpdate
-      - ./gradlew publishRelease
+ #     - erb .appcfg_oauth2_tokens_java.json > ~/.appcfg_oauth2_tokens_java
+ #     - ./gradlew appengineUpdate
+ #     - ./gradlew publishRelease
       - git config --global user.email "builds@circleci.com"
       - git config --global user.name "Circle CI"
       - git commit -am "Update version number and codes for automatic deploy."
-      - git checkout master
-      - git merge -m "Circle CI merge after deploy" alpha
-      - git push https://$GIT_CREDS@github.com/tokko/Recipesv2.git HEAD:master
+  #    - git checkout master
+  #    - git merge -m "Circle CI merge after deploy" alpha
+      - git push https://$GIT_CREDS@github.com/tokko/Recipesv2.git HEAD:alpha-circleci
+      - git request-pull alpha-circleci https://$GIT_CREDS@github.com/tokko/Recipesv2.git master
