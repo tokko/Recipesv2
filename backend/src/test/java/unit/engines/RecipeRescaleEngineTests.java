@@ -22,10 +22,16 @@ public class RecipeRescaleEngineTests {
 
         List<Ingredient> rescaledIngredients = engine.rescaleIngredientsToNumberOfHelpings(ingredients, 1, 2);
 
+        assertIngredientQuantity(rescaledIngredients, 4.4, 2.6);
+    }
+
+    private void assertIngredientQuantity(List<Ingredient> rescaledIngredients, double... expected) {
         assertNotNull(rescaledIngredients);
-        assertEquals(ingredients.size(), rescaledIngredients.size());
-        assertEquals(4.4, rescaledIngredients.get(0).getQuantity().getQuantity(), 0);
-        assertEquals(2.6, rescaledIngredients.get(1).getQuantity().getQuantity(), 0);
+        assertEquals(expected.length, rescaledIngredients.size());
+        for (int i = 0; i < expected.length; i++) {
+            double q = expected[i];
+            assertEquals(q, rescaledIngredients.get(i).getQuantity().getQuantity(), 0);
+        }
     }
 
     private List<Ingredient> getIngredientList(double... quantities) {
