@@ -16,10 +16,7 @@ test:
     - case $CIRCLE_NODE_INDEX in 1) emulator -avd circleci-android21 -no-audio -no-window ;; esac:
         background: true
         parallel: true
-    branch: alpha
-    commands:
-      - git branch alpha-circleci alpha
-      - git checkout alpha-circleci
+    - if [$CIRCLE_BRANCH == "alpha" ] then git checkout -b alpha-circleci alpha; fi
     - ./gradlew increaseVersionCode incrementVersionNumber
     #- (./gradlew assembleRelease -PdisablePreDex):
     #    parallel: true
