@@ -16,6 +16,7 @@ test:
     - case $CIRCLE_NODE_INDEX in 1) emulator -avd circleci-android21 -no-audio -no-window ;; esac:
         background: true
         parallel: true
+    - if [$CIRCLE_BRANCH == "alpha" ]; then git checkout -b alpha-circleci alpha; fi
     - ./gradlew increaseVersionCode incrementVersionNumber
     #- (./gradlew assembleRelease -PdisablePreDex):
     #    parallel: true
@@ -46,6 +47,5 @@ deployment:
       - git config --global user.email "builds@circleci.com"
       - git config --global user.name "Circle CI"
       - git commit -am "Update version number and codes for automatic deploy."
-      - git checkout master
-      - git merge -m "Circle CI merge after deploy" alpha
-      - git push https://$GIT_CREDS@github.com/tokko/Recipesv2.git HEAD:master
+      - git push https://$GIT_CREDS@github.com/tokko/Recipesv2.git HEAD:alpha-circleci
+ #     - git request-pull master https://$GIT_CREDS@github.com/tokko/Recipesv2.git alpha-circleci
