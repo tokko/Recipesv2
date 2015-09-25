@@ -41,9 +41,9 @@ deployment:
   appengine:
     branch: alpha
     commands:
-      - erb .appcfg_oauth2_tokens_java.json > ~/.appcfg_oauth2_tokens_java
-      - ./gradlew appengineUpdate
-      - ./gradlew publishRelease
+#      - erb .appcfg_oauth2_tokens_java.json > ~/.appcfg_oauth2_tokens_java
+ #     - ./gradlew appengineUpdate
+ #     - ./gradlew publishRelease
       - git config --global user.email "builds@circleci.com"
       - git config --global user.name "Circle CI"
       - git commit -am "Update version number and codes for automatic deploy."
