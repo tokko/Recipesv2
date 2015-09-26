@@ -1,9 +1,9 @@
 package unit.resourceaccess;
 
 import com.googlecode.objectify.Key;
-import com.tokko.recipesv2.backend.resourceaccess.GroceryRa;
 import com.tokko.recipesv2.backend.entities.Grocery;
 import com.tokko.recipesv2.backend.entities.RecipeUser;
+import com.tokko.recipesv2.backend.resourceaccess.GroceryRa;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +11,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 
 import static com.tokko.recipesv2.backend.resourceaccess.OfyService.ofy;
 import static org.junit.Assert.assertEquals;
@@ -34,6 +33,20 @@ public class GroceryRaTests extends TestsWithObjectifyStorage {
         RecipeUser otherUser = new RecipeUser("email1");
         ofy().save().entities(new Grocery("Grocery4", otherUser)).now();
         groceryRa = new GroceryRa();
+    }
+
+    @Test
+    public void testGetGrocery_ReturnsGrocery() throws Exception {
+        Grocery g = new Grocery();
+        g.setTitle("title");
+        g.setUser(user);
+        ofy().save().entity(g).now();
+
+        Grocery grocery = groceryRa.getGrocery(g.getId(), user);
+
+        assertNotNull(grocery);
+        assertEquals(g.getTitle(), grocery.getTitle());
+        assertEquals(g.getId(), grocery.getId());
     }
 
     @Test

@@ -76,4 +76,9 @@ public class RecipeManager {
         recipe.setIngredients(uppedIngredients);
         return recipe;
     }
+
+    public Recipe getRecipe(Long id, String email) {
+        RecipeUser user = recipeUserRa.getUserByEmail(email);
+        return recipeRa.getRecipe(user, id);
+    }
 }

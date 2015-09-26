@@ -1,6 +1,11 @@
 package com.tokko.recipesv2.masterdetail;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,6 +38,8 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
     @InjectView(R.id.buttonbar)
     private ViewGroup buttonBar;
     private boolean deletable = true;
+    private IntentFilter intentFilter;
+    private OnChangeReceiver onChangeReceiver;
 
     public ItemDetailFragment() {
     }
@@ -49,8 +56,7 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
                     entity = new AndroidJsonFactory().fromString(json, clz);
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
-                catch(IllegalArgumentException e){
+                } catch (IllegalArgumentException e) {
                     e.printStackTrace();
                 }
             } else
@@ -60,10 +66,29 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
                     e.printStackTrace();
                 }
         }
+
+        intentFilter = new IntentFilter("com.google.android.c2dm.intent.RECEIVE");
+        onChangeReceiver = new OnChangeReceiver();
     }
 
-    public void clear(){
-        if(clz == null) return;
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (onChangeReceiver == null)
+            onChangeReceiver = new OnChangeReceiver();
+        getActivity().registerReceiver(onChangeReceiver, intentFilter);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (onChangeReceiver != null)
+            getActivity().unregisterReceiver(onChangeReceiver);
+
+    }
+
+    public void clear() {
+        if (clz == null) return;
         try {
             entity = clz.newInstance();
         } catch (java.lang.InstantiationException | IllegalAccessException e) {
@@ -71,9 +96,11 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
         }
         bindView(entity);
     }
+
     public void setCallbacks(Callbacks callbacks) {
         this.callbacks = callbacks;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -161,11 +188,11 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
 
     @OnClick(R.id.buttonbar_cancel)
     public void onCancelButtonClick(View v) {
-        if(!onCancel()) return;
+        if (!onCancel()) return;
         leaveEditMode(Editable::discard);
     }
 
-    public boolean onCancel(){
+    public boolean onCancel() {
         //do nothing, let children override
         return true;
     }
@@ -176,14 +203,14 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
 
     @OnClick(R.id.buttonbar_ok)
     public void onOkButtonClick(View v) {
-        if(!onOk()) return;
+        if (!onOk()) return;
         leaveEditMode(Editable::accept);
         entity = getEntity();
     }
 
     @OnClick(R.id.buttonbar_delete)
     public void onDeleteButtonClick(View v) {
-        if(!onDelete()) return;
+        if (!onDelete()) return;
         leaveEditMode(Editable::discard);
         if (callbacks != null)
             callbacks.detailFinished();
@@ -196,6 +223,7 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
     private void hideButtonBar() {
         buttonBar.setVisibility(View.GONE);
     }
+
     private void traverseView(Action action) {
         traverseView((ViewGroup) getView(), action);
     }
@@ -211,11 +239,41 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
         }
     }
 
+    protected abstract EntityGetter<T> getEntityGetter();
+
     private interface Action {
         void action(Editable editable);
     }
 
     public interface Callbacks {
         void detailFinished();
+    }
+
+    public interface EntityGetter<T> {
+        T getEntity(Long id) throws IOException;
+    }
+
+    private class OnChangeReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                String data = intent.getStringExtra("id");
+                Long id = Long.valueOf(data);
+                if (id != null) {
+                    EntityGetter<T> entityGetter = getEntityGetter();
+                    if (entityGetter != null) {
+                        AsyncTask.execute(() -> {
+                            try {
+                                entity = entityGetter.getEntity(id);
+                                getActivity().runOnUiThread(() -> bindView(entity));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    }
+                }
+            } catch (ClassCastException ignore) {
+            }
+        }
     }
 }

@@ -17,4 +17,8 @@ public class GroceryRa {
         ofy().save().entity(grocery).now();
         return grocery;
     }
+
+    public Grocery getGrocery(Long id, RecipeUser user) {
+        return ofy().load().type(Grocery.class).parent(user).id(id).now();
+    }
 }

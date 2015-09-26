@@ -154,7 +154,7 @@ dependencies {
     provided 'org.roboguice:roboblender:3.0.1'
     compile 'org.roboguice:roboguice:3.0.1'
     compile 'com.google.android.gms:play-services:7.5.0'
-    //compile 'com.google.code.gson:gson:2.3.1'
+    compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.annimon:stream:1.0.1'
     compile 'com.google.code.gson:gson:2.3.1'

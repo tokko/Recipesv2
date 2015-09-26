@@ -222,6 +222,11 @@ public class IngredientDetailFragment extends ItemDetailFragment<Ingredient> imp
     }
 
     @Override
+    protected EntityGetter<Ingredient> getEntityGetter() {
+        return null;
+    }
+
+    @Override
     protected boolean onDelete() {
         ingredientCallbacks.ingredientDeleted(entity);
         dismiss();
