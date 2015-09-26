@@ -3,8 +3,8 @@ package com.tokko.recipesv2.backend.engines;
 import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
-import com.google.appengine.repackaged.com.google.gson.Gson;
 import com.google.inject.Inject;
+import com.tokko.recipesv2.backend.entities.BaseEntity;
 import com.tokko.recipesv2.backend.entities.RecipeUser;
 
 import java.io.IOException;
@@ -19,8 +19,8 @@ public class MessagingEngine {
         this.sender = sender;
     }
 
-    public <T> void sendMessage(T entity, RecipeUser user) {
-        Message msg = new Message.Builder().addData("message", new Gson().toJson(entity)).build();
+    public <T extends BaseEntity<Long>> void sendMessage(T entity, RecipeUser user) {
+        Message msg = new Message.Builder().addData("id", Long.toString(entity.getId())).build();
 
         List<String> records = user.getRegistrationIds();
         try {

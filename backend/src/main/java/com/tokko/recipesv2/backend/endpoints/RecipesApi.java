@@ -87,6 +87,14 @@ public class RecipesApi {
     }
 
     @ApiMethod(
+            name = "getGrocery",
+            path = "grocery/{id}",
+            httpMethod = ApiMethod.HttpMethod.GET)
+    public Grocery GetGrocery(@Named("id") Long id, User user) throws NotFoundException {
+        return groceryManager.getGrocery(id, user.getEmail());
+    }
+
+    @ApiMethod(
             name = "getSchedule",
             path = "schedule",
             httpMethod = ApiMethod.HttpMethod.GET)

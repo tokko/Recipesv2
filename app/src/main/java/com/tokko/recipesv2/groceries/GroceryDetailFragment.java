@@ -15,7 +15,6 @@ import com.tokko.recipesv2.views.EditTextViewSwitchable;
 
 import java.io.IOException;
 
-import butterknife.OnClick;
 import roboguice.inject.InjectView;
 
 public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
@@ -69,6 +68,11 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
     }
 
     @Override
+    protected Grocery refreshById(Long id) {
+        return null;
+    }
+
+    @Override
     protected boolean onOk() {
         AsyncTask.execute(() -> {
             try {
@@ -94,5 +98,26 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
             }
         });
         return true;
+    }
+
+    private class GroceryDownloader extends AsyncTask<Long, Void, Grocery> {
+
+        @Override
+        protected Grocery doInBackground(Long... params) {
+            try {
+                return api.getGrocery(params[0]).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Grocery grocery) {
+            if (grocery != null) {
+                entity = grocery;
+                bindView(entity);
+            }
+        }
     }
 }
