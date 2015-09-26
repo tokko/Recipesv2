@@ -31,7 +31,6 @@ import com.tokko.recipesv2.recipes.RecipeDetailFragment;
 import com.tokko.recipesv2.recipes.UnitDownloader;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -41,6 +40,7 @@ import java.util.List;
 import roboguice.RoboGuice;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
@@ -51,6 +51,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.AllOf.allOf;
 
 @RunWith(AndroidJUnit4.class)
@@ -119,7 +120,7 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
     public void testAddTwoIngredients_IngredientDetailsShouldBeCleared() throws Exception {
         createIngredient("grocery", 1, true);
 
-        onView(withText("grocery")).check(matches(isDisplayed()));
+        onView(withText(containsString("grocery"))).check(matches(isDisplayed()));
 
         onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.ingredient_list)))).perform(click());
         onView(withId(R.id.ingredientdetail_grocery)).check(matches(withText("")));
@@ -130,7 +131,7 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
     public void testAddIngredients_IsAddedToList() throws Exception {
         createIngredient("grocery", 1, true);
 
-        onView(withText("grocery")).check(matches(isDisplayed()));
+        onView(withText(containsString("grocery"))).check(matches(isDisplayed()));
     }
 
     @Test
@@ -138,22 +139,22 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
         createIngredient("grocery", 1, true);
         Thread.sleep(500);
 
-        onView(withText("grocery")).perform(click());
+        onView(withText(containsString("grocery"))).perform(click());
         Thread.sleep(500);
 
-        onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("postfix"), closeSoftKeyboard());
-        Thread.sleep(500);
-
-        onView(withId(R.id.buttonbar_ok)).perform(click());
+        onView(withId(R.id.ingredientdetail_grocery)).perform(clearText(), typeText("new"), closeSoftKeyboard());
         Thread.sleep(500);
 
         onView(withId(R.id.buttonbar_ok)).perform(click());
         Thread.sleep(500);
 
-        onView(withText("grocery")).check(doesNotExist());
+        onView(withId(R.id.buttonbar_ok)).perform(click());
         Thread.sleep(500);
 
-        onView(withText("grocerypostfix")).check(matches(isDisplayed()));
+        onView(withText(containsString("grocery"))).check(doesNotExist());
+        Thread.sleep(500);
+
+        onView(withText(containsString("new"))).check(matches(isDisplayed()));
     }
 
     @Test
@@ -175,26 +176,25 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
     public void testEditIngredient_Cancel_NotEdited() throws Exception {
         createIngredient("grocery", 1, true);
 
-        onView(withText("grocery")).perform(click());
+        onView(withText(containsString("grocery"))).perform(click());
         onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("postfix"), closeSoftKeyboard());
         Thread.sleep(1000);
 
         onView(withId(R.id.buttonbar_cancel)).perform(click());
-        onView(withText("grocerypostfix")).check(doesNotExist());
-        onView(withText("grocery")).check(matches(isDisplayed()));
+        onView(withText(containsString("grocerypostfix"))).check(doesNotExist());
+        onView(withText(containsString("grocery"))).check(matches(isDisplayed()));
     }
 
     @Test
     public void testDeleteIngredient_IsDeleted() throws Exception {
         createIngredient("grocery", 1, true);
 
-        onView(allOf(withId(R.id.deleteImageButton), hasSibling(withText("grocery")))).perform(click());
+        onView(allOf(withId(R.id.deleteImageButton), hasSibling(withText(containsString("grocery"))))).perform(click());
 
-        onView(withText("grocery")).check(doesNotExist());
+        onView(withText(containsString("grocery"))).check(doesNotExist());
     }
 
     @Test
-    @Ignore("Fails on travis for some reason?")
     public void testDeleteInstruction_IsDeleted() throws Exception {
         String instructionText = "instruction";
         createInstruction(instructionText);
@@ -213,7 +213,6 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
     }
 
     @Test
-    @Ignore("Fails on travis for some reason?")
     public void testEditInstruction_IsEdited() throws Exception{
         String instructionText = "inst";
         String postfix = "post";
@@ -259,7 +258,10 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
         onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.ingredient_list)))).perform(click());
 
         onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("grocery"), closeSoftKeyboard());
-        Thread.sleep(1000);
+        Thread.sleep(500);
+
+        onView(withId(R.id.ingredient_quantity)).perform(typeText("12"), closeSoftKeyboard());
+        Thread.sleep(500);
 
         onView(withId(R.id.buttonbar_ok)).perform(click());
         onView(withId(R.id.buttonbar_cancel)).perform(click());

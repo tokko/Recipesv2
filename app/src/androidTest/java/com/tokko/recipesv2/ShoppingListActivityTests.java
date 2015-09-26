@@ -135,6 +135,7 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
 
         String grocery = UUID.randomUUID().toString();
         onView(withId(R.id.ingredientdetail_grocery)).perform(typeText(grocery), closeSoftKeyboard());
+        onView(withId(R.id.ingredient_quantity)).perform(typeText("12"), closeSoftKeyboard());
         onView(withId(R.id.buttonbar_ok)).perform(click());
         onView(withId(R.id.buttonbar_ok)).perform(click());
         Thread.sleep(200);
