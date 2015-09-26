@@ -168,11 +168,11 @@ public class RecipesApi {
     }
 
     @ApiMethod(
-            name = "get",
+            name = "getRecipe",
             path = "recipe/{id}",
             httpMethod = ApiMethod.HttpMethod.GET)
-    public Recipe getRecipe(@Named("id") Long id) throws NotFoundException {
-        throw new UnsupportedOperationException("Not implemented");
+    public Recipe getRecipe(@Named("id") Long id, User user) throws NotFoundException {
+        return recipeManager.getRecipe(id, user.getEmail());
     }
 
     @ApiMethod(

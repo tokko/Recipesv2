@@ -67,6 +67,11 @@ public class InstructionsDetailFragment extends ItemDetailFragment<String> {
         dismiss();
     }
 
+    @Override
+    protected EntityGetter<String> getEntityGetter() {
+        return null;
+    }
+
     public void setCallbacks(Callbacks callbacks) {
         this.callbacks = callbacks;
     }

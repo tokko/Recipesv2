@@ -101,6 +101,11 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
         return true;
     }
 
+    @Override
+    protected EntityGetter<Recipe> getEntityGetter() {
+        return (id) -> api.getRecipe(id).execute();
+    }
+
     private class ResscaleRecipeTask extends AsyncTask<Void, Void, Recipe> {
 
         @Override

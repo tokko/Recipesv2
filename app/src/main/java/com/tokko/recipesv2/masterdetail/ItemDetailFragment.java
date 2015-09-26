@@ -238,7 +238,7 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
         }
     }
 
-    protected abstract T refreshById(Long id);
+    protected abstract EntityGetter<T> getEntityGetter();
 
     private interface Action {
         void action(Editable editable);
@@ -248,6 +248,10 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
         void detailFinished();
     }
 
+    public interface EntityGetter<T> {
+        T getEntity(Long id) throws IOException;
+    }
+
     private class OnChangeReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -255,10 +259,15 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
                 String data = intent.getStringExtra("id");
                 Long id = Long.valueOf(data);
                 if (id != null) {
-                    entity = refreshById(id);
-                    bindView(entity);
+                    EntityGetter<T> entityGetter = getEntityGetter();
+                    if (entityGetter != null) {
+                        entity = entityGetter.getEntity(id);
+                        bindView(entity);
+                    }
                 }
             } catch (ClassCastException ignore) {
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

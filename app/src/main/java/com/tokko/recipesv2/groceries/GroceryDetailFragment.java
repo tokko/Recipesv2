@@ -68,8 +68,8 @@ public class GroceryDetailFragment extends ItemDetailFragment<Grocery> {
     }
 
     @Override
-    protected Grocery refreshById(Long id) {
-        return null;
+    protected EntityGetter<Grocery> getEntityGetter() {
+        return (id) -> api.getGrocery(id).execute();
     }
 
     @Override
