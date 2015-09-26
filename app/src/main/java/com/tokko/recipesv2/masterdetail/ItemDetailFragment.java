@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -261,13 +262,17 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
                 if (id != null) {
                     EntityGetter<T> entityGetter = getEntityGetter();
                     if (entityGetter != null) {
-                        entity = entityGetter.getEntity(id);
-                        bindView(entity);
+                        AsyncTask.execute(() -> {
+                            try {
+                                entity = entityGetter.getEntity(id);
+                                getActivity().runOnUiThread(() -> bindView(entity));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
                     }
                 }
             } catch (ClassCastException ignore) {
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }
