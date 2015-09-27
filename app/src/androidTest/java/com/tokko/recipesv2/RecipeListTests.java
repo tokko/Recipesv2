@@ -7,6 +7,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.view.View;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
@@ -30,7 +31,9 @@ import com.tokko.recipesv2.recipes.RecipeAdapter;
 import com.tokko.recipesv2.recipes.RecipeDetailFragment;
 import com.tokko.recipesv2.recipes.UnitDownloader;
 
+import org.hamcrest.Matcher;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -49,10 +52,12 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.AllOf.allOf;
+import static org.hamcrest.core.IsNot.not;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -176,13 +181,18 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
     public void testEditIngredient_Cancel_NotEdited() throws Exception {
         createIngredient("grocery", 1, true);
 
-        onView(withText(containsString("grocery"))).perform(click());
-        onView(withId(R.id.ingredientdetail_grocery)).perform(typeText("postfix"), closeSoftKeyboard());
-        Thread.sleep(1000);
+        String title = "grocery";
+        onView(withText(containsString(title))).perform(click());
+
+        String newTitle = "newTitle";
+        onView(withId(R.id.ingredientdetail_grocery)).perform(clearText(), typeText(newTitle), closeSoftKeyboard());
+        Thread.sleep(200);
 
         onView(withId(R.id.buttonbar_cancel)).perform(click());
-        onView(withText(containsString("grocerypostfix"))).check(doesNotExist());
-        onView(withText(containsString("grocery"))).check(matches(isDisplayed()));
+        Thread.sleep(200);
+
+        onView(withText(containsString(newTitle))).check(doesNotExist());
+        onView(withText(containsString(title))).check(matches(isDisplayed()));
     }
 
     @Test
@@ -253,6 +263,7 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
     }
 
     @Test
+    @Ignore("Disabled cancellation of grocery. Is useless operation at the moment")
     public void testAddIngredient_NewGroceryCancelGroceryDialog_ShouldReturnToIngredientEditDialog() throws Exception{
         onView(withId(R.id.listad_add)).perform(click());
         onView(allOf(withId(R.id.editableList_addButton), isDescendantOfA(withId(R.id.ingredient_list)))).perform(click());
@@ -270,6 +281,8 @@ public class RecipeListTests extends ActivityInstrumentationTestCase2<ItemListAc
         onView(withId(R.id.buttonbar_ok)).check(matches(isDisplayed()));
         onView(withId(R.id.ingredient_quantity)).check(matches(isDisplayed()));
     }
+
+
 
     private void createIngredient(String groceryTitle, int quantity, boolean newGrocery) throws InterruptedException {
         onView(withId(R.id.listad_add)).perform(click());

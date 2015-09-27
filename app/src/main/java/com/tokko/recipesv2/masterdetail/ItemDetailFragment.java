@@ -178,6 +178,7 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
     }
 
     private void leaveEditMode(Action action) {
+
         traverseView(action);
         hideButtonBar();
     }
@@ -247,6 +248,8 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
 
     public interface Callbacks {
         void detailFinished();
+
+        void hideFragment();
     }
 
     public interface EntityGetter<T> {

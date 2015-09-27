@@ -115,7 +115,7 @@ public class ItemDetailFragmentTests {
     @Test
     public void testEdit_IsCreating_CancelButtonIsEnabled() {
         View v = fragment.getView().findViewById(R.id.buttonbar_cancel);
-        assertTrue(v.isEnabled());
+        assertFalse(v.isEnabled());
         assertEquals(View.VISIBLE, v.getVisibility());
     }
 

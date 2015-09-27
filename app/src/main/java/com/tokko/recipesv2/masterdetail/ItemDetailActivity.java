@@ -54,4 +54,9 @@ public class ItemDetailActivity extends RoboFragmentActivity implements ItemDeta
     public void detailFinished() {
         finish();
     }
+
+    @Override
+    public void hideFragment() {
+        finish();
+    }
 }
