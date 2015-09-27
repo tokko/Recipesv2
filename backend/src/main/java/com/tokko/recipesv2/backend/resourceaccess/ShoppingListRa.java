@@ -27,7 +27,7 @@ public class ShoppingListRa {
 
 
     public ShoppingList getLatestShoppingList(RecipeUser user) {
-        List<ShoppingList> list = ofy().load().type(ShoppingList.class).ancestor(user).order("-date").list();
+        List<ShoppingList> list = ofy().load().type(ShoppingList.class).ancestor(user).order("-expirationDate").list();
         if (list.size() > 0)
             if (Objects.equals(list.get(0).getId(), Constants.GENERAL_LIST_ID)) list.remove(0);
         if (!list.isEmpty()) {

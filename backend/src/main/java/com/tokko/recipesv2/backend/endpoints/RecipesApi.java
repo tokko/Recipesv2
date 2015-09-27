@@ -17,7 +17,7 @@ import com.tokko.recipesv2.backend.entities.ShoppingList;
 import com.tokko.recipesv2.backend.managers.GroceryManager;
 import com.tokko.recipesv2.backend.managers.RecipeManager;
 import com.tokko.recipesv2.backend.managers.RecipeUserManager;
-import com.tokko.recipesv2.backend.managers.ScheduleEntryManager;
+import com.tokko.recipesv2.backend.managers.ScheduleManager;
 import com.tokko.recipesv2.backend.managers.ShoppingListManager;
 
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class RecipesApi {
     private QuantityCalculatorEngine quantityCalculatorEngine;
 
     @Inject
-    private ScheduleEntryManager scheduleEntryManager;
+    private ScheduleManager scheduleEntryManager;
 
     @Inject
     private ShoppingListManager shoppingListManager;
