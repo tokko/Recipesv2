@@ -58,15 +58,7 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
 
     @Override
     public void onClick(View v) {
-        AsyncTask.execute(() -> {
-            try {
-                CommitScheduleContainer csc = new CommitScheduleContainer();
-                csc.setEntries(adapter.data);
-                api.commitSchedule(csc).execute();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+
     }
 
     @Override
@@ -209,6 +201,15 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
                             if (tag.getRecipes() == null) tag.setRecipes(new ArrayList<>());
                             tag.getRecipes().add(r);
                             adapter.notifyDataSetChanged();
+                            AsyncTask.execute(() -> {
+                                try {
+                                    CommitScheduleContainer csc = new CommitScheduleContainer();
+                                    csc.setEntries(adapter.data);
+                                    api.commitSchedule(csc).execute();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            });
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
