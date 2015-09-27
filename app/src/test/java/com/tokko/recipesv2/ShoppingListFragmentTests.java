@@ -8,6 +8,7 @@ import com.google.inject.TypeLiteral;
 import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Grocery;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Ingredient;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.Quantity;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ShoppingList;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ShoppingListItem;
 import com.tokko.recipesv2.groceries.GroceryAdapter;
@@ -53,6 +54,10 @@ public class ShoppingListFragmentTests {
         Ingredient i = new Ingredient();
         i.setGrocery(g);
         i.setId(2L);
+        Quantity quantity = new Quantity();
+        quantity.setQuantity(2.0);
+        quantity.setUnit("g");
+        i.setQuantity(quantity);
         ShoppingListItem sli = new ShoppingListItem();
         sli.setIngredient(i);
         sl.setItems(Collections.singletonList(sli));

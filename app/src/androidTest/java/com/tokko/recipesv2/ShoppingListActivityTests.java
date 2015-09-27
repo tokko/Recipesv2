@@ -46,6 +46,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -146,19 +147,19 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
         onView(withId(R.id.buttonbar_ok)).perform(click());
         Thread.sleep(200);
 
-        onView(withText(grocery)).check(matches(isDisplayed()));
+        onView(withText(containsString(grocery))).check(matches(isDisplayed()));
     }
 
     @Test
     public void testAddButtonClick_DeleteIngredient_IsDeletedFromList() throws Exception {
-        onView(allOf(hasSibling(withText(grocery.getTitle())), withId(R.id.deleteImageButton))).perform(click());
+        onView(allOf(hasSibling(withText(containsString(grocery.getTitle()))), withId(R.id.deleteImageButton))).perform(click());
 
-        onView(withText(grocery.getTitle())).check(doesNotExist());
+        onView(withText(containsString(grocery.getTitle()))).check(doesNotExist());
     }
 
     @Test
     public void testListItemClick_OpensIngredientFragmentWithDeleteButtonHidden() throws Exception {
-        onView(withText(grocery.getTitle())).perform(click());
+        onView(withText(containsString(grocery.getTitle()))).perform(click());
 
         onView(withId(R.id.ingredientdetail_grocery)).check(matches(isDisplayed()));
 
@@ -170,16 +171,16 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
         String title = ingredient.getGrocery().getTitle();
         Double quantity = ingredient.getQuantity().getQuantity();
 
-        onView(withText(title)).perform(click());
+        onView(withText(containsString(title))).perform(click());
 
-        onView(withText(title)).check(matches(isDisplayed()));
-        onView(withText(String.valueOf(quantity))).check(matches(isDisplayed()));
+        onView(withText(containsString(title))).check(matches(isDisplayed()));
+        onView(withText(containsString((String.valueOf(quantity))))).check(matches(isDisplayed()));
     }
 
     @Test
     public void testListItemClick_EditedIngredient_IsEdited() throws Exception {
         String title = grocery.getTitle();
-        onView(withText(title)).perform(click());
+        onView(withText(containsString(title))).perform(click());
         Thread.sleep(500);
         String grocery = UUID.randomUUID().toString();
         Thread.sleep(500);
@@ -189,8 +190,8 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
         Thread.sleep(500);
         onView(withId(R.id.buttonbar_ok)).perform(click());
         Thread.sleep(500);
-        onView(withText(title)).check(doesNotExist());
+        onView(withText(containsString(title))).check(doesNotExist());
         Thread.sleep(500);
-        onView(withText(grocery)).check(matches(isDisplayed()));
+        onView(withText(containsString(grocery))).check(matches(isDisplayed()));
     }
 }
