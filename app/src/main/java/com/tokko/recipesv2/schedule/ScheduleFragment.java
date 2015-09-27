@@ -1,6 +1,7 @@
 package com.tokko.recipesv2.schedule;
 
 import android.app.LoaderManager;
+import android.content.Intent;
 import android.content.Loader;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.CommitScheduleContainer;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Recipe;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ScheduleEntry;
+import com.tokko.recipesv2.shoppinglist.ShoppingListActivity;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -58,7 +60,7 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
 
     @Override
     public void onClick(View v) {
-
+        startActivity(new Intent(getActivity(), ShoppingListActivity.class).putExtra("generated", true));
     }
 
     @Override
