@@ -3,6 +3,7 @@ package unit.engines;
 import com.tokko.recipesv2.backend.engines.ShoppingListAggregatorEngine;
 import com.tokko.recipesv2.backend.entities.Grocery;
 import com.tokko.recipesv2.backend.entities.Ingredient;
+import com.tokko.recipesv2.backend.entities.ShoppingListItem;
 import com.tokko.recipesv2.backend.units.Quantity;
 import com.tokko.recipesv2.backend.units.Units;
 
@@ -45,16 +46,16 @@ public class ShoppingListAggregatorEngineTests {
         i3.setId(3L);
         i3.setQuantity(new Quantity(Units.KG, 0.5));
 
-        List<Ingredient> ingredients = new ArrayList<>(Arrays.asList(i1, i2, i3));
+        List<ShoppingListItem> ingredients = new ArrayList<>(Arrays.asList(new ShoppingListItem(i1), new ShoppingListItem(i2), new ShoppingListItem(i3)));
 
-        List<Ingredient> aggregated = shoppingListAggregatorEngine.aggregateIngredients(ingredients);
+        List<ShoppingListItem> aggregated = shoppingListAggregatorEngine.aggregateIngredients(ingredients);
 
         assertEquals(2, aggregated.size());
-        assertEquals(1.5, aggregated.get(0).getQuantity().getQuantity(), 0);
-        assertEquals(Units.KG, aggregated.get(0).getQuantity().getUnit());
+        assertEquals(1.5, aggregated.get(0).ingredient.getQuantity().getQuantity(), 0);
+        assertEquals(Units.KG, aggregated.get(0).ingredient.getQuantity().getUnit());
 
-        assertEquals(2, aggregated.get(1).getQuantity().getQuantity(), 0);
-        assertEquals(Units.KG, aggregated.get(1).getQuantity().getUnit());
+        assertEquals(2, aggregated.get(1).ingredient.getQuantity().getQuantity(), 0);
+        assertEquals(Units.KG, aggregated.get(1).ingredient.getQuantity().getUnit());
 
     }
 }

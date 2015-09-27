@@ -5,6 +5,13 @@ public class ShoppingListItem extends BaseEntity<Void> {
     public boolean purchased;
     public boolean generated = true;
 
+    public ShoppingListItem() {
+    }
+
+    public ShoppingListItem(Ingredient ingredient) {
+        this.ingredient = ingredient;
+    }
+
     @Override
     public Void getId() {
         return null;
@@ -18,5 +25,13 @@ public class ShoppingListItem extends BaseEntity<Void> {
     @Override
     public void prepare() {
         ingredient.prepare();
+    }
+
+    public void addIngredientQuantity(ShoppingListItem other) {
+        if (ingredient == null)
+            ingredient = other.ingredient;
+        else
+            ingredient.getQuantity().add(other.ingredient.getQuantity());
+        generated = other.generated;
     }
 }
