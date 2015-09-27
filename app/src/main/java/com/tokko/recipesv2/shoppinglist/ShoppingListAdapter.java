@@ -19,7 +19,7 @@ public class ShoppingListAdapter extends StringifyableAdapter<ShoppingListItem> 
         ShoppingListItem item = getItem(position);
         Ingredient ingredient = item.getIngredient();
         Grocery grocery = ingredient.getGrocery();
-        String title = grocery.getTitle();
+        String title = ingredient.getQuantity().getQuantity() + ingredient.getQuantity().getUnit() + " " + grocery.getTitle();
         return title;
     }
 

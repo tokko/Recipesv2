@@ -17,7 +17,10 @@ public class ShoppingList extends BaseEntity<Long> {
     public Long id;
 
     @Index
-    public long date;
+    public long expirationDate;
+
+    @Index
+    public long startDate;
 
     @JsonIgnore
     @Parent
@@ -29,15 +32,10 @@ public class ShoppingList extends BaseEntity<Long> {
         parent = Ref.create(user);
     }
 
-    public void setDate(long date) {
-        this.date = date;
+    public void setExpirationDate(long expirationDate) {
+        this.expirationDate = expirationDate;
     }
 
-    /*
-        public void setDate(DateTime date) {
-            this.date = date.withTime(0, 0, 0, 0).getMillis();
-        }
-    */
     public void addItem(ShoppingListItem item) {
         items.add(item);
     }
@@ -63,6 +61,14 @@ public class ShoppingList extends BaseEntity<Long> {
         for (ShoppingListItem item : items) {
             item.prepare();
         }
+    }
+
+    public long getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(long startDate) {
+        this.startDate = startDate;
     }
 
     public List<ShoppingListItem> getItems() {

@@ -10,14 +10,14 @@ import com.tokko.recipesv2.backend.resourceaccess.ScheduleEntryRa;
 
 import java.util.List;
 
-public class ScheduleEntryManager {
+public class ScheduleManager {
 
     private ScheduleCalculatorEngine scheduleCalculatorEngine;
     private ScheduleEntryRa scheduleEntryRa;
     private RecipeUserRa recipeUserRa;
 
     @Inject
-    public ScheduleEntryManager(ScheduleCalculatorEngine scheduleCalculatorEngine, ScheduleEntryRa scheduleEntryRa, RecipeUserRa recipeUserRa) {
+    public ScheduleManager(ScheduleCalculatorEngine scheduleCalculatorEngine, ScheduleEntryRa scheduleEntryRa, RecipeUserRa recipeUserRa) {
         this.scheduleCalculatorEngine = scheduleCalculatorEngine;
         this.scheduleEntryRa = scheduleEntryRa;
         this.recipeUserRa = recipeUserRa;

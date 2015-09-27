@@ -23,7 +23,7 @@ public class ScheduleLoader extends AbstractLoader<ScheduleEntry>{
     @Override
     public List<ScheduleEntry> loadInBackground() {
         try {
-            return api.getSchedule(timeUtils.getCurrentTime().getMillis()).execute().getItems();
+            return api.getSchedule(timeUtils.getCurrentDate().getMillis()).execute().getItems();
         } catch (IOException e) {
             e.printStackTrace();
             return null;

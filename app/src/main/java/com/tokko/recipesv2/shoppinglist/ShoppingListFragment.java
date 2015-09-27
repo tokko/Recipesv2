@@ -37,6 +37,24 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
     private Integer editing;
     @InjectView(R.id.buttonbar)
     private LinearLayout buttonBar;
+    private boolean generated;
+
+    public static ShoppingListFragment newInstance(boolean generated) {
+        ShoppingListFragment f = new ShoppingListFragment();
+        Bundle b = new Bundle();
+        b.putBoolean("generated", generated);
+        f.setArguments(b);
+        return f;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            generated = getArguments().getBoolean("generated");
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.shoppinglistfragment, null);
@@ -75,7 +93,7 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
         super.onStart();
         ShoppingListDownloader listDownloader = RoboGuice.getInjector(getActivity()).getInstance(ShoppingListDownloader.class);
         listDownloader.setCallbacks(this);
-        listDownloader.execute();
+        listDownloader.execute(generated);
     }
 
     @OnClick(R.id.shoppingListAddbutton)

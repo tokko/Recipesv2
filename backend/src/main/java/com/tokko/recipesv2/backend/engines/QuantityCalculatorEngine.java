@@ -1,6 +1,7 @@
 package com.tokko.recipesv2.backend.engines;
 
 import com.tokko.recipesv2.backend.entities.Ingredient;
+import com.tokko.recipesv2.backend.entities.ShoppingListItem;
 import com.tokko.recipesv2.backend.units.Quantity;
 import com.tokko.recipesv2.backend.units.Units;
 
@@ -49,6 +50,20 @@ public class QuantityCalculatorEngine {
     public List<Ingredient> upQuantities(List<Ingredient> ingredients) {
         for (Ingredient ingredient : ingredients) {
             ingredient.setQuantity(upQuantity(ingredient.getQuantity()));
+        }
+        return ingredients;
+    }
+
+    public List<ShoppingListItem> toBaseQuantitiesShoppingList(List<ShoppingListItem> ingredients) {
+        for (ShoppingListItem ingredient : ingredients) {
+            ingredient.ingredient.setQuantity(getBaseQuantity(ingredient.ingredient.getQuantity()));
+        }
+        return ingredients;
+    }
+
+    public List<ShoppingListItem> upQuantitiesShoppingList(List<ShoppingListItem> ingredients) {
+        for (ShoppingListItem ingredient : ingredients) {
+            ingredient.ingredient.setQuantity(upQuantity(ingredient.ingredient.getQuantity()));
         }
         return ingredients;
     }

@@ -13,7 +13,12 @@ public class ShoppingListActivity extends RoboActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new ShoppingListFragment()).commit();
+        ShoppingListFragment fragment;
+        if (getIntent().getExtras() != null)
+            fragment = ShoppingListFragment.newInstance(true);
+        else
+            fragment = ShoppingListFragment.newInstance(false);
+        getFragmentManager().beginTransaction().replace(android.R.id.content, fragment).commit();
     }
 
     @Override
