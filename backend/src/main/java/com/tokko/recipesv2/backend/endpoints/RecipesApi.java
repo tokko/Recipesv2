@@ -154,11 +154,20 @@ public class RecipesApi {
 
     @ApiMethod(
             name = "commitShoppingList",
-            path = "shoppingListrwq",
+            path = "shoppingListrwg",
             httpMethod = ApiMethod.HttpMethod.POST)
     public void commitShoppingList(ShoppingList shoppingList, User user) {
         shoppingListManager.commitShoppingList(shoppingList, user.getEmail());
     }
+
+    @ApiMethod(
+            name = "generateShoppingList",
+            path = "shoppingListrwggwa",
+            httpMethod = ApiMethod.HttpMethod.GET)
+    public void gemerateShoppingList(@Named("date") Long date, User user) {
+        shoppingListManager.generateShoppingList(date, user.getEmail());
+    }
+
     @ApiMethod(
             name = "listUnits",
             path = "quantity",
