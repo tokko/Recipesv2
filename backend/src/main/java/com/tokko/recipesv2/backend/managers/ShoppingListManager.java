@@ -5,9 +5,11 @@ import com.tokko.recipesv2.backend.endpoints.Constants;
 import com.tokko.recipesv2.backend.engines.ShoppingListGeneralListPreparerEngine;
 import com.tokko.recipesv2.backend.entities.Grocery;
 import com.tokko.recipesv2.backend.entities.RecipeUser;
+import com.tokko.recipesv2.backend.entities.ScheduleEntry;
 import com.tokko.recipesv2.backend.entities.ShoppingList;
 import com.tokko.recipesv2.backend.entities.ShoppingListItem;
 import com.tokko.recipesv2.backend.resourceaccess.RecipeUserRa;
+import com.tokko.recipesv2.backend.resourceaccess.ScheduleEntryRa;
 import com.tokko.recipesv2.backend.resourceaccess.ShoppingListRa;
 
 import java.util.ArrayList;
@@ -19,13 +21,19 @@ public class ShoppingListManager {
     private RecipeUserRa recipeUserRa;
     private ShoppingListGeneralListPreparerEngine shoppingListGeneralListPreparerEngine;
     private GroceryManager groceryManager;
+    private ScheduleEntryRa scheduleEntryRa;
 
     @Inject
-    public ShoppingListManager(ShoppingListRa shoppingListRa, RecipeUserRa recipeUserRa, ShoppingListGeneralListPreparerEngine shoppingListGeneralListPreparerEngine, GroceryManager groceryManager) {
+    public ShoppingListManager(ShoppingListRa shoppingListRa,
+                               RecipeUserRa recipeUserRa,
+                               ShoppingListGeneralListPreparerEngine shoppingListGeneralListPreparerEngine,
+                               GroceryManager groceryManager,
+                               ScheduleEntryRa scheduleEntryRa) {
         this.shoppingListRa = shoppingListRa;
         this.recipeUserRa = recipeUserRa;
         this.shoppingListGeneralListPreparerEngine = shoppingListGeneralListPreparerEngine;
         this.groceryManager = groceryManager;
+        this.scheduleEntryRa = scheduleEntryRa;
     }
 
     public ShoppingList getGeneralList(String email) {
@@ -44,5 +52,14 @@ public class ShoppingListManager {
         groceryManager.commitGroceries(groceries, email);
         shoppingList.setItems(shoppingListGeneralListPreparerEngine.markItemsAsGeneralList(shoppingList.getItems()));
         shoppingListRa.commitShoppingList(shoppingList);
+    }
+
+    public ShoppingList generateShoppingList(long date, String email) {
+        RecipeUser user = recipeUserRa.getUserByEmail(email);
+        ShoppingList generalList = getGeneralList(email);
+        List<ScheduleEntry> scheduleEntries = scheduleEntryRa.getScheduleEntries(date, user);
+        // List<Ingredient> ingredients = generalList.getItems();
+        ShoppingList sl = new ShoppingList();
+        return null;
     }
 }
