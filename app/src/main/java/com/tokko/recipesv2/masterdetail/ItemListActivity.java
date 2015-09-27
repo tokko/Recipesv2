@@ -99,4 +99,9 @@ public class ItemListActivity extends RoboActivity
     public void detailFinished() {
         onBackPressed();
     }
+
+    @Override
+    public void hideFragment() {
+        getFragmentManager().popBackStack();
+    }
 }
