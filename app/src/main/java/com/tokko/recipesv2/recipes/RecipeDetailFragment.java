@@ -15,6 +15,7 @@ import com.tokko.recipesv2.views.EditableIntegerTextViewSwitchable;
 import com.tokko.recipesv2.views.EditableListView;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import roboguice.inject.InjectView;
 
@@ -86,6 +87,14 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
                 e.printStackTrace();
             }
         });
+        return true;
+    }
+
+    @Override
+    public boolean onCancel() {
+        if(null == entity.getId()){
+            callbacks.hideFragment();
+        }
         return true;
     }
 

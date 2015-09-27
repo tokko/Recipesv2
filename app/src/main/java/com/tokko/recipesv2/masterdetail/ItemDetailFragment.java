@@ -191,13 +191,6 @@ public abstract class ItemDetailFragment<T> extends RoboDialogFragment {
     public void onCancelButtonClick(View v) {
         if (!onCancel()) return;
         leaveEditMode(Editable::discard);
-        try {
-            if(null == entity.getClass().getMethod("getId").invoke(entity)){
-                callbacks.hideFragment();
-            }
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            e.printStackTrace();
-        }
     }
 
     public boolean onCancel() {
