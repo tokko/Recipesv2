@@ -38,6 +38,7 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
     @InjectView(R.id.buttonbar)
     private LinearLayout buttonBar;
     private boolean generated;
+    private boolean checklist;
 
     public static ShoppingListFragment newInstance(boolean generated) {
         ShoppingListFragment f = new ShoppingListFragment();
@@ -73,19 +74,27 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        IngredientDetailFragment ingredientDetailFragment = RoboGuice.getInjector(getActivity()).getInstance(IngredientDetailFragment.class);
-        try {
-            ShoppingListItem item = adapter.getItem(position);
-            Bundle b = new Bundle();
-            b.putSerializable(ItemDetailFragment.EXTRA_CLASS, item.getIngredient().getClass());
-            editing = position;
-            b.putString(ItemDetailFragment.EXTRA_ENTITY, new AndroidJsonFactory().toPrettyString(item.getIngredient()));
-            ingredientDetailFragment.setIngredientDetailFragmentCallbacks(this);
-            ingredientDetailFragment.setArguments(b);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(checklist){
+            for (int i = 0; i < adapter.getCount(); i++) {
+                l.setItemChecked(i, adapter.getItem(i).getPurchased());
+            }
+            list.getItems().get(position).setPurchased(l.getCheckedItemPositions().get(position));
         }
-        ingredientDetailFragment.show(getFragmentManager(), "tag");
+        else {
+            IngredientDetailFragment ingredientDetailFragment = RoboGuice.getInjector(getActivity()).getInstance(IngredientDetailFragment.class);
+            try {
+                ShoppingListItem item = adapter.getItem(position);
+                Bundle b = new Bundle();
+                b.putSerializable(ItemDetailFragment.EXTRA_CLASS, item.getIngredient().getClass());
+                editing = position;
+                b.putString(ItemDetailFragment.EXTRA_ENTITY, new AndroidJsonFactory().toPrettyString(item.getIngredient()));
+                ingredientDetailFragment.setIngredientDetailFragmentCallbacks(this);
+                ingredientDetailFragment.setArguments(b);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ingredientDetailFragment.show(getFragmentManager(), "tag");
+        }
     }
 
     @Override
@@ -124,7 +133,8 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
             }
         });
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        adapter.setChecklist(true);
+        checklist = true;
+        adapter.setChecklist(checklist);
         setListAdapter(adapter);
     }
 
