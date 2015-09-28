@@ -123,7 +123,11 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
                 e.printStackTrace();
             }
         });
+        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        adapter.setChecklist(true);
+        setListAdapter(adapter);
     }
+
 
     @Override
     public void onShoppingListDownloaded(ShoppingList list) {

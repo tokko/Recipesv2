@@ -28,7 +28,6 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
     protected ArrayList<T> data = new ArrayList<>();
     protected ArrayList<T> original = new ArrayList<>();
     private ArrayList<DataSetObserver> observers = new ArrayList<>();
-    private int resource = R.layout.adapterentry;
     private int textViewResourceId = android.R.id.text1;
     @Inject
     private LayoutInflater inflater;
@@ -91,21 +90,27 @@ public abstract class StringifyableAdapter<T> implements ListAdapter, Iterable<T
         return false;
     }
 
+    protected int getResource(){
+        return  R.layout.adapterentry;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null)
-            convertView = inflater.inflate(resource, null);
+            convertView = inflater.inflate(getResource(), null);
         TextView tv = (TextView) convertView.findViewById(textViewResourceId);
         tv.setText(getItemString(position));
         View deleteButton = convertView.findViewById(R.id.deleteImageButton);
         convertView.setTag(getItem(position));
         convertView.setOnTouchListener(new MyThouchListener());
-        if (delete) {
-            deleteButton.setTag(position);
-            deleteButton.setOnClickListener(v -> removeItem((Integer) v.getTag()));
-            deleteButton.setVisibility(View.VISIBLE);
-        } else
-            deleteButton.setVisibility(View.GONE);
+        if( deleteButton != null) {
+            if (delete) {
+                deleteButton.setTag(position);
+                deleteButton.setOnClickListener(v -> removeItem((Integer) v.getTag()));
+                deleteButton.setVisibility(View.VISIBLE);
+            } else
+                deleteButton.setVisibility(View.GONE);
+        }
         return convertView;
     }
 
