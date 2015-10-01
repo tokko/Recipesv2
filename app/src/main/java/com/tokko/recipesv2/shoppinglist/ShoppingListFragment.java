@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -37,6 +38,8 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
     private Integer editing;
     @InjectView(R.id.buttonbar)
     private LinearLayout buttonBar;
+    @InjectView(R.id.shoppingListAddbutton)
+    private Button addButton;
     private boolean generated;
     private boolean checklist;
 
@@ -75,9 +78,6 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         if(checklist){
-            for (int i = 0; i < adapter.getCount(); i++) {
-                l.setItemChecked(i, adapter.getItem(i).getPurchased());
-            }
             list.getItems().get(position).setPurchased(l.getCheckedItemPositions().get(position));
         }
         else {
@@ -136,6 +136,13 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
         checklist = true;
         adapter.setChecklist(checklist);
         setListAdapter(adapter);
+        ListView listView = getListView();
+        for (int i = 0; i < adapter.getCount(); i++) {
+            ShoppingListItem item = adapter.getItem(i);
+            listView.setItemChecked(i, item.getPurchased());
+        }
+        buttonBar.setVisibility(View.GONE);
+        addButton.setVisibility(View.GONE);
     }
 
     @Override

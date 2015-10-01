@@ -48,6 +48,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
@@ -71,7 +72,7 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
 
         grocery = new Grocery();
         grocery.setId(1L);
-        grocery.setTitle("MockedGrocery");
+        grocery.setTitle(UUID.randomUUID().toString());
 
         ingredient = new Ingredient();
         ingredient.setId(2L);
@@ -82,6 +83,7 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
         ingredient.setQuantity(quantity);
 
         ShoppingListItem sli = new ShoppingListItem();
+        sli.setPurchased(false);
         sli.setIngredient(ingredient);
 
         RecipeApi api = mock(RecipeApi.class);
@@ -105,6 +107,14 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
         units.setItems(Collections.singletonList("g"));
         doReturn(listUnits).when(api).listUnits();
         doReturn(units).when(listUnits).execute();
+
+
+        RecipeApi.GetGeneralList getGeneralList = mock(RecipeApi.GetGeneralList.class);
+        doReturn(getGeneralList).when(api).getGeneralList();
+        doReturn(sl).when(getGeneralList).execute();
+
+        RecipeApi.CommitShoppingList commitShoppingList = mock(RecipeApi.CommitShoppingList.class);
+        doReturn(commitShoppingList).when(api).commitShoppingList(any());
 
         RoboGuice.overrideApplicationInjector((Application) context.getApplicationContext(), new AbstractModule() {
             @Override
@@ -193,5 +203,13 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
         onView(withText(containsString(title))).check(doesNotExist());
         Thread.sleep(500);
         onView(withText(containsString(grocery))).check(matches(isDisplayed()));
+    }
+
+
+    @Test
+    public void testOnOkButtonClicked_OkButtonGone() throws Exception {
+        onView(withId(R.id.buttonbar_ok)).perform(click());
+
+        onView(withId(R.id.buttonbar)).check(matches(not(isDisplayed())));
     }
 }
