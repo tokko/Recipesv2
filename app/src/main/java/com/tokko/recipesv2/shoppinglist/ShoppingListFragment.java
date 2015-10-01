@@ -143,6 +143,7 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
         }
         ShoppingListItem sli = new ShoppingListItem();
         sli.setIngredient(ingredient);
+        sli.setGenerated(false);
         adapter.addItem(sli);
     }
 

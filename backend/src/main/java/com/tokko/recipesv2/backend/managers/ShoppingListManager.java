@@ -54,10 +54,15 @@ public class ShoppingListManager {
         this.scheduleCalculatorEngine = scheduleCalculatorEngine;
     }
 
-    public ShoppingList getGeneralList(String email) {
+    public ShoppingList getLatestList(String email) {
         RecipeUser user = recipeUserRa.getUserByEmail(email);
-        ShoppingList shoppingList = shoppingListRa.getShoppingList(user, Constants.GENERAL_LIST_ID);
-        return shoppingList;
+        ShoppingList general = shoppingListRa.getShoppingList(user, Constants.GENERAL_LIST_ID);
+        ShoppingList shoppingList = shoppingListRa.getLatestShoppingList(user);
+        if(shoppingList != null){
+            shoppingList.getItems().addAll(general.getItems());
+            return shoppingList;
+        }
+        return general;
     }
 
     public void commitShoppingList(final ShoppingList shoppingList, String email) {
@@ -68,14 +73,18 @@ public class ShoppingListManager {
             groceries.add(item.ingredient.getGrocery());
         }
         groceryManager.commitGroceries(groceries, email);
-        shoppingList.setItems(shoppingListGeneralListPreparerEngine.markItemsAsGeneralList(shoppingList.getItems()));
+
+        ShoppingList generalList = shoppingListRa.getShoppingList(user, 1L);
+        generalList.getItems().addAll(shoppingListGeneralListPreparerEngine.getGeneralItems(shoppingList.getItems()));
+        shoppingList.setItems(shoppingListGeneralListPreparerEngine.getGeneratedItems(shoppingList.getItems()));
         shoppingListRa.commitShoppingList(shoppingList);
+        shoppingListRa.commitShoppingList(generalList);
     }
 
     public ShoppingList generateShoppingList(long date, String email) {
         RecipeUser user = recipeUserRa.getUserByEmail(email);
 
-        ShoppingList generalList = getGeneralList(email);
+        ShoppingList generalList = getLatestList(email);
 
         List<ScheduleEntry> scheduleEntries = scheduleEntryRa.getScheduleEntries(date, user);
 

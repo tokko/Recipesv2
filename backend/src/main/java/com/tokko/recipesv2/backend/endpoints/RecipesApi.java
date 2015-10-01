@@ -149,7 +149,7 @@ public class RecipesApi {
             path = "shoppingList",
             httpMethod = ApiMethod.HttpMethod.GET)
     public ShoppingList getShoppingList(User user) {
-        return shoppingListManager.getGeneralList(user.getEmail());
+        return shoppingListManager.getLatestList(user.getEmail());
     }
 
     @ApiMethod(
