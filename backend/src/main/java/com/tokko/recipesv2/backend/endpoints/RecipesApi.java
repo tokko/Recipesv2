@@ -164,7 +164,7 @@ public class RecipesApi {
             name = "generateShoppingList",
             path = "shoppingListrwggwa",
             httpMethod = ApiMethod.HttpMethod.GET)
-    public ShoppingList gemerateShoppingList(@Named("date") Long date, User user) {
+    public ShoppingList generateShoppingList(@Named("date") Long date, User user) {
         return shoppingListManager.generateShoppingList(date, user.getEmail());
     }
 
