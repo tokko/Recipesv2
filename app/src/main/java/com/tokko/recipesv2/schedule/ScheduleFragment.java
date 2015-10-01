@@ -72,7 +72,7 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
     public void onOk(){
         AsyncTask.execute(() -> {
             try {
-                api.generateShoppingList(new DateTime().withTime(0, 0, 0, 0).getMillis());
+                api.generateShoppingList(new DateTime().withTime(0, 0, 0, 0).getMillis()).execute();
                 getActivity().runOnUiThread(() -> startActivity(new Intent(getActivity(), ShoppingListActivity.class).putExtra("generated", true)));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -82,7 +82,7 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
 
     @OnClick(R.id.scheduleFragmentShop)
     public void OnShopClick(){
-        startActivity(new Intent(getActivity(), ShoppingListActivity.class));
+        startActivity(new Intent(getActivity(), ShoppingListActivity.class).putExtra("generated", true));
     }
 
     @Override
