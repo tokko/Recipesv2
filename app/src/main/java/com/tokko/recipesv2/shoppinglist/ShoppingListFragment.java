@@ -123,7 +123,9 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
                 e.printStackTrace();
             }
         });
+        getActivity().finish();
     }
+
 
     @Override
     public void onShoppingListDownloaded(ShoppingList list) {

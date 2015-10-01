@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import roboguice.RoboGuice;
 import roboguice.fragment.provided.RoboListFragment;
 import roboguice.inject.InjectView;
@@ -53,6 +55,8 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
         adapter = new ExpandableAdapter();
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.schedulefragment, null);
@@ -60,19 +64,28 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
 
     @Override
     public void onClick(View v) {
+    }
+
+    @OnClick(R.id.scheduleFragmentOk)
+    public void onOk(){
         startActivity(new Intent(getActivity(), ShoppingListActivity.class).putExtra("generated", true));
+    }
+
+    @OnClick(R.id.scheduleFragmentShop)
+    public void OnShopClick(){
+        startActivity(new Intent(getActivity(), ShoppingListActivity.class));
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ((ExpandableListView) getListView()).setAdapter(adapter);
-        okButton.setOnClickListener(this);
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        ButterKnife.inject(this, getActivity());
         getLoaderManager().initLoader(0, null, this);
     }
 
