@@ -212,4 +212,11 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
 
         onView(withId(R.id.buttonbar)).check(matches(not(isDisplayed())));
     }
+
+    @Test
+    public void testOnOkButtonClicked_AddButtonGone() throws Exception {
+        onView(withId(R.id.buttonbar_ok)).perform(click());
+
+        onView(withId(R.id.shoppingListAddbutton)).check(matches(not(isDisplayed())));
+    }
 }
