@@ -23,6 +23,8 @@ import com.tokko.recipesv2.backend.entities.recipeApi.model.Recipe;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ScheduleEntry;
 import com.tokko.recipesv2.shoppinglist.ShoppingListActivity;
 
+import org.joda.time.DateTime;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -68,7 +70,14 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
 
     @OnClick(R.id.scheduleFragmentOk)
     public void onOk(){
-        startActivity(new Intent(getActivity(), ShoppingListActivity.class).putExtra("generated", true));
+        AsyncTask.execute(() -> {
+            try {
+                api.generateShoppingList(new DateTime().withTime(0, 0, 0, 0).getMillis());
+                getActivity().runOnUiThread(() -> startActivity(new Intent(getActivity(), ShoppingListActivity.class).putExtra("generated", true)));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @OnClick(R.id.scheduleFragmentShop)

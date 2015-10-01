@@ -25,10 +25,10 @@ public class ShoppingListDownloader extends AsyncTask<Boolean, Void, ShoppingLis
     protected ShoppingList doInBackground(Boolean... params) {
         try {
             if (!params[0]) {
-                RecipeApi.GetShoppingList shoppingList = api.getShoppingList();
+                RecipeApi.GetGeneralList shoppingList = api.getGeneralList();
                 return shoppingList.execute();
             } else {
-                RecipeApi.GenerateShoppingList shoppingList = api.generateShoppingList(new DateTime().withTime(0, 0, 0, 0).getMillis());
+                RecipeApi.GetShoppingList shoppingList = api.getShoppingList();
                 return shoppingList.execute();
             }
         } catch (IOException e) {

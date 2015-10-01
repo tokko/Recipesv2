@@ -103,6 +103,13 @@ public class ShoppingListManager {
         shoppingList.setStartDate(date);
         shoppingList.setItems(upScaledShoppingListItems);
         shoppingList.setExpirationDate(scheduleCalculatorEngine.getExpirationDate(scheduleEntries));
+        commitShoppingList(shoppingList, email);
         return shoppingList;
+    }
+
+    public ShoppingList getGeneralList(String email) {
+        RecipeUser user = recipeUserRa.getUserByEmail(email);
+        ShoppingList generalList = shoppingListRa.getShoppingList(user, 1L);
+        return generalList;
     }
 }

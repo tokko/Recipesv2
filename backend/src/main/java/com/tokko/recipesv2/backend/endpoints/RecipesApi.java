@@ -153,6 +153,14 @@ public class RecipesApi {
     }
 
     @ApiMethod(
+            name = "getGeneralList",
+            path = "shoppingListrwq",
+            httpMethod = ApiMethod.HttpMethod.GET)
+    public ShoppingList getGeneralList(User user) {
+        return shoppingListManager.getGeneralList(user.getEmail());
+    }
+
+    @ApiMethod(
             name = "commitShoppingList",
             path = "shoppingListrwg",
             httpMethod = ApiMethod.HttpMethod.POST)
