@@ -34,6 +34,7 @@ import java.util.UUID;
 
 import roboguice.RoboGuice;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -42,6 +43,7 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
+import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -59,6 +61,8 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
     private ShoppingListActivity activity;
     private Grocery grocery;
     private Ingredient ingredient;
+    private ShoppingListItem unPurchased;
+    private ShoppingListItem purchased;
 
     public ShoppingListActivityTests() {
         super(ShoppingListActivity.class);
@@ -82,16 +86,34 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
         quantity.setQuantity(2.0);
         ingredient.setQuantity(quantity);
 
-        ShoppingListItem sli = new ShoppingListItem();
-        sli.setPurchased(false);
-        sli.setIngredient(ingredient);
+        unPurchased = new ShoppingListItem();
+        unPurchased.setPurchased(false);
+        unPurchased.setIngredient(ingredient);
+
+        grocery = new Grocery();
+        grocery.setId(8L);
+        grocery.setTitle(UUID.randomUUID().toString());
+
+        ingredient = new Ingredient();
+        ingredient.setId(9L);
+        ingredient.setGrocery(grocery);
+        quantity = new Quantity();
+        quantity.setUnit("g");
+        quantity.setQuantity(2.0);
+        ingredient.setQuantity(quantity);
+
+        purchased = new ShoppingListItem();
+        purchased.setPurchased(true);
+        purchased.setIngredient(ingredient);
 
         RecipeApi api = mock(RecipeApi.class);
 
         RecipeApi.GetShoppingList shoppingList = mock(RecipeApi.GetShoppingList.class);
+
         ShoppingList sl = new ShoppingList();
         sl.setItems(new ArrayList<>());
-        sl.getItems().add(sli);
+        sl.getItems().add(unPurchased);
+        sl.getItems().add(purchased);
         sl.setId(1L);
         doReturn(shoppingList).when(api).getShoppingList();
         doReturn(sl).when(shoppingList).execute();
@@ -218,5 +240,13 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
         onView(withId(R.id.buttonbar_ok)).perform(click());
 
         onView(withId(R.id.shoppingListAddbutton)).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void testOnOk_PurchasedItemsAreChecked() throws Exception {
+        onView(withId(R.id.buttonbar_ok)).perform(click());
+
+        String title = purchased.getIngredient().getGrocery().getTitle();
+        onView(allOf(isChecked(), hasSibling(withText(containsString(title))))).check(matches(not(doesNotExist())));
     }
 }
