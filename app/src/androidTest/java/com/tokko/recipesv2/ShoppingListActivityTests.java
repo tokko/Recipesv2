@@ -34,6 +34,7 @@ import java.util.UUID;
 
 import roboguice.RoboGuice;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -42,12 +43,15 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
+import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
@@ -58,6 +62,8 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
     private ShoppingListActivity activity;
     private Grocery grocery;
     private Ingredient ingredient;
+    private ShoppingListItem unPurchased;
+    private ShoppingListItem purchased;
 
     public ShoppingListActivityTests() {
         super(ShoppingListActivity.class);
@@ -71,7 +77,7 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
 
         grocery = new Grocery();
         grocery.setId(1L);
-        grocery.setTitle("MockedGrocery");
+        grocery.setTitle(UUID.randomUUID().toString());
 
         ingredient = new Ingredient();
         ingredient.setId(2L);
@@ -81,15 +87,34 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
         quantity.setQuantity(2.0);
         ingredient.setQuantity(quantity);
 
-        ShoppingListItem sli = new ShoppingListItem();
-        sli.setIngredient(ingredient);
+        unPurchased = new ShoppingListItem();
+        unPurchased.setPurchased(false);
+        unPurchased.setIngredient(ingredient);
+
+        grocery = new Grocery();
+        grocery.setId(8L);
+        grocery.setTitle(UUID.randomUUID().toString());
+
+        ingredient = new Ingredient();
+        ingredient.setId(9L);
+        ingredient.setGrocery(grocery);
+        quantity = new Quantity();
+        quantity.setUnit("g");
+        quantity.setQuantity(2.0);
+        ingredient.setQuantity(quantity);
+
+        purchased = new ShoppingListItem();
+        purchased.setPurchased(true);
+        purchased.setIngredient(ingredient);
 
         RecipeApi api = mock(RecipeApi.class);
 
         RecipeApi.GetShoppingList shoppingList = mock(RecipeApi.GetShoppingList.class);
+
         ShoppingList sl = new ShoppingList();
         sl.setItems(new ArrayList<>());
-        sl.getItems().add(sli);
+        sl.getItems().add(unPurchased);
+        sl.getItems().add(purchased);
         sl.setId(1L);
         doReturn(shoppingList).when(api).getShoppingList();
         doReturn(sl).when(shoppingList).execute();
@@ -105,6 +130,14 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
         units.setItems(Collections.singletonList("g"));
         doReturn(listUnits).when(api).listUnits();
         doReturn(units).when(listUnits).execute();
+
+
+        RecipeApi.GetGeneralList getGeneralList = mock(RecipeApi.GetGeneralList.class);
+        doReturn(getGeneralList).when(api).getGeneralList();
+        doReturn(sl).when(getGeneralList).execute();
+
+        RecipeApi.CommitShoppingList commitShoppingList = mock(RecipeApi.CommitShoppingList.class);
+        doReturn(commitShoppingList).when(api).commitShoppingList(any());
 
         RoboGuice.overrideApplicationInjector((Application) context.getApplicationContext(), new AbstractModule() {
             @Override
@@ -193,5 +226,57 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
         onView(withText(containsString(title))).check(doesNotExist());
         Thread.sleep(500);
         onView(withText(containsString(grocery))).check(matches(isDisplayed()));
+    }
+
+
+    @Test
+    public void testOnOkButtonClicked_OkButtonGone() throws Exception {
+        onView(withId(R.id.buttonbar_ok)).perform(click());
+
+        onView(withId(R.id.buttonbar)).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void testOnOkButtonClicked_AddButtonGone() throws Exception {
+        onView(withId(R.id.buttonbar_ok)).perform(click());
+
+        onView(withId(R.id.shoppingListAddbutton)).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void testOnOk_PurchasedItemsAreChecked() throws Exception {
+        onView(withId(R.id.buttonbar_ok)).perform(click());
+
+        String title = purchased.getIngredient().getGrocery().getTitle();
+        onView(allOf(isChecked(), hasSibling(withText(containsString(title))))).check(matches(not(doesNotExist())));
+    }
+
+    @Test
+    public void testOnOk_UnPurchasedItemsAreUnChecked() throws Exception {
+        onView(withId(R.id.buttonbar_ok)).perform(click());
+
+        String title = unPurchased.getIngredient().getGrocery().getTitle();
+        onView(allOf(isNotChecked(), hasSibling(withText(containsString(title))))).check(matches(not(doesNotExist())));
+    }
+
+    @Test
+    public void testOnItemClick_IsUnpurchased_IsChecked() throws Exception {
+        String title = unPurchased.getIngredient().getGrocery().getTitle();
+        onView(allOf(withId(R.id.deleteImageButton), hasSibling(withText(containsString(purchased.getIngredient().getGrocery().getTitle()))))).perform(click());
+        onView(withId(R.id.buttonbar_ok)).perform(click());
+
+        onView(allOf(isNotChecked(), hasSibling(withText(containsString(title))))).perform(click());
+        onView(allOf(isChecked(), hasSibling(withText(containsString(title))))).check(matches(not(doesNotExist())));
+    }
+
+    @Test
+    public void testOnItemClick_purchased_IsUnChecked() throws Exception {
+        String title = purchased.getIngredient().getGrocery().getTitle();
+        onView(allOf(withId(R.id.deleteImageButton), hasSibling(withText(containsString(unPurchased.getIngredient().getGrocery().getTitle()))))).perform(click());
+
+        onView(withId(R.id.buttonbar_ok)).perform(click());
+
+        onView(allOf(isChecked(), hasSibling(withText(containsString(title))))).perform(click());
+        onView(allOf(isNotChecked(), hasSibling(withText(containsString(title))))).check(matches(not(doesNotExist())));
     }
 }
