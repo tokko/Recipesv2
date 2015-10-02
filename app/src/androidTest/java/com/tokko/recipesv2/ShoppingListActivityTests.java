@@ -45,6 +45,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -248,5 +249,13 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
 
         String title = purchased.getIngredient().getGrocery().getTitle();
         onView(allOf(isChecked(), hasSibling(withText(containsString(title))))).check(matches(not(doesNotExist())));
+    }
+
+    @Test
+    public void testOnOk_UnPurchasedItemsAreUnChecked() throws Exception {
+        onView(withId(R.id.buttonbar_ok)).perform(click());
+
+        String title = unPurchased.getIngredient().getGrocery().getTitle();
+        onView(allOf(isNotChecked(), hasSibling(withText(containsString(title))))).check(matches(not(doesNotExist())));
     }
 }
