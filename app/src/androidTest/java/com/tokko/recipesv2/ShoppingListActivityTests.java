@@ -258,4 +258,14 @@ public class ShoppingListActivityTests extends ActivityInstrumentationTestCase2<
         String title = unPurchased.getIngredient().getGrocery().getTitle();
         onView(allOf(isNotChecked(), hasSibling(withText(containsString(title))))).check(matches(not(doesNotExist())));
     }
+
+    @Test
+    public void testOnItemClick_IsUnpurchased_IsChecked() throws Exception {
+        String title = unPurchased.getIngredient().getGrocery().getTitle();
+        onView(allOf(withId(R.id.deleteImageButton), hasSibling(withText(containsString(purchased.getIngredient().getGrocery().getTitle()))))).perform(click());
+        onView(withId(R.id.buttonbar_ok)).perform(click());
+
+        onView(allOf(isNotChecked(), hasSibling(withText(containsString(title))))).perform(click());
+        onView(allOf(isChecked(), hasSibling(withText(containsString(title))))).check(matches(not(doesNotExist())));
+    }
 }
