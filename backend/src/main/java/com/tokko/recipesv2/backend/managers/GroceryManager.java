@@ -44,4 +44,10 @@ public class GroceryManager {
             commitGrocery(g, user);
         }
     }
+
+    public Grocery getGrocery(Long id, String email) {
+        RecipeUser user = recipeUserRa.getUserByEmail(email);
+        Grocery grocery = groceryRa.getGrocery(id, user);
+        return grocery;
+    }
 }

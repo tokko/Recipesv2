@@ -6,8 +6,11 @@ import android.view.View;
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.CollectionResponseGrocery;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.CollectionResponseString;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Grocery;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Ingredient;
+import com.tokko.recipesv2.backend.entities.recipeApi.model.Quantity;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ShoppingList;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ShoppingListItem;
 import com.tokko.recipesv2.groceries.GroceryAdapter;
@@ -53,6 +56,10 @@ public class ShoppingListFragmentTests {
         Ingredient i = new Ingredient();
         i.setGrocery(g);
         i.setId(2L);
+        Quantity quantity = new Quantity();
+        quantity.setQuantity(2.0);
+        quantity.setUnit("g");
+        i.setQuantity(quantity);
         ShoppingListItem sli = new ShoppingListItem();
         sli.setIngredient(i);
         sl.setItems(Collections.singletonList(sli));
@@ -61,6 +68,26 @@ public class ShoppingListFragmentTests {
         RecipeApi.GetShoppingList shoppingList = mock(RecipeApi.GetShoppingList.class);
         doReturn(shoppingList).when(api).getShoppingList();
         doReturn(sl).when(shoppingList).execute();
+
+        RecipeApi.ListGroceries listGroceries = mock(RecipeApi.ListGroceries.class);
+        CollectionResponseGrocery collectionResponseGrocery = new CollectionResponseGrocery();
+        collectionResponseGrocery.setItems(Collections.singletonList(g));
+        doReturn(listGroceries).when(api).listGroceries();
+        doReturn(collectionResponseGrocery).when(listGroceries).execute();
+
+        RecipeApi.ListUnits listUnits = mock(RecipeApi.ListUnits.class);
+        CollectionResponseString units = new CollectionResponseString();
+        units.setItems(Collections.singletonList("g"));
+        doReturn(listUnits).when(api).listUnits();
+        doReturn(units).when(listUnits).execute();
+
+
+        RecipeApi.GetGeneralList getGeneralList = mock(RecipeApi.GetGeneralList.class);
+        doReturn(getGeneralList).when(api).getGeneralList();
+        doReturn(sl).when(getGeneralList).execute();
+
+        RecipeApi.CommitShoppingList commitShoppingList = mock(RecipeApi.CommitShoppingList.class);
+        doReturn(commitShoppingList).when(api).commitShoppingList(any());
         RoboGuice.overrideApplicationInjector(RuntimeEnvironment.application, new AbstractModule() {
 
 

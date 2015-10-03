@@ -84,11 +84,19 @@ public class ScheduleEntry extends BaseEntity<Long> implements Comparable<Schedu
     @Override
     public void load() {
         recipes = deRef(storedRecipes);
+        for (Recipe recipe : recipes) {
+            recipe.load();
+        }
         storedRecipes = null;
     }
 
     @Override
     public void prepare() {
+        if (recipes != null) {
+            for (Recipe recipe : recipes) {
+                recipe.prepare();
+            }
+        }
         storedRecipes = ref(recipes);
         recipes = null;
     }

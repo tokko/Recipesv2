@@ -1,6 +1,7 @@
 package com.tokko.recipesv2.schedule;
 
 import android.app.LoaderManager;
+import android.content.Intent;
 import android.content.Loader;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +21,9 @@ import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.CommitScheduleContainer;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Recipe;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ScheduleEntry;
+import com.tokko.recipesv2.shoppinglist.ShoppingListActivity;
+
+import org.joda.time.DateTime;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -27,6 +31,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import roboguice.RoboGuice;
 import roboguice.fragment.provided.RoboListFragment;
 import roboguice.inject.InjectView;
@@ -51,6 +57,8 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
         adapter = new ExpandableAdapter();
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.schedulefragment, null);
@@ -58,27 +66,38 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
 
     @Override
     public void onClick(View v) {
+    }
+
+    @OnClick(R.id.scheduleFragmentOk)
+    public void onOk(){
         AsyncTask.execute(() -> {
             try {
-                CommitScheduleContainer csc = new CommitScheduleContainer();
-                csc.setEntries(adapter.data);
-                api.commitSchedule(csc).execute();
+                api.generateShoppingList(new DateTime().withTime(0, 0, 0, 0).getMillis()).execute();
+                getActivity().runOnUiThread(() -> startActivity(new Intent(getActivity(), ShoppingListActivity.class).putExtra("generated", true)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
     }
 
+    @OnClick(R.id.scheduleFragmentShop)
+    public void OnShopClick(){
+        Bundle b = new Bundle();
+        b.putBoolean("generated", true);
+        b.putBoolean("justshop", true);
+        startActivity(new Intent(getActivity(), ShoppingListActivity.class).putExtras(b));
+    }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ((ExpandableListView) getListView()).setAdapter(adapter);
-        okButton.setOnClickListener(this);
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        ButterKnife.inject(this, getActivity());
         getLoaderManager().initLoader(0, null, this);
     }
 
@@ -209,6 +228,15 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
                             if (tag.getRecipes() == null) tag.setRecipes(new ArrayList<>());
                             tag.getRecipes().add(r);
                             adapter.notifyDataSetChanged();
+                            AsyncTask.execute(() -> {
+                                try {
+                                    CommitScheduleContainer csc = new CommitScheduleContainer();
+                                    csc.setEntries(adapter.data);
+                                    api.commitSchedule(csc).execute();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            });
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

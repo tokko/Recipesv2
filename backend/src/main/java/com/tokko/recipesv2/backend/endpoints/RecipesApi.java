@@ -17,7 +17,7 @@ import com.tokko.recipesv2.backend.entities.ShoppingList;
 import com.tokko.recipesv2.backend.managers.GroceryManager;
 import com.tokko.recipesv2.backend.managers.RecipeManager;
 import com.tokko.recipesv2.backend.managers.RecipeUserManager;
-import com.tokko.recipesv2.backend.managers.ScheduleEntryManager;
+import com.tokko.recipesv2.backend.managers.ScheduleManager;
 import com.tokko.recipesv2.backend.managers.ShoppingListManager;
 
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class RecipesApi {
     private QuantityCalculatorEngine quantityCalculatorEngine;
 
     @Inject
-    private ScheduleEntryManager scheduleEntryManager;
+    private ScheduleManager scheduleEntryManager;
 
     @Inject
     private ShoppingListManager shoppingListManager;
@@ -84,6 +84,14 @@ public class RecipesApi {
             httpMethod = ApiMethod.HttpMethod.DELETE)
     public void deleteGrocery(@Named("id") Long id) throws NotFoundException {
         throw new UnsupportedOperationException("not implemented");
+    }
+
+    @ApiMethod(
+            name = "getGrocery",
+            path = "grocery/{id}",
+            httpMethod = ApiMethod.HttpMethod.GET)
+    public Grocery GetGrocery(@Named("id") Long id, User user) throws NotFoundException {
+        return groceryManager.getGrocery(id, user.getEmail());
     }
 
     @ApiMethod(
@@ -141,16 +149,33 @@ public class RecipesApi {
             path = "shoppingList",
             httpMethod = ApiMethod.HttpMethod.GET)
     public ShoppingList getShoppingList(User user) {
+        return shoppingListManager.getLatestList(user.getEmail());
+    }
+
+    @ApiMethod(
+            name = "getGeneralList",
+            path = "shoppingListrwq",
+            httpMethod = ApiMethod.HttpMethod.GET)
+    public ShoppingList getGeneralList(User user) {
         return shoppingListManager.getGeneralList(user.getEmail());
     }
 
     @ApiMethod(
             name = "commitShoppingList",
-            path = "shoppingListrwq",
+            path = "shoppingListrwg",
             httpMethod = ApiMethod.HttpMethod.POST)
     public void commitShoppingList(ShoppingList shoppingList, User user) {
         shoppingListManager.commitShoppingList(shoppingList, user.getEmail());
     }
+
+    @ApiMethod(
+            name = "generateShoppingList",
+            path = "shoppingListrwggwa",
+            httpMethod = ApiMethod.HttpMethod.GET)
+    public ShoppingList generateShoppingList(@Named("date") Long date, User user) {
+        return shoppingListManager.generateShoppingList(date, user.getEmail());
+    }
+
     @ApiMethod(
             name = "listUnits",
             path = "quantity",
@@ -160,11 +185,11 @@ public class RecipesApi {
     }
 
     @ApiMethod(
-            name = "get",
+            name = "getRecipe",
             path = "recipe/{id}",
             httpMethod = ApiMethod.HttpMethod.GET)
-    public Recipe getRecipe(@Named("id") Long id) throws NotFoundException {
-        throw new UnsupportedOperationException("Not implemented");
+    public Recipe getRecipe(@Named("id") Long id, User user) throws NotFoundException {
+        return recipeManager.getRecipe(id, user.getEmail());
     }
 
     @ApiMethod(

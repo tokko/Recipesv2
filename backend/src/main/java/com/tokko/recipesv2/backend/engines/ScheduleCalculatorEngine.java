@@ -45,4 +45,12 @@ public class ScheduleCalculatorEngine {
     public List<ScheduleEntry> getScheduleEntriesToDelete(List<ScheduleEntry> entries) {
         return getEmptyEntries(entries, true);
     }
+
+    public long getExpirationDate(List<ScheduleEntry> entries) {
+        long date = 0;
+        for (ScheduleEntry entry : entries) {
+            if (entry.date > date) date = entry.date;
+        }
+        return date;
+    }
 }

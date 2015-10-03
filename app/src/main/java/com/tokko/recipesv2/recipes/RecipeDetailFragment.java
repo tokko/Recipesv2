@@ -15,6 +15,7 @@ import com.tokko.recipesv2.views.EditableIntegerTextViewSwitchable;
 import com.tokko.recipesv2.views.EditableListView;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import roboguice.inject.InjectView;
 
@@ -90,6 +91,14 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
     }
 
     @Override
+    public boolean onCancel() {
+        if(null == entity.getId()){
+            callbacks.hideFragment();
+        }
+        return true;
+    }
+
+    @Override
     protected boolean onDelete() {
         AsyncTask.execute(() -> {
             try {
@@ -99,6 +108,11 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
             }
         });
         return true;
+    }
+
+    @Override
+    protected EntityGetter<Recipe> getEntityGetter() {
+        return (id) -> api.getRecipe(id).execute();
     }
 
     private class ResscaleRecipeTask extends AsyncTask<Void, Void, Recipe> {

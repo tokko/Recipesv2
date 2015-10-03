@@ -6,6 +6,7 @@ import com.tokko.recipesv2.backend.endpoints.Constants;
 import com.tokko.recipesv2.backend.entities.RecipeUser;
 import com.tokko.recipesv2.backend.entities.ShoppingList;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,9 +28,17 @@ public class ShoppingListRa {
 
 
     public ShoppingList getLatestShoppingList(RecipeUser user) {
-        List<ShoppingList> list = ofy().load().type(ShoppingList.class).ancestor(user).order("-date").list();
-        if (list.size() > 0)
-            if (Objects.equals(list.get(0).getId(), Constants.GENERAL_LIST_ID)) list.remove(0);
+        List<ShoppingList> list = ofy().load().type(ShoppingList.class).ancestor(user).order("-expirationDate").list();
+        if (list.size() > 0) {
+            Iterator<ShoppingList> it = list.iterator();
+            while (it.hasNext()) {
+                ShoppingList current = it.next();
+                if (current.getId().equals(Constants.GENERAL_LIST_ID)) {
+                    it.remove();
+                    break;
+                }
+            }
+        }
         if (!list.isEmpty()) {
             ShoppingList shoppingList = list.get(0);
             shoppingList.load();

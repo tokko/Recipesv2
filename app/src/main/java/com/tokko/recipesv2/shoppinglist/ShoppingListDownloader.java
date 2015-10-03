@@ -6,9 +6,11 @@ import com.google.inject.Inject;
 import com.tokko.recipesv2.backend.entities.recipeApi.RecipeApi;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.ShoppingList;
 
+import org.joda.time.DateTime;
+
 import java.io.IOException;
 
-public class ShoppingListDownloader extends AsyncTask<Void, Void, ShoppingList> {
+public class ShoppingListDownloader extends AsyncTask<Boolean, Void, ShoppingList> {
     private RecipeApi api;
 
 
@@ -20,10 +22,15 @@ public class ShoppingListDownloader extends AsyncTask<Void, Void, ShoppingList> 
     }
 
     @Override
-    protected ShoppingList doInBackground(Void... params) {
+    protected ShoppingList doInBackground(Boolean... params) {
         try {
-            RecipeApi.GetShoppingList shoppingList = api.getShoppingList();
-            return shoppingList.execute();
+            if (!params[0]) {
+                RecipeApi.GetGeneralList shoppingList = api.getGeneralList();
+                return shoppingList.execute();
+            } else {
+                RecipeApi.GetShoppingList shoppingList = api.getShoppingList();
+                return shoppingList.execute();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

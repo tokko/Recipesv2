@@ -13,7 +13,7 @@ import static com.tokko.recipesv2.backend.util.IterableUtil.deRef;
 import static com.tokko.recipesv2.backend.util.IterableUtil.ref;
 
 @Entity
-public class Recipe {
+public class Recipe extends BaseEntity<Long> {
     @Id
     public Long id;
     public String title;
