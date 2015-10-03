@@ -18,6 +18,8 @@ import com.tokko.recipesv2.backend.resourceaccess.RecipeUserRa;
 import com.tokko.recipesv2.backend.resourceaccess.ScheduleEntryRa;
 import com.tokko.recipesv2.backend.resourceaccess.ShoppingListRa;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +61,11 @@ public class ShoppingListManager {
         ShoppingList general = shoppingListRa.getShoppingList(user, Constants.GENERAL_LIST_ID);
         ShoppingList shoppingList = shoppingListRa.getLatestShoppingList(user);
         if(shoppingList != null){
+            DateTime expirationDate = new DateTime(shoppingList.expirationDate);
+            if(expirationDate.isBefore(new DateTime().withTime(0, 0, 0, 0).getMillis())){
+                shoppingListRa.deleteShoppingList(shoppingList);
+                return general;
+            }
             shoppingList.getItems().addAll(general.getItems());
             return shoppingList;
         }

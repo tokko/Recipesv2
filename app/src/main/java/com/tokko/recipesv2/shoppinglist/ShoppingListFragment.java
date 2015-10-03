@@ -42,20 +42,23 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
     private Button addButton;
     private boolean generated;
     private boolean checklist;
+    private boolean justShop;
 
-    public static ShoppingListFragment newInstance(boolean generated) {
+    public static ShoppingListFragment newInstance(Bundle args) {
         ShoppingListFragment f = new ShoppingListFragment();
-        Bundle b = new Bundle();
-        b.putBoolean("generated", generated);
-        f.setArguments(b);
+        if(args != null)
+            f.setArguments(args);
         return f;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        Bundle arguments = getArguments();
+        if (arguments != null) {
             generated = getArguments().getBoolean("generated");
+            justShop = getArguments().getBoolean("justshop");
+
         }
     }
 
@@ -72,6 +75,7 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
         setListAdapter(adapter);
         buttonBar.setVisibility(View.VISIBLE);
         view.findViewById(R.id.buttonbar_delete).setVisibility(View.GONE);
+        if(justShop) disableEditMode();
     }
 
     @Override
@@ -79,6 +83,13 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
         super.onListItemClick(l, v, position, id);
         if(checklist){
             list.getItems().get(position).setPurchased(l.getCheckedItemPositions().get(position));
+            AsyncTask.execute(() -> {
+                try {
+                    api.commitShoppingList(list);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         }
         else {
             IngredientDetailFragment ingredientDetailFragment = RoboGuice.getInjector(getActivity()).getInstance(IngredientDetailFragment.class);
@@ -132,6 +143,10 @@ public class ShoppingListFragment extends RoboListFragment implements ShoppingLi
                 e.printStackTrace();
             }
         });
+        disableEditMode();
+    }
+
+    private void disableEditMode() {
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         checklist = true;
         adapter.setChecklist(checklist);
