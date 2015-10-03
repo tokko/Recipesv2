@@ -82,7 +82,10 @@ public class ScheduleFragment extends RoboListFragment implements LoaderManager.
 
     @OnClick(R.id.scheduleFragmentShop)
     public void OnShopClick(){
-        startActivity(new Intent(getActivity(), ShoppingListActivity.class).putExtra("generated", true));
+        Bundle b = new Bundle();
+        b.putBoolean("generated", true);
+        b.putBoolean("justshop", true);
+        startActivity(new Intent(getActivity(), ShoppingListActivity.class).putExtras(b));
     }
 
     @Override

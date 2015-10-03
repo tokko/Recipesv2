@@ -14,10 +14,8 @@ public class ShoppingListActivity extends RoboActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ShoppingListFragment fragment;
-        if (getIntent().getExtras() != null)
-            fragment = ShoppingListFragment.newInstance(true);
-        else
-            fragment = ShoppingListFragment.newInstance(false);
+        fragment = ShoppingListFragment.newInstance(getIntent().getExtras());
+
         getFragmentManager().beginTransaction().replace(android.R.id.content, fragment).commit();
     }
 
