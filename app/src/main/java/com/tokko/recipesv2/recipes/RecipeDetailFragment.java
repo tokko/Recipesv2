@@ -15,7 +15,6 @@ import com.tokko.recipesv2.views.EditableIntegerTextViewSwitchable;
 import com.tokko.recipesv2.views.EditableListView;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
 import roboguice.inject.InjectView;
 
@@ -48,7 +47,7 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
         helpings.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
                 if (entity.getId() == null) return;
-                new ResscaleRecipeTask().execute();
+                new RescaleRecipeTask().execute();
             }
         });
         helpings.setFocusable(true);
@@ -115,7 +114,7 @@ public class RecipeDetailFragment extends ItemDetailFragment<Recipe> {
         return (id) -> api.getRecipe(id).execute();
     }
 
-    private class ResscaleRecipeTask extends AsyncTask<Void, Void, Recipe> {
+    private class RescaleRecipeTask extends AsyncTask<Void, Void, Recipe> {
 
         @Override
         protected Recipe doInBackground(Void... params) {
