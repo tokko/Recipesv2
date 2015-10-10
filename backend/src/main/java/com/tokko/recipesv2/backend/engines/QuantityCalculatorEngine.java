@@ -37,6 +37,7 @@ public class QuantityCalculatorEngine {
     public Quantity upQuantity(Quantity q) {
         if(!units.containsKey(q.getUnit())) throw new UnsupportedOperationException("Unsupported unit");
         Unit unit = units.get(q.getUnit());
+        if(unit.getUp() == null) return q; //are at highest
         double newQuantity = q.getQuantity() / unit.getFactor();
         if (newQuantity < 1) return q;
         Quantity q1 = new Quantity(unit.getUp());
