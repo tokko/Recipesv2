@@ -2,7 +2,7 @@ package unit.engines;
 
 import com.tokko.recipesv2.backend.engines.QuantityCalculatorEngine;
 import com.tokko.recipesv2.backend.units.Quantity;
-import com.tokko.recipesv2.backend.units.Units;
+import com.tokko.recipesv2.backend.units.Unit;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,16 +26,16 @@ public class QuantityCalculatorEngineTests {
 
     @Test
     public void testGetBaseQuantity_KiloGrams() throws Exception {
-        Quantity baseQuantity = engine.getBaseQuantity(new Quantity(Units.KG, 1.5));
+        Quantity baseQuantity = engine.getBaseQuantity(new Quantity(Unit.KG, 1.5));
+        assertEquals(Unit.G, baseQuantity.getUnit());
         assertEquals(1500, baseQuantity.getQuantity(), 0);
-        assertEquals(Units.G, baseQuantity.getUnit());
     }
 
     @Test
     public void testGetBaseQuantity_Grams() throws Exception {
-        Quantity baseQuantity = engine.getBaseQuantity(new Quantity(Units.G, 500));
+        Quantity baseQuantity = engine.getBaseQuantity(new Quantity(Unit.G, 500));
         assertEquals(baseQuantity.getQuantity(), 500, 0);
-        assertEquals(Units.G, baseQuantity.getUnit());
+        assertEquals(Unit.G, baseQuantity.getUnit());
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -45,22 +45,54 @@ public class QuantityCalculatorEngineTests {
 
     @Test
     public void testUpQuantity_Grams() throws Exception {
-        Quantity uppedQuantity = engine.upQuantity(new Quantity(Units.G, 1345));
+        Quantity uppedQuantity = engine.upQuantity(new Quantity(Unit.G, 1345));
         assertEquals(1.345, uppedQuantity.getQuantity(), 0);
-        assertEquals(Units.KG, uppedQuantity.getUnit());
+        assertEquals(Unit.KG, uppedQuantity.getUnit());
     }
 
     @Test
     public void testUpQuantity_kiloGrams() throws Exception {
-        Quantity uppedQuantity = engine.upQuantity(new Quantity(Units.KG, 1.234));
+        Quantity uppedQuantity = engine.upQuantity(new Quantity(Unit.KG, 1.234));
         assertEquals(1.234, uppedQuantity.getQuantity(), 0);
-        assertEquals(Units.KG, uppedQuantity.getUnit());
+        assertEquals(Unit.KG, uppedQuantity.getUnit());
     }
 
     @Test
     public void testUpQuantity_GramsLessThanOneKilo_IsStillGrams() throws Exception {
-        Quantity uppedQuantity = engine.upQuantity(new Quantity(Units.G, 22));
+        Quantity uppedQuantity = engine.upQuantity(new Quantity(Unit.G, 22));
         assertEquals(22, uppedQuantity.getQuantity(), 0);
-        assertEquals(Units.G, uppedQuantity.getUnit());
+        assertEquals(Unit.G, uppedQuantity.getUnit());
     }
+
+    @Test
+    public void testUpQuantity_MlIsLessThan1Teaspoon_IsStillMl() throws Exception{
+        Quantity q = engine.upQuantity(new Quantity(Unit.ML, 3));
+        assertEquals(3, q.getQuantity(), 0);
+        assertEquals(Unit.ML, q.getUnit());
+    }
+
+    @Test
+    public void testUpQuantity_MlIsMoreThan1Teaspoon_IsTeaspoon() throws Exception{
+        Quantity q1 = new Quantity(Unit.ML, 4.92892);
+        Quantity q = engine.upQuantity(q1);
+        assertEquals(1, q.getQuantity(), 0.02); //0.02 is acceptable error margin
+        assertEquals(Unit.TEASPOON, q.getUnit());
+    }
+
+    @Test
+    public void testUpQuantity_MlIsMoreThan1Tablespoon_IsTablespoon() throws Exception{
+        Quantity q1 = new Quantity(Unit.ML, 14.7868);
+        Quantity q = engine.upQuantity(q1);
+        assertEquals(Unit.TBLSPOON, q.getUnit());
+        assertEquals(1, q.getQuantity(), 0.02); //0.02 is acceptable error margin
+    }
+
+    @Test
+    public void testUpQuantity_MlIsMoreThan1TeaspoonButLessThan1TableSpoon_IsTeaspoon() throws Exception{
+        Quantity q1 = new Quantity(Unit.ML, 6);
+        Quantity q = engine.upQuantity(q1);
+        assertEquals(Unit.TEASPOON, q.getUnit());
+        assertEquals(1.21731, q.getQuantity(), 0.05); //0.02 is acceptable error margin
+    }
+
 }

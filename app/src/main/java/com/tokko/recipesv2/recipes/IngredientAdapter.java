@@ -8,6 +8,8 @@ import com.tokko.recipesv2.backend.entities.recipeApi.model.Ingredient;
 import com.tokko.recipesv2.backend.entities.recipeApi.model.Quantity;
 import com.tokko.recipesv2.masterdetail.StringifyableAdapter;
 
+import java.text.DecimalFormat;
+
 public class IngredientAdapter extends StringifyableAdapter<Ingredient> {
 
     @Inject
@@ -22,7 +24,7 @@ public class IngredientAdapter extends StringifyableAdapter<Ingredient> {
         Ingredient ingredient = getItem(position);
         Grocery grocery = ingredient.getGrocery();
         Quantity q = getItem(position).getQuantity();
-        return (q != null ? (q.getQuantity() + q.getUnit() + " ") : "") + grocery.getTitle();
+        return (q != null ? (new DecimalFormat("#.00").format(q.getQuantity()) + q.getUnit() + " ") : "") + grocery.getTitle();
     }
 
     @Override
