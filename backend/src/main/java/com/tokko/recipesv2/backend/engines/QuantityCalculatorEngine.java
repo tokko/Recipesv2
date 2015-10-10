@@ -35,17 +35,13 @@ public class QuantityCalculatorEngine {
     }
 
     public Quantity upQuantity(Quantity q) {
-        if (q.getUnit().equals(Unit.G)) {
-            double newQuantity = q.getQuantity() / 1000;
-            if (newQuantity < 1) return q;
-            Quantity q1 = new Quantity(Unit.KG);
-            q1.setQuantity(newQuantity);
-            return upQuantity(q1);
-        }
-        if (q.getUnit().equals(Unit.KG)) {
-            return q;
-        }
-        throw new UnsupportedOperationException("Unsupported unit");
+        if(!units.containsKey(q.getUnit())) throw new UnsupportedOperationException("Unsupported unit");
+        Unit unit = units.get(q.getUnit());
+        double newQuantity = q.getQuantity() / unit.getFactor();
+        if (newQuantity < 1) return q;
+        Quantity q1 = new Quantity(unit.getUp());
+        q1.setQuantity(newQuantity);
+        return upQuantity(q1);
     }
 
     public List<Ingredient> toBaseQuantities(List<Ingredient> ingredients) {
