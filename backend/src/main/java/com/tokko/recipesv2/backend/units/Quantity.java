@@ -40,7 +40,7 @@ public class Quantity {
 
     public void add(Quantity q) {
         if (!unit.equals(q.getUnit()))
-            throw new UnsupportedOperationException("Units does not match");
+            throw new UnsupportedOperationException("Unit does not match");
         quantity += q.getQuantity();
     }
 }
