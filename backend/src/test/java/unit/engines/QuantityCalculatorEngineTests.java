@@ -27,8 +27,8 @@ public class QuantityCalculatorEngineTests {
     @Test
     public void testGetBaseQuantity_KiloGrams() throws Exception {
         Quantity baseQuantity = engine.getBaseQuantity(new Quantity(Unit.KG, 1.5));
-        assertEquals(1500, baseQuantity.getQuantity(), 0);
         assertEquals(Unit.G, baseQuantity.getUnit());
+        assertEquals(1500, baseQuantity.getQuantity(), 0);
     }
 
     @Test

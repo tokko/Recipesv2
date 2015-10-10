@@ -23,15 +23,14 @@ public class QuantityCalculatorEngine {
     }
 
     public Quantity getBaseQuantity(Quantity q) {
-        if (q.getUnit().equals(Unit.G)) {
-            return q;
-        }
-        if (q.getUnit().equals(Unit.KG)) {
-            Quantity q1 = new Quantity(Unit.G);
-            q1.setQuantity(q.getQuantity() * 1000);
-            return getBaseQuantity(q1);
-        }
-        throw new UnsupportedOperationException("Unsupported unit");
+        if(!units.containsKey(q.getUnit())) throw new UnsupportedOperationException("Unsupported unit");
+        Unit unit = units.get(q.getUnit());
+        if(unit.getDown() == null) return q; //are at lowest
+        double newQuantity = q.getQuantity() * unit.getFactor();
+        if (newQuantity < 1) return q;
+        Quantity q1 = new Quantity(unit.getDown());
+        q1.setQuantity(newQuantity);
+        return getBaseQuantity(q1);
     }
 
     public Quantity upQuantity(Quantity q) {
