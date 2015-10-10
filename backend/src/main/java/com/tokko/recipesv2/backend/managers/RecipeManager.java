@@ -58,6 +58,7 @@ public class RecipeManager {
             Recipe existing = recipeRa.getRecipe(user, recipe.getId());
             List<Ingredient> toDelete = ingredientRa.getIngredientsToDelete(recipe, existing);
             ingredientRa.deleteIngredients(toDelete);
+            recipe = rescaleRecipe(recipe, email);
         }
         Recipe save = recipeRa.commitRecipe(recipe, user);
         if (save != null)
@@ -70,6 +71,7 @@ public class RecipeManager {
         Recipe old = recipeRa.getRecipe(user, recipe.getId());
         int fromHelpings = old.getHelpings();
         int toHelpings = recipe.getHelpings();
+        if(fromHelpings == toHelpings) return recipe;
         List<Ingredient> baseLinedIngredients = quantityCalculatorEngine.toBaseQuantities(recipe.getIngredients());
         List<Ingredient> rescaledIngredients = recipeRescaleEngine.rescaleIngredientsToNumberOfHelpings(baseLinedIngredients, fromHelpings, toHelpings);
         List<Ingredient> uppedIngredients = quantityCalculatorEngine.upQuantities(rescaledIngredients);
