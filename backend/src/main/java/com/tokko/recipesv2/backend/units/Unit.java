@@ -11,13 +11,15 @@ public class Unit {
     private String unit;
     private String up;
     private String down;
-    private double factor;
+    private double factorUp;
+    private double factorDown;
 
-    public Unit(String unit, String up, String down, double factor) {
+    public Unit(String unit, String up, String down, double factorUp, double factorDown) {
         this.unit = unit;
         this.up = up;
         this.down = down;
-        this.factor = factor;
+        this.factorUp = factorUp;
+        this.factorDown = factorDown;
     }
 
     public String getUnit() {
@@ -44,11 +46,19 @@ public class Unit {
         this.down = down;
     }
 
-    public double getFactor() {
-        return factor;
+    public double getFactorUp() {
+        return factorUp;
     }
 
-    public void setFactor(double factor) {
-        this.factor = factor;
+    public void setFactorUp(double factorUp) {
+        this.factorUp = factorUp;
+    }
+
+    public double getFactorDown() {
+        return factorDown;
+    }
+
+    public void setFactorDown(double factorDown) {
+        this.factorDown = factorDown;
     }
 }
