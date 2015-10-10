@@ -3,8 +3,10 @@ package com.tokko.recipesv2.backend.units;
 public class Unit {
     public static final String G = "g";
     public static final String KG = "kg";
-    public static final String ML = "ml";
+    public static final String ML = "krm";
     public static final String DL = "DL";
+    public static final String TEASPOON = "tsk";
+    public static final String TBLSPOON = "msk";
 
     private String unit;
     private String up;

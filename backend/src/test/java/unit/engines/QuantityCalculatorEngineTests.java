@@ -65,16 +65,18 @@ public class QuantityCalculatorEngineTests {
     }
 
     @Test
-    public void testUpQuantity_MlIsLessThan1Dl_IsStillMl() throws Exception{
-        Quantity q = engine.upQuantity(new Quantity(Unit.ML, 50));
-        assertEquals(50, q.getQuantity(), 0);
+    public void testUpQuantity_MlIsLessThan1Teaspoon_IsStillMl() throws Exception{
+        Quantity q = engine.upQuantity(new Quantity(Unit.ML, 3));
+        assertEquals(3, q.getQuantity(), 0);
         assertEquals(Unit.ML, q.getUnit());
     }
 
     @Test
-    public void testUpQuantity_MlIsMoreThan1Dl_IsMl() throws Exception{
-        Quantity q = engine.upQuantity(new Quantity(Unit.ML, 150));
-        assertEquals(1.5, q.getQuantity(), 0);
-        assertEquals(Unit.DL, q.getUnit());
+    public void testUpQuantity_MlIsMoreThan1Teaspoon_IsTeaspoon() throws Exception{
+        Quantity q1 = new Quantity(Unit.ML, 4.92892);
+        Quantity q = engine.upQuantity(q1);
+        assertEquals(1, q.getQuantity(), 0.02); //0.02 is acceptable error margin
+        assertEquals(Unit.TEASPOON, q.getUnit());
     }
+
 }
