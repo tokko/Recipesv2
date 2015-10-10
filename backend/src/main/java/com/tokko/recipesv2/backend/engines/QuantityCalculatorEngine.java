@@ -14,10 +14,22 @@ public class QuantityCalculatorEngine {
     private static final HashMap<String, Unit> units = new HashMap<>();
 
     static {
-        units.put(Unit.G, new Unit(Unit.G, Unit.KG, null, 1000));
-        units.put(Unit.KG, new Unit(Unit.KG, null, Unit.G, 1000));
+        addConversion(Unit.G, Unit.KG, 1000);
+        addConversion(Unit.ML, Unit.DL, 100);
     }
 
+    private static void addConversion(String src, String dest, double factor){
+        if(!units.containsKey(src)){
+            units.put(src, new Unit(src, null, null, factor));
+        }
+        if(!units.containsKey(dest)){
+            units.put(dest, new Unit(dest, null, null, factor));
+        }
+        Unit srcUnit = units.get(src);
+        Unit dstUnit = units.get(dest);
+        srcUnit.setUp(dest);
+        dstUnit.setDown(src);
+    }
     public List<String> listUnits() {
         return new ArrayList<>(units.keySet());
     }

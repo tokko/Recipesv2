@@ -63,4 +63,18 @@ public class QuantityCalculatorEngineTests {
         assertEquals(22, uppedQuantity.getQuantity(), 0);
         assertEquals(Unit.G, uppedQuantity.getUnit());
     }
+
+    @Test
+    public void testUpQuantity_MlIsLessThan1Dl_IsStillMl() throws Exception{
+        Quantity q = engine.upQuantity(new Quantity(Unit.ML, 50));
+        assertEquals(50, q.getQuantity(), 0);
+        assertEquals(Unit.ML, q.getUnit());
+    }
+
+    @Test
+    public void testUpQuantity_MlIsMoreThan1Dl_IsMl() throws Exception{
+        Quantity q = engine.upQuantity(new Quantity(Unit.ML, 150));
+        assertEquals(1.5, q.getQuantity(), 0);
+        assertEquals(Unit.DL, q.getUnit());
+    }
 }
