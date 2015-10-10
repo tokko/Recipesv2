@@ -87,4 +87,12 @@ public class QuantityCalculatorEngineTests {
         assertEquals(1, q.getQuantity(), 0.02); //0.02 is acceptable error margin
     }
 
+    @Test
+    public void testUpQuantity_MlIsMoreThan1TeaspoonButLessThan1TableSpoon_IsTeaspoon() throws Exception{
+        Quantity q1 = new Quantity(Unit.ML, 6);
+        Quantity q = engine.upQuantity(q1);
+        assertEquals(Unit.TEASPOON, q.getUnit());
+        assertEquals(1.21731, q.getQuantity(), 0.05); //0.02 is acceptable error margin
+    }
+
 }
