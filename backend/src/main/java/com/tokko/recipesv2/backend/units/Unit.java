@@ -7,6 +7,7 @@ public class Unit {
     public static final String DL = "DL";
     public static final String TEASPOON = "tsk";
     public static final String TBLSPOON = "msk";
+    public static final String L = "l";
 
     private String unit;
     private String up;

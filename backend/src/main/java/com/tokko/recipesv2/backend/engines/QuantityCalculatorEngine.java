@@ -16,6 +16,8 @@ public class QuantityCalculatorEngine {
         addConversion(Unit.G, Unit.KG, 1000);
         addConversion(Unit.ML, Unit.TEASPOON, 4.92892);
         addConversion(Unit.TEASPOON, Unit.TBLSPOON, 3);
+        addConversion(Unit.TBLSPOON, Unit.DL, 6.7628);
+        addConversion(Unit.DL, Unit.L, 10);
     }
 
     private static void addConversion(String src, String dest, double factorUp){
