@@ -4,7 +4,7 @@ public class Unit {
     public static final String G = "g";
     public static final String KG = "kg";
     public static final String ML = "krm";
-    public static final String DL = "DL";
+    public static final String DL = "dl";
     public static final String TEASPOON = "tsk";
     public static final String TBLSPOON = "msk";
     public static final String L = "l";
